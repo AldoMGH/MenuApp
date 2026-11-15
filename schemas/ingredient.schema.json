@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ingrediente",
+  "description": "Ingrediente del catálogo. Cantidades en unidad base cruda; conversiones y rendimiento traducen medidas del plan.",
+  "type": "object",
+  "required": ["id", "name", "baseUnit", "purchase", "aisle"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "title": "Identificador" },
+    "name": { "type": "string", "minLength": 1, "title": "Nombre" },
+    "aliases": { "type": "array", "items": { "type": "string" }, "title": "Alias" },
+    "group": { "anyOf": [{ "$ref": "#/$defs/group" }, { "type": "null" }], "title": "Grupo" },
+    "baseUnit": { "enum": ["g", "ml", "pieza", "diente", "paquete", "lata"], "title": "Unidad base" },
+    "conversions": {
+      "type": "array",
+      "title": "Equivalencias",
+      "items": {
+        "type": "object",
+        "required": ["unit", "grams"],
+        "properties": {
+          "unit": { "$ref": "#/$defs/unit" },
+          "grams": { "type": "number", "exclusiveMinimum": 0 },
+          "state": { "enum": ["crudo", "cocido"], "default": "crudo" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cookedYield": { "type": "number", "exclusiveMinimum": 0, "maximum": 10, "default": 1, "title": "Rendimiento crudo → cocido" },
+    "purchase": {
+      "type": "object",
+      "title": "Compra",
+      "required": ["unit", "step"],
+      "properties": {
+        "unit": { "$ref": "#/$defs/unit" },
+        "step": { "type": "number", "exclusiveMinimum": 0 },
+        "label": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "aisle": { "type": "string", "minLength": 1, "title": "Pasillo" },
+    "isLean": { "type": "boolean", "default": true, "title": "Proteína magra" },
+    "proteinFamily": { "type": ["string", "null"], "title": "Familia de proteína" },
+    "notes": { "type": ["string", "null"], "title": "Notas" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "unit": { "enum": ["g", "ml", "pieza", "taza", "cda", "cdita", "porcion", "diente", "paquete", "lata"] },
+    "group": { "enum": ["verdura", "proteina", "leguminosa", "cereal", "grasa"] }
+  }
+}

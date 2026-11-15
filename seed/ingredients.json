@@ -1,0 +1,1021 @@
+[
+  {
+    "id": "pechuga-pollo",
+    "name": "Pechuga de pollo",
+    "aliases": [
+      "pollo",
+      "pechuga"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "cookedYield": 0.72,
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Carnes y pescados",
+    "isLean": true,
+    "proteinFamily": "pollo"
+  },
+  {
+    "id": "lomo-cerdo",
+    "name": "Lomo de cerdo",
+    "aliases": [
+      "lomo",
+      "cerdo"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "cookedYield": 0.7,
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Carnes y pescados",
+    "isLean": true,
+    "proteinFamily": "cerdo"
+  },
+  {
+    "id": "res-molida-magra",
+    "name": "Carne molida de res magra (90/10)",
+    "aliases": [
+      "molida",
+      "carne molida"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "cookedYield": 0.72,
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Carnes y pescados",
+    "isLean": true,
+    "proteinFamily": "res"
+  },
+  {
+    "id": "bistec-res-magro",
+    "name": "Bistec de res magro (aguayón)",
+    "aliases": [
+      "bistec",
+      "aguayón",
+      "res"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "cookedYield": 0.68,
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Carnes y pescados",
+    "isLean": true,
+    "proteinFamily": "res"
+  },
+  {
+    "id": "filete-pescado",
+    "name": "Filete de pescado blanco (tilapia/basa)",
+    "aliases": [
+      "pescado",
+      "tilapia",
+      "basa",
+      "filete"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "cookedYield": 0.8,
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Carnes y pescados",
+    "isLean": true,
+    "proteinFamily": "pescado"
+  },
+  {
+    "id": "camaron",
+    "name": "Camarón limpio",
+    "aliases": [
+      "camarones"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "cookedYield": 0.85,
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Carnes y pescados",
+    "isLean": true,
+    "proteinFamily": "mariscos"
+  },
+  {
+    "id": "atun-agua",
+    "name": "Atún en agua (drenado)",
+    "aliases": [
+      "atún"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "lata",
+        "grams": 140,
+        "state": "crudo"
+      }
+    ],
+    "cookedYield": 1.0,
+    "purchase": {
+      "unit": "lata",
+      "step": 1
+    },
+    "aisle": "Abarrotes",
+    "isLean": true,
+    "proteinFamily": "pescado",
+    "notes": "Ya viene cocido: 1 lata ≈ 140 g drenado."
+  },
+  {
+    "id": "huevo",
+    "name": "Huevo",
+    "group": "proteina",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 50,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Lácteos y huevo",
+    "isLean": true,
+    "proteinFamily": "huevo"
+  },
+  {
+    "id": "nopal",
+    "name": "Nopal picado",
+    "aliases": [
+      "nopales"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 150,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 80,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "champinon",
+    "name": "Champiñón",
+    "aliases": [
+      "champiñones",
+      "hongos"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 70,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "calabacita",
+    "name": "Calabacita",
+    "aliases": [
+      "calabacitas",
+      "calabaza"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 125,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 200,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "chayote",
+    "name": "Chayote",
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 130,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 300,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "zanahoria",
+    "name": "Zanahoria",
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 130,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 80,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "brocoli",
+    "name": "Brócoli",
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 90,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 350,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "ejote",
+    "name": "Ejote",
+    "aliases": [
+      "ejotes"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 110,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "pimiento",
+    "name": "Pimiento morrón",
+    "aliases": [
+      "pimientos",
+      "morrón"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 150,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 160,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "jitomate",
+    "name": "Jitomate",
+    "aliases": [
+      "tomate rojo"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 180,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 120,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "tomate-verde",
+    "name": "Tomate verde",
+    "aliases": [
+      "tomatillo"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 160,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 50,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "lechuga",
+    "name": "Lechuga",
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 50,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 500,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "pepino",
+    "name": "Pepino",
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 120,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 300,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "espinaca",
+    "name": "Espinaca",
+    "aliases": [
+      "espinacas"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 30,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "col",
+    "name": "Col / repollo",
+    "aliases": [
+      "repollo"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 70,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 900,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "verdura-mixta",
+    "name": "Verdura para ensalada o al vapor",
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 100,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras",
+    "notes": "Acompañamiento genérico cuando la receta no trae verdura."
+  },
+  {
+    "id": "cebolla",
+    "name": "Cebolla",
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 160,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 150,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "chile-serrano",
+    "name": "Chile serrano",
+    "group": "verdura",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 6,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "ajo",
+    "name": "Ajo",
+    "group": "verdura",
+    "baseUnit": "diente",
+    "conversions": [
+      {
+        "unit": "diente",
+        "grams": 5,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 50,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1,
+      "label": "cabeza"
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "cilantro",
+    "name": "Cilantro",
+    "group": "verdura",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 60,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1,
+      "label": "manojo"
+    },
+    "aisle": "Frutas y verduras",
+    "notes": "1 pieza = 1 manojo."
+  },
+  {
+    "id": "limon",
+    "name": "Limón",
+    "group": "verdura",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 40,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "chile-chipotle",
+    "name": "Chile chipotle adobado",
+    "group": "verdura",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 10,
+        "state": "crudo"
+      },
+      {
+        "unit": "lata",
+        "grams": 200,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "lata",
+      "step": 1
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "tortilla-maiz",
+    "name": "Tortilla de maíz",
+    "group": "cereal",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 30,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Tortillería y panadería"
+  },
+  {
+    "id": "tortilla-nopal",
+    "name": "Tortilla de nopal",
+    "group": "cereal",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 25,
+        "state": "crudo"
+      },
+      {
+        "unit": "paquete",
+        "grams": 250,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "paquete",
+      "step": 1
+    },
+    "aisle": "Tortillería y panadería",
+    "notes": "Paquete de 10 piezas."
+  },
+  {
+    "id": "tostada-horneada",
+    "name": "Tostada horneada",
+    "group": "cereal",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 12,
+        "state": "crudo"
+      },
+      {
+        "unit": "paquete",
+        "grams": 288,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "paquete",
+      "step": 1
+    },
+    "aisle": "Tortillería y panadería",
+    "notes": "Paquete de 24 piezas."
+  },
+  {
+    "id": "salmas",
+    "name": "Salmas (paquete individual)",
+    "group": "cereal",
+    "baseUnit": "paquete",
+    "conversions": [
+      {
+        "unit": "paquete",
+        "grams": 20,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "paquete",
+      "step": 1
+    },
+    "aisle": "Tortillería y panadería"
+  },
+  {
+    "id": "arroz",
+    "name": "Arroz",
+    "group": "cereal",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 195,
+        "state": "cocido"
+      }
+    ],
+    "cookedYield": 2.9,
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "pasta",
+    "name": "Pasta",
+    "group": "cereal",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 140,
+        "state": "cocido"
+      },
+      {
+        "unit": "paquete",
+        "grams": 200,
+        "state": "crudo"
+      }
+    ],
+    "cookedYield": 2.4,
+    "purchase": {
+      "unit": "paquete",
+      "step": 1
+    },
+    "aisle": "Abarrotes",
+    "notes": "Paquete de 200 g."
+  },
+  {
+    "id": "quinoa",
+    "name": "Quinoa",
+    "group": "cereal",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 185,
+        "state": "cocido"
+      }
+    ],
+    "cookedYield": 2.7,
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "papa",
+    "name": "Papa",
+    "group": "cereal",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 170,
+        "state": "crudo"
+      },
+      {
+        "unit": "taza",
+        "grams": 160,
+        "state": "cocido"
+      }
+    ],
+    "cookedYield": 1.0,
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "camote",
+    "name": "Camote",
+    "group": "cereal",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 200,
+        "state": "crudo"
+      },
+      {
+        "unit": "taza",
+        "grams": 200,
+        "state": "cocido"
+      }
+    ],
+    "cookedYield": 1.0,
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "frijol",
+    "name": "Frijol",
+    "aliases": [
+      "frijoles",
+      "frijolitos"
+    ],
+    "group": "leguminosa",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 170,
+        "state": "cocido"
+      }
+    ],
+    "cookedYield": 2.5,
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "lenteja",
+    "name": "Lenteja",
+    "aliases": [
+      "lentejas"
+    ],
+    "group": "leguminosa",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 200,
+        "state": "cocido"
+      }
+    ],
+    "cookedYield": 2.5,
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "garbanzo",
+    "name": "Garbanzo",
+    "aliases": [
+      "garbanzos"
+    ],
+    "group": "leguminosa",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 165,
+        "state": "cocido"
+      }
+    ],
+    "cookedYield": 2.2,
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "aguacate",
+    "name": "Aguacate",
+    "group": "grasa",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 170,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "aceite-oliva",
+    "name": "Aceite de oliva",
+    "group": "grasa",
+    "baseUnit": "ml",
+    "conversions": [
+      {
+        "unit": "cda",
+        "grams": 15,
+        "state": "crudo"
+      },
+      {
+        "unit": "cdita",
+        "grams": 5,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "ml",
+      "step": 500
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "cacahuate",
+    "name": "Cacahuate tostado natural",
+    "group": "grasa",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "cda",
+        "grams": 9,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Semillas y especias"
+  },
+  {
+    "id": "fruta-temporada",
+    "name": "Fruta de temporada",
+    "group": null,
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 150,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 500
+    },
+    "aisle": "Frutas y verduras",
+    "notes": "Picada para la colación."
+  },
+  {
+    "id": "yogurt-natural",
+    "name": "Yogurt natural sin azúcar",
+    "group": "proteina",
+    "baseUnit": "ml",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 240,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "ml",
+      "step": 1000
+    },
+    "aisle": "Lácteos y huevo",
+    "isLean": true
+  },
+  {
+    "id": "chia",
+    "name": "Chía",
+    "group": "grasa",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "cdita",
+        "grams": 4,
+        "state": "crudo"
+      },
+      {
+        "unit": "cda",
+        "grams": 12,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Semillas y especias"
+  }
+]

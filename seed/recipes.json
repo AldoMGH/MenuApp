@@ -1,0 +1,1017 @@
+[
+  {
+    "id": "ceviche-pescado",
+    "name": "Ceviche de pescado con verdura picada y aguacate",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "curado-en-limon",
+    "tags": [
+      "pescado",
+      "fresco",
+      "rapida"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "filete-pescado"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "pepino",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "salmas"
+          }
+        ]
+      },
+      {
+        "group": "grasa",
+        "ingredients": [
+          {
+            "ingredientId": "aguacate"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "limon",
+        "qty": 12,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "chile-serrano",
+        "qty": 2,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Corta el pescado en cubos pequeños y cúbrelo con jugo de limón; refrigera 30–40 min hasta que se vea blanco.",
+      "Pica finamente pepino, jitomate, zanahoria, cebolla, cilantro y chile.",
+      "Escurre el exceso de limón, mezcla con las verduras y sazona con sal y pimienta.",
+      "Sirve tu porción con ¼ de aguacate y salmas."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "sopa-verdura-albondigas",
+    "name": "Sopa de verdura + albóndigas sin grasa en salsa",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "caldo",
+    "tags": [
+      "res",
+      "caldo"
+    ],
+    "laborious": true,
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "res-molida-magra"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "chayote",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "huevo",
+        "qty": 1,
+        "unit": "pieza",
+        "note": "para ligar las albóndigas"
+      },
+      {
+        "ingredientId": "jitomate",
+        "qty": 300,
+        "unit": "g",
+        "note": "salsa"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Mezcla la carne con el huevo, sal y pimienta; forma albóndigas pequeñas.",
+      "Licúa jitomate, ajo y cebolla con agua; hierve la salsa y cuece ahí las albóndigas 20 min.",
+      "Aparte, cuece las verduras picadas en caldo para la sopa.",
+      "Cuece el arroz sin aceite (o sólo una gota)."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "lomo-salsa-verde-nopales",
+    "name": "Lomo de cerdo en salsa verde con nopales y champiñones",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "cerdo",
+      "salsa-verde"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "lomo-cerdo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "nopal",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "champinon",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "frijol"
+          }
+        ],
+        "optional": true
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "tomate-verde",
+        "qty": 500,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "chile-serrano",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Corta el lomo en cubos y séllalo en sartén antiadherente sin grasa.",
+      "Hierve tomate verde, chiles, ajo y cebolla; licúa con cilantro.",
+      "Agrega la salsa al lomo con nopales y champiñones; cocina 25 min a fuego bajo.",
+      "Si te toca leguminosa, acompaña con ½ tz de frijoles de la olla."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "garbanzos-mexicana-pescado",
+    "name": "Garbanzos a la mexicana + filete de pescado + puré de papa y verduras salteadas",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "plancha",
+    "tags": [
+      "pescado",
+      "leguminosa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "filete-pescado"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "brocoli",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "garbanzo"
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "papa"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "jitomate",
+        "qty": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "chile-serrano",
+        "qty": 1,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 4,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cuece los garbanzos (remojados la noche anterior) y guísalos con jitomate, cebolla y chile picados.",
+      "Prepara el pescado a la parrilla, al limón o miel-mostaza.",
+      "Cuece la papa y hazla puré natural (sin lácteos).",
+      "Saltea las verduras con unas gotas de aceite."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "lentejas-tacos-pescado",
+    "name": "Ensalada fría de lentejas + tacos de pescado (sin empanizar) con aguacate",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "plancha",
+    "tags": [
+      "pescado",
+      "leguminosa",
+      "tacos"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "filete-pescado"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "col",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "lenteja"
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      },
+      {
+        "group": "grasa",
+        "ingredients": [
+          {
+            "ingredientId": "aguacate"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "limon",
+        "qty": 4,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cuece las lentejas, enfríalas y mézclalas con jitomate, cebolla y cilantro picados y limón.",
+      "Cocina el pescado a la plancha con sal, pimienta y limón; desmenúzalo.",
+      "Sirve los tacos con col y zanahoria ralladas y ¼ de aguacate."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "tinga-pollo",
+    "name": "Tinga de pollo en tostadas horneadas",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "pollo",
+      "tostadas"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "lechuga",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "frijol"
+          }
+        ],
+        "optional": true
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tostada-horneada"
+          }
+        ]
+      },
+      {
+        "group": "grasa",
+        "ingredients": [
+          {
+            "ingredientId": "aguacate"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "chile-chipotle",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 1,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 1,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Cuece y deshebra la pechuga.",
+      "Acitrona la cebolla en rodajas, agrega jitomate licuado con chipotle y ajo; integra el pollo.",
+      "Sirve sobre tostadas horneadas con lechuga y ¼ de aguacate."
+    ],
+    "source": "semilla",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "fajitas-res",
+    "name": "Fajitas de res con pimientos y champiñones",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "salteado",
+    "tags": [
+      "res",
+      "tacos",
+      "rapida"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "bistec-res-magro"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "pimiento",
+            "share": 0.6
+          },
+          {
+            "ingredientId": "champinon",
+            "share": 0.4
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "frijol"
+          }
+        ],
+        "optional": true
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "cebolla",
+        "qty": 1,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 2,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Corta la carne y las verduras en tiras.",
+      "Saltea la carne a fuego alto en sartén antiadherente; agrega pimiento, champiñón y cebolla.",
+      "Termina con limón, sal y pimienta."
+    ],
+    "source": "semilla",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-plancha-verduras-arroz",
+    "name": "Pollo a la plancha con verduras al vapor y arroz",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "plancha",
+    "tags": [
+      "pollo",
+      "rapida"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "brocoli",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "calabacita",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 2,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Marina el pollo con ajo, limón, sal y pimienta; cocínalo a la plancha.",
+      "Cuece las verduras al vapor.",
+      "Prepara el arroz."
+    ],
+    "source": "semilla",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "picadillo-res",
+    "name": "Picadillo de res con verduras",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "res"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "res-molida-magra"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "calabacita",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "chayote",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "jitomate",
+        "qty": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Dora la carne sin grasa y escurre el exceso.",
+      "Agrega la salsa de jitomate, cebolla y ajo, y las verduras en cubos chicos.",
+      "Cocina 15–20 min."
+    ],
+    "source": "semilla",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "camarones-ajillo-verduras",
+    "name": "Camarones al ajillo con verduras salteadas",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "salteado",
+    "tags": [
+      "mariscos",
+      "rapida"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "camaron"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "brocoli",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "ajo",
+        "qty": 4,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "aceite-oliva",
+        "qty": 1,
+        "unit": "cda"
+      }
+    ],
+    "steps": [
+      "Saltea el ajo fileteado en el aceite, agrega los camarones 3–4 min.",
+      "Saltea las verduras aparte.",
+      "Sirve con arroz y limón."
+    ],
+    "source": "semilla",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "caldo-pollo",
+    "name": "Caldo de pollo con verduras",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "caldo",
+    "tags": [
+      "pollo",
+      "caldo"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "calabacita",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "chayote",
+            "share": 0.2
+          },
+          {
+            "ingredientId": "ejote",
+            "share": 0.2
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 4,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cuece el pollo con cebolla y ajo; desgrasa el caldo.",
+      "Agrega las verduras en trozos y cocina hasta que estén suaves.",
+      "Sirve con arroz, cilantro y limón."
+    ],
+    "source": "semilla",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-champinones-pasta",
+    "name": "Pechuga en salsa de champiñones y espinaca con pasta",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "pollo",
+      "pasta"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "champinon",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "espinaca",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "pasta"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cocina la pechuga en cubos a la plancha.",
+      "Saltea cebolla, ajo y champiñones; agrega espinaca al final.",
+      "Mezcla con la pasta cocida."
+    ],
+    "source": "semilla",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "chile-con-carne",
+    "name": "Chile con carne y frijoles",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "res",
+      "leguminosa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "res-molida-magra"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "pimiento",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "calabacita",
+            "share": 0.6
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "frijol"
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "jitomate",
+        "qty": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 1,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Dora la carne sin grasa.",
+      "Agrega cebolla, ajo, pimiento y calabacita picados, la salsa de jitomate y los frijoles cocidos.",
+      "Cocina 20 min."
+    ],
+    "source": "semilla",
+    "stats": {
+      "timesCooked": 0
+    }
+  }
+]

@@ -1,0 +1,59 @@
+{
+  "id": "plan-2",
+  "version": 2,
+  "name": "Plan de alimentación 2",
+  "validFrom": "2026-11-01T00:00:00Z",
+  "active": true,
+  "proteinTarget": "max",
+  "mealsPerWeek": 7,
+  "meals": [
+    {
+      "meal": "comida",
+      "components": [
+        { "group": "verdura", "min": 2, "max": 2, "unit": "taza", "state": "crudo", "notes": "Base: sopas, caldos, ensaladas, al vapor, salteadas. Verdura extra al gusto." },
+        { "group": "proteina", "min": 150, "max": 200, "unit": "g", "state": "cocido", "constraint": "magra", "notes": "Pollo, cerdo, carne o pescado, sin grasa." },
+        { "group": "leguminosa", "min": 0.5, "max": 0.5, "unit": "taza", "state": "cocido", "weeklyFrequency": { "min": 2, "max": 3 }, "notes": "Lentejas, frijoles, haba, garbanzos, edamames." },
+        { "group": "cereal", "min": 1, "max": 1, "unit": "porcion", "notes": "Ver tabla de intercambios de cereal/tubérculo." },
+        { "group": "grasa", "min": 0, "max": 1, "unit": "porcion", "optional": true, "notes": "¼ de aguacate en varios ejemplos del plan." }
+      ]
+    }
+  ],
+  "exchanges": [
+    {
+      "group": "cereal",
+      "options": [
+        { "ingredientId": "tortilla-maiz", "qty": 2, "unit": "pieza" },
+        { "ingredientId": "tortilla-nopal", "qty": 4, "unit": "pieza" },
+        { "ingredientId": "pasta", "qty": 0.5, "unit": "taza", "state": "cocido" },
+        { "ingredientId": "tostada-horneada", "qty": 2, "unit": "pieza" },
+        { "ingredientId": "arroz", "qty": 0.5, "unit": "taza", "state": "cocido" },
+        { "ingredientId": "quinoa", "qty": 0.5, "unit": "taza", "state": "cocido" },
+        { "ingredientId": "papa", "qty": 0.5, "unit": "pieza", "state": "cocido" },
+        { "ingredientId": "camote", "qty": 0.5, "unit": "pieza", "state": "cocido" },
+        { "ingredientId": "salmas", "qty": 1, "unit": "paquete" }
+      ]
+    },
+    {
+      "group": "grasa",
+      "options": [
+        { "ingredientId": "aguacate", "qty": 0.25, "unit": "pieza" },
+        { "ingredientId": "aceite-oliva", "qty": 1, "unit": "cdita" }
+      ]
+    }
+  ],
+  "weeklyBasics": [
+    { "meal": "colacion", "ingredientId": "fruta-temporada", "qtyPerDay": 1, "unit": "taza" },
+    { "meal": "colacion", "ingredientId": "yogurt-natural", "qtyPerDay": 0.5, "unit": "taza" },
+    { "meal": "colacion", "ingredientId": "chia", "qtyPerDay": 1.5, "unit": "cdita" }
+  ],
+  "rules": {
+    "forbiddenMethods": ["frito", "capeado", "empanizado"],
+    "defaultVegetableSideId": "verdura-mixta",
+    "notes": [
+      "Priorizar proteínas magras (sin grasa).",
+      "Evitar o disminuir fritos, capeados, empanizados, azúcares, grasas saturadas y sodio.",
+      "Aumentar verdura poco a poco en cada tiempo de comida.",
+      "Plato: ½ verduras + ¼ proteína + ¼ cereal/tubérculo o leguminosa + grasa saludable."
+    ]
+  }
+}
