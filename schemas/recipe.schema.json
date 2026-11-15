@@ -59,7 +59,12 @@
       "type": "object",
       "properties": {
         "timesCooked": { "type": "integer", "minimum": 0 },
-        "lastCooked": { "type": ["string", "null"], "format": "date-time" }
+        "lastCooked": { "type": ["string", "null"], "format": "date-time" },
+        "historyCount": { "type": "integer", "minimum": 0 },
+        "historyLastCooked": { "type": ["string", "null"], "format": "date-time" },
+        "historyMonths": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+        "totalCount": { "type": "integer", "readOnly": true },
+        "latestCooked": { "type": ["string", "null"], "readOnly": true }
       },
       "additionalProperties": false
     }

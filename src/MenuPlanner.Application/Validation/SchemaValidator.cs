@@ -8,6 +8,7 @@ public static class SchemaNames
     public const string NutritionPlan = "nutrition-plan";
     public const string Recipe = "recipe";
     public const string Ingredient = "ingredient";
+    public const string Dish = "dish";
 }
 
 /// <summary>

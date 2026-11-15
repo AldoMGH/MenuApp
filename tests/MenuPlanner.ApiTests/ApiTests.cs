@@ -29,6 +29,10 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
             services.RemoveAll<IRecipeRepository>();
             services.RemoveAll<IMenuRepository>();
             services.RemoveAll<ISettingsRepository>();
+            services.RemoveAll<IDishRepository>();
+            services.RemoveAll<IImportRepository>();
+            services.AddSingleton<IDishRepository>(Store);
+            services.AddSingleton<IImportRepository>(Store);
             services.AddSingleton<IPlanRepository>(Store);
             services.AddSingleton<IIngredientRepository>(Store);
             services.AddSingleton<IRecipeRepository>(Store);

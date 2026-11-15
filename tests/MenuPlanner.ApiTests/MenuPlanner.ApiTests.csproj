@@ -24,4 +24,8 @@
     <ProjectReference Include="..\MenuPlanner.UnitTests\MenuPlanner.UnitTests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\MenuPlanner.UnitTests\Fixtures\**" Link="Fixtures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

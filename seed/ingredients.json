@@ -4,7 +4,8 @@
     "name": "Pechuga de pollo",
     "aliases": [
       "pollo",
-      "pechuga"
+      "pechuga",
+      "pechugas"
     ],
     "group": "proteina",
     "baseUnit": "g",
@@ -40,7 +41,8 @@
     "name": "Carne molida de res magra (90/10)",
     "aliases": [
       "molida",
-      "carne molida"
+      "carne molida",
+      "molida de res"
     ],
     "group": "proteina",
     "baseUnit": "g",
@@ -113,7 +115,9 @@
     "id": "atun-agua",
     "name": "Atún en agua (drenado)",
     "aliases": [
-      "atún"
+      "atún",
+      "atun",
+      "latas de atun"
     ],
     "group": "proteina",
     "baseUnit": "g",
@@ -152,7 +156,11 @@
     },
     "aisle": "Lácteos y huevo",
     "isLean": true,
-    "proteinFamily": "huevo"
+    "proteinFamily": "huevo",
+    "aliases": [
+      "huevos",
+      "blanquillos"
+    ]
   },
   {
     "id": "nopal",
@@ -273,7 +281,10 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "aliases": [
+      "zanahorias"
+    ]
   },
   {
     "id": "brocoli",
@@ -296,7 +307,10 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "aliases": [
+      "brocoli"
+    ]
   },
   {
     "id": "ejote",
@@ -323,8 +337,10 @@
     "id": "pimiento",
     "name": "Pimiento morrón",
     "aliases": [
+      "pimiento",
       "pimientos",
-      "morrón"
+      "morrón",
+      "morron"
     ],
     "group": "verdura",
     "baseUnit": "g",
@@ -350,7 +366,10 @@
     "id": "jitomate",
     "name": "Jitomate",
     "aliases": [
-      "tomate rojo"
+      "tomate rojo",
+      "tomate",
+      "tomates",
+      "jitomates"
     ],
     "group": "verdura",
     "baseUnit": "g",
@@ -419,7 +438,11 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "aliases": [
+      "mix ensalada",
+      "ensalada"
+    ]
   },
   {
     "id": "pepino",
@@ -442,13 +465,17 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "aliases": [
+      "pepinos"
+    ]
   },
   {
     "id": "espinaca",
     "name": "Espinaca",
     "aliases": [
-      "espinacas"
+      "espinacas",
+      "espinaca bby"
     ],
     "group": "verdura",
     "baseUnit": "g",
@@ -531,7 +558,11 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "aliases": [
+      "cebolla morada",
+      "cebollas"
+    ]
   },
   {
     "id": "chile-serrano",
@@ -611,7 +642,10 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "aliases": [
+      "limones"
+    ]
   },
   {
     "id": "chile-chipotle",
@@ -836,7 +870,8 @@
     "name": "Frijol",
     "aliases": [
       "frijoles",
-      "frijolitos"
+      "frijolitos",
+      "frijol de la olla"
     ],
     "group": "leguminosa",
     "baseUnit": "g",
@@ -914,7 +949,10 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "aliases": [
+      "aguacates"
+    ]
   },
   {
     "id": "aceite-oliva",
@@ -974,7 +1012,16 @@
       "step": 500
     },
     "aisle": "Frutas y verduras",
-    "notes": "Picada para la colación."
+    "notes": "Picada para la colación.",
+    "aliases": [
+      "fruta",
+      "pina",
+      "manzana",
+      "manzanas",
+      "papaya",
+      "melon",
+      "fresas"
+    ]
   },
   {
     "id": "yogurt-natural",
@@ -1016,6 +1063,492 @@
       "unit": "g",
       "step": 100
     },
+    "aisle": "Semillas y especias",
+    "aliases": [
+      "chia"
+    ]
+  },
+  {
+    "id": "pierna-cerdo",
+    "name": "Pierna de cerdo deshuesada (piernil)",
+    "aliases": [
+      "piernil",
+      "piernil deshuesado",
+      "pierna de cerdo"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "cookedYield": 0.68,
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Carnes y pescados",
+    "isLean": true,
+    "proteinFamily": "cerdo"
+  },
+  {
+    "id": "paleta-res",
+    "name": "Paleta de res",
+    "aliases": [
+      "paleta",
+      "paleta de res",
+      "carne para deshebrar"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "cookedYield": 0.65,
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Carnes y pescados",
+    "isLean": true,
+    "proteinFamily": "res"
+  },
+  {
+    "id": "queso-panela",
+    "name": "Queso panela",
+    "aliases": [
+      "panela",
+      "queso",
+      "queso fresco"
+    ],
+    "group": "proteina",
+    "baseUnit": "g",
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Lácteos y huevo",
+    "isLean": true
+  },
+  {
+    "id": "yogurt-griego",
+    "name": "Yogurt griego natural",
+    "aliases": [
+      "yogurt griego",
+      "yogurt griego natural"
+    ],
+    "group": "proteina",
+    "baseUnit": "ml",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 240,
+        "state": "crudo"
+      },
+      {
+        "unit": "cda",
+        "grams": 15,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "ml",
+      "step": 1000
+    },
+    "aisle": "Lácteos y huevo",
+    "isLean": true
+  },
+  {
+    "id": "leche",
+    "name": "Leche descremada / deslactosada",
+    "aliases": [
+      "leche",
+      "leche deslactosada"
+    ],
+    "group": "proteina",
+    "baseUnit": "ml",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 240,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "ml",
+      "step": 1000
+    },
+    "aisle": "Lácteos y huevo",
+    "isLean": true
+  },
+  {
+    "id": "salsa-soya",
+    "name": "Salsa de soya baja en sodio",
+    "aliases": [
+      "soya",
+      "salsa de soya"
+    ],
+    "group": null,
+    "baseUnit": "ml",
+    "conversions": [
+      {
+        "unit": "cda",
+        "grams": 15,
+        "state": "crudo"
+      },
+      {
+        "unit": "cdita",
+        "grams": 5,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "ml",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "ajonjoli",
+    "name": "Ajonjolí",
+    "aliases": [
+      "ajonjoli"
+    ],
+    "group": "grasa",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "cda",
+        "grams": 9,
+        "state": "crudo"
+      },
+      {
+        "unit": "cdita",
+        "grams": 3,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
     "aisle": "Semillas y especias"
+  },
+  {
+    "id": "col-napa",
+    "name": "Col napa (china)",
+    "aliases": [
+      "napa",
+      "col china"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 70,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 1000,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "cebollin",
+    "name": "Cebollín",
+    "aliases": [
+      "cebollin",
+      "cebolla cambray"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 60,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 100,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1,
+      "label": "manojo"
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "apio",
+    "name": "Apio",
+    "group": "verdura",
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "taza",
+        "grams": 100,
+        "state": "crudo"
+      },
+      {
+        "unit": "pieza",
+        "grams": 450,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "pasta-mole",
+    "name": "Pasta de mole",
+    "aliases": [
+      "mole"
+    ],
+    "group": "grasa",
+    "baseUnit": "g",
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Abarrotes",
+    "notes": "Rinde con caldo desgrasado; úsala en poca cantidad."
+  },
+  {
+    "id": "pasta-pipian",
+    "name": "Pasta de pipián",
+    "aliases": [
+      "pipian"
+    ],
+    "group": "grasa",
+    "baseUnit": "g",
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "chile-guajillo",
+    "name": "Chile guajillo",
+    "aliases": [
+      "guajillo"
+    ],
+    "group": "verdura",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 6,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Semillas y especias"
+  },
+  {
+    "id": "jengibre",
+    "name": "Jengibre",
+    "aliases": [
+      "jengibre"
+    ],
+    "group": "verdura",
+    "baseUnit": "g",
+    "purchase": {
+      "unit": "g",
+      "step": 50
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "mostaza",
+    "name": "Mostaza",
+    "group": null,
+    "baseUnit": "ml",
+    "conversions": [
+      {
+        "unit": "cda",
+        "grams": 15,
+        "state": "crudo"
+      },
+      {
+        "unit": "cdita",
+        "grams": 5,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "ml",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "miel",
+    "name": "Miel",
+    "group": null,
+    "baseUnit": "ml",
+    "conversions": [
+      {
+        "unit": "cda",
+        "grams": 15,
+        "state": "crudo"
+      },
+      {
+        "unit": "cdita",
+        "grams": 5,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "ml",
+      "step": 250
+    },
+    "aisle": "Abarrotes",
+    "notes": "Azúcar: el plan pide moderarla; las recetas usan 1 cda por lote."
+  },
+  {
+    "id": "naranja",
+    "name": "Naranja",
+    "aliases": [
+      "naranjas"
+    ],
+    "group": null,
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 200,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 500
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "gochujang",
+    "name": "Pasta de chile coreano (gochujang)",
+    "aliases": [
+      "gochujang"
+    ],
+    "group": null,
+    "baseUnit": "g",
+    "conversions": [
+      {
+        "unit": "cda",
+        "grams": 20,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 250
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "salsa-picante",
+    "name": "Salsa picante (tipo Valentina)",
+    "aliases": [
+      "salsa valentina",
+      "salsa bufalo"
+    ],
+    "group": null,
+    "baseUnit": "ml",
+    "conversions": [
+      {
+        "unit": "cda",
+        "grams": 15,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "ml",
+      "step": 500
+    },
+    "aisle": "Abarrotes"
+  },
+  {
+    "id": "tortilla-harina-integral",
+    "name": "Tortilla de harina integral",
+    "aliases": [
+      "tortillas de harina",
+      "tortillas de harina integrales",
+      "tortilla de harina"
+    ],
+    "group": "cereal",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 40,
+        "state": "crudo"
+      },
+      {
+        "unit": "paquete",
+        "grams": 400,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "paquete",
+      "step": 1
+    },
+    "aisle": "Tortillería y panadería",
+    "notes": "No está en la tabla de intercambios del plan 2; consúltalo con tu nutrióloga."
+  },
+  {
+    "id": "platano",
+    "name": "Plátano",
+    "aliases": [
+      "platanos"
+    ],
+    "group": null,
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 120,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "pieza",
+      "step": 1
+    },
+    "aisle": "Frutas y verduras"
+  },
+  {
+    "id": "jalapeno",
+    "name": "Chile jalapeño",
+    "aliases": [
+      "jalapenos"
+    ],
+    "group": "verdura",
+    "baseUnit": "pieza",
+    "conversions": [
+      {
+        "unit": "pieza",
+        "grams": 25,
+        "state": "crudo"
+      }
+    ],
+    "purchase": {
+      "unit": "g",
+      "step": 100
+    },
+    "aisle": "Frutas y verduras"
   }
 ]

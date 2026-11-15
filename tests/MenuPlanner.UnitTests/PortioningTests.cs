@@ -124,7 +124,7 @@ public class PortionCalculatorTests
     [Fact]
     public void Exchange_portions_use_the_plan_table()
     {
-        var result = _calculator.Calculate(TestData.Recipe("pollo-plancha-verduras-arroz"), _plan, _ingredients);
+        var result = _calculator.Calculate(TestData.Recipe("pollo-teriyaki"), _plan, _ingredients);
 
         Assert.Equal(135, Line(result, "arroz").Quantity);                       // 4 × ½ tz cocido = 390 g cocido ÷ 2.9 = 134.5 → 135 g crudo
         Assert.Contains(result.Serving, s => s.Text == "½ tz de arroz (en cocido)");
@@ -148,7 +148,7 @@ public class PortionCalculatorTests
     [Fact]
     public void Forbidden_cooking_method_makes_the_recipe_incompatible()
     {
-        var recipe = TestData.Recipe("pollo-plancha-verduras-arroz");
+        var recipe = TestData.Recipe("pollo-teriyaki");
         recipe.CookingMethod = "empanizado";
 
         var result = _calculator.Calculate(recipe, _plan, _ingredients);
@@ -160,7 +160,7 @@ public class PortionCalculatorTests
     [Fact]
     public void Cereal_outside_the_exchange_table_is_reported()
     {
-        var recipe = TestData.Recipe("pollo-plancha-verduras-arroz");
+        var recipe = TestData.Recipe("pollo-teriyaki");
         recipe.GetComponent(ComponentGroup.Cereal)!.Ingredients[0].IngredientId = "frijol";
 
         var result = _calculator.Calculate(recipe, _plan, _ingredients);

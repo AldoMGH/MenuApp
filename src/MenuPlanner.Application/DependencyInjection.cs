@@ -15,7 +15,11 @@ public static class DependencyInjection
         services.AddSingleton<PortionCalculator>();
         services.AddSingleton<MenuGenerator>();
         services.AddSingleton<ShoppingListBuilder>();
+        services.TryAddSingleton(new GenerationOptions());
         services.AddScoped<MenuService>();
+        services.AddScoped<Imports.ImportService>();
+        services.AddScoped<Imports.DishService>();
+        services.AddScoped<Seeding.SeedSyncService>();
         return services;
     }
 }

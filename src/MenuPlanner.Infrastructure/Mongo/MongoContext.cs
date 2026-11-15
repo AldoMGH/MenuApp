@@ -48,6 +48,18 @@ public sealed class MongoContext
 
     public IMongoCollection<BasicsConfig> Basics => Database.GetCollection<BasicsConfig>("basics");
 
+    public IMongoCollection<Dish> Dishes => Database.GetCollection<Dish>("dishes");
+
+    public IMongoCollection<ImportRules> ImportRules => Database.GetCollection<ImportRules>("importRules");
+
+    public IMongoCollection<ImportedNote> ImportedNotes => Database.GetCollection<ImportedNote>("importedNotes");
+
+    public IMongoCollection<DishOccurrence> DishHistory => Database.GetCollection<DishOccurrence>("dishHistory");
+
+    public IMongoCollection<PurchaseRecord> PurchaseHistory => Database.GetCollection<PurchaseRecord>("purchaseHistory");
+
+    public IMongoCollection<ImportJob> ImportJobs => Database.GetCollection<ImportJob>("importJobs");
+
     public async Task EnsureIndexesAsync(CancellationToken ct = default)
     {
         await Plans.Indexes.CreateOneAsync(
@@ -68,6 +80,32 @@ public sealed class MongoContext
                 new CreateIndexModel<Recipe>(Builders<Recipe>.IndexKeys.Ascending(r => r.Stats.LastCooked)),
             ],
             ct);
+
+        await Dishes.Indexes.CreateManyAsync(
+            [
+                new CreateIndexModel<Dish>(Builders<Dish>.IndexKeys.Ascending(d => d.RecipeId)),
+                new CreateIndexModel<Dish>(Builders<Dish>.IndexKeys.Descending(d => d.Stats.TimesCooked)),
+            ],
+            ct);
+
+        await DishHistory.Indexes.CreateManyAsync(
+            [
+                new CreateIndexModel<DishOccurrence>(Builders<DishOccurrence>.IndexKeys.Ascending(o => o.DishId)),
+                new CreateIndexModel<DishOccurrence>(Builders<DishOccurrence>.IndexKeys.Ascending(o => o.ImportId)),
+                new CreateIndexModel<DishOccurrence>(Builders<DishOccurrence>.IndexKeys.Descending(o => o.Date)),
+            ],
+            ct);
+
+        await PurchaseHistory.Indexes.CreateManyAsync(
+            [
+                new CreateIndexModel<PurchaseRecord>(Builders<PurchaseRecord>.IndexKeys.Ascending(p => p.IngredientId)),
+                new CreateIndexModel<PurchaseRecord>(Builders<PurchaseRecord>.IndexKeys.Descending(p => p.Date)),
+            ],
+            ct);
+
+        await ImportJobs.Indexes.CreateOneAsync(
+            new CreateIndexModel<ImportJob>(Builders<ImportJob>.IndexKeys.Descending(j => j.CreatedAt)),
+            cancellationToken: ct);
 
         await Menus.Indexes.CreateManyAsync(
             [

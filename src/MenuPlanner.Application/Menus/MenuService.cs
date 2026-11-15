@@ -49,11 +49,12 @@ public sealed class MenuService(
     PortionCalculator calculator,
     MenuGenerator generator,
     ShoppingListBuilder shoppingBuilder,
-    TimeProvider time)
+    TimeProvider time,
+    GenerationOptions? generationOptions = null)
 {
     public const int MaxDishes = 14;
 
-    public GenerationOptions Options { get; init; } = new();
+    private GenerationOptions Options { get; } = generationOptions ?? new GenerationOptions();
 
     public async Task<MenuView> GenerateAsync(GenerateMenuRequest request, CancellationToken ct = default)
     {
@@ -372,10 +373,12 @@ public sealed class MenuService(
             return Options;
         }
 
-        // Cuántos guisados con leguminosa caben sin pasarse del máximo semanal (suponiendo lotes de 4).
+        // Cuántos guisados con leguminosa caben sin pasarse del máximo semanal (suponiendo lotes de 4),
+        // y cuántas porciones deben poder llevarla para llegar al mínimo.
         var totalServings = dishCount * 4;
         var maxServings = Math.Floor(totalServings * (double)frequency.Max / plan.MealsPerWeek);
         var maxDishes = Math.Max(1, (int)Math.Floor(maxServings / 4));
+        var minServings = (int)Math.Ceiling((totalServings * (double)frequency.Min / plan.MealsPerWeek) - 1e-9);
 
         return new GenerationOptions
         {
@@ -385,7 +388,9 @@ public sealed class MenuService(
             FishFamilies = Options.FishFamilies,
             RecentDays = Options.RecentDays,
             RecentPenalty = Options.RecentPenalty,
+            SeasonBonus = Options.SeasonBonus,
             MaxLegumeIncludedDishes = Math.Min(Options.MaxLegumeIncludedDishes, maxDishes),
+            MinLegumeServings = minServings,
         };
     }
 

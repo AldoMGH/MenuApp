@@ -13,6 +13,11 @@ public sealed class SeedData
 
     public List<Recipe> Recipes { get; init; } = [];
 
+    /// <summary>Diccionario de platillos de tu historial (<c>dish-aliases.json</c>).</summary>
+    public List<Dish> Dishes { get; init; } = [];
+
+    public ImportRules ImportRules { get; init; } = new();
+
     /// <summary>Los mismos documentos como JSON, para validarlos contra los schemas.</summary>
     public List<(string Source, string Schema, JsonNode Node)> RawDocuments { get; init; } = [];
 
@@ -35,7 +40,23 @@ public sealed class SeedData
         var ingredients = ReadArray<Ingredient>(Path.Combine(directory, "ingredients.json"), Validation.SchemaNames.Ingredient, raw);
         var recipes = ReadArray<Recipe>(Path.Combine(directory, "recipes.json"), Validation.SchemaNames.Recipe, raw);
 
-        return new SeedData { Plans = plans, Ingredients = ingredients, Recipes = recipes, RawDocuments = raw };
+        var dishes = new List<Dish>();
+        var rules = new ImportRules();
+        var dishFile = Path.Combine(directory, "dish-aliases.json");
+        if (File.Exists(dishFile))
+        {
+            var root = Parse(dishFile).AsObject();
+            rules.SpellingFixes = root["spellingFixes"]?.Deserialize<List<SpellingFix>>(AppJson.Options) ?? [];
+            rules.Ignore = root["ignore"]?.Deserialize<List<string>>(AppJson.Options) ?? [];
+            var array = root["dishes"]?.AsArray() ?? [];
+            for (var i = 0; i < array.Count; i++)
+            {
+                raw.Add(($"dish-aliases.json[dishes][{i}]", Validation.SchemaNames.Dish, array[i]!));
+                dishes.Add(array[i]!.Deserialize<Dish>(AppJson.Options)!);
+            }
+        }
+
+        return new SeedData { Plans = plans, Ingredients = ingredients, Recipes = recipes, Dishes = dishes, ImportRules = rules, RawDocuments = raw };
     }
 
     private static List<T> ReadArray<T>(string file, string schema, List<(string, string, JsonNode)> raw)

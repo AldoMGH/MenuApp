@@ -12,7 +12,8 @@ public sealed record RecipeCandidate(Recipe Recipe, string? ProteinFamily, bool 
 
 public sealed class GenerationOptions
 {
-    public int MaxSameProtein { get; init; } = 2;
+    /// <summary>Máximo de platillos con la misma proteína (pollo, res…) por menú.</summary>
+    public int MaxSameProtein { get; init; } = 3;
 
     public int MaxLaborious { get; init; } = 1;
 
@@ -26,8 +27,14 @@ public sealed class GenerationOptions
 
     public double RecentPenalty { get; init; } = 0.2;
 
+    /// <summary>Multiplicador si en tu historial lo cocinaste en el mismo mes del año.</summary>
+    public double SeasonBonus { get; init; } = 1.25;
+
     /// <summary>Máximo de platillos con leguminosa incluida (para no pasarse de las veces por semana).</summary>
     public int MaxLegumeIncludedDishes { get; init; } = int.MaxValue;
+
+    /// <summary>Porciones mínimas que deben poder llevar leguminosa (incluida o de acompañamiento) para cumplir el plan.</summary>
+    public int MinLegumeServings { get; init; }
 }
 
 public sealed record GenerationRequest(
@@ -91,6 +98,7 @@ public sealed class MenuGenerator
         }
 
         EnsureFish(selected, pool, request, rng, warnings);
+        EnsureLegume(selected, pool, request, rng);
         return new GenerationResult(selected, warnings);
     }
 
@@ -110,13 +118,23 @@ public sealed class MenuGenerator
         return Pick(withRules.Count > 0 ? withRules : pool, request, rng);
     }
 
+    /// <summary>
+    /// Peso = (1 + 2·√veces cocinado) × penalización si se cocinó hace poco × bonus de temporada.
+    /// La raíz evita que tus 3–4 favoritos acaparen todos los menús.
+    /// </summary>
     public static double Weight(RecipeCandidate candidate, DateTime weekOf, GenerationOptions options)
     {
-        var weight = 1.0 + Math.Max(0, candidate.Recipe.Stats.TimesCooked);
-        var lastCooked = candidate.Recipe.Stats.LastCooked;
+        var stats = candidate.Recipe.Stats;
+        var weight = 1.0 + (2 * Math.Sqrt(Math.Max(0, stats.TotalCount)));
+        var lastCooked = stats.LatestCooked;
         if (lastCooked is not null && (weekOf - lastCooked.Value).TotalDays < options.RecentDays)
         {
             weight *= options.RecentPenalty;
+        }
+
+        if (stats.HistoryMonths.Count == 12 && stats.HistoryMonths[weekOf.Month - 1] > 0)
+        {
+            weight *= options.SeasonBonus;
         }
 
         return weight;
@@ -168,6 +186,40 @@ public sealed class MenuGenerator
         selected[selected.IndexOf(replaceable)] = pick;
         pool.Remove(pick);
         pool.Add(replaceable);
+    }
+
+    /// <summary>Si los platillos elegidos no alcanzan para la leguminosa semanal, cambia alguno por uno que la lleve.</summary>
+    private static void EnsureLegume(List<RecipeCandidate> selected, List<RecipeCandidate> pool, GenerationRequest request, Random rng)
+    {
+        static int Capacity(IEnumerable<RecipeCandidate> dishes) =>
+            dishes.Where(d => d.LegumeMode != LegumeMode.None).Sum(d => d.Recipe.Servings);
+
+        var options = request.Options;
+        while (Capacity(selected) < options.MinLegumeServings)
+        {
+            var fishCount = selected.Count(c => IsFish(c, options));
+            var replaceable = selected.LastOrDefault(c =>
+                c.LegumeMode == LegumeMode.None &&
+                !request.MustInclude.Contains(c.Id, StringComparer.OrdinalIgnoreCase) &&
+                !(IsFish(c, options) && fishCount == 1 && selected.Count >= options.RequireFishFrom));
+            var legumes = pool.Where(c => c.LegumeMode != LegumeMode.None).ToList();
+            if (replaceable is null || legumes.Count == 0)
+            {
+                return;
+            }
+
+            var others = selected.Where(c => c != replaceable).ToList();
+            var eligible = legumes.Where(c => SatisfiesRules(c, others, options)).ToList();
+            var pick = Pick(eligible.Count > 0 ? eligible : legumes, request, rng);
+            if (pick is null)
+            {
+                return;
+            }
+
+            selected[selected.IndexOf(replaceable)] = pick;
+            pool.Remove(pick);
+            pool.Add(replaceable);
+        }
     }
 
     private static bool SatisfiesRules(RecipeCandidate candidate, IReadOnlyList<RecipeCandidate> selected, GenerationOptions options)

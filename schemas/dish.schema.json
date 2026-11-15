@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Platillo",
+  "description": "Platillo de tu historial de Keep. Los alias son las formas en que lo escribes; puede ligarse a una receta porcionada.",
+  "type": "object",
+  "required": ["id", "name"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "title": "Identificador" },
+    "name": { "type": "string", "minLength": 1, "title": "Nombre" },
+    "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 }, "title": "Cómo lo escribes en tus notas" },
+    "recipeId": { "type": ["string", "null"], "title": "Receta ligada" },
+    "compatibility": { "enum": ["compatible", "adaptada", "noCompatible"], "default": "compatible", "title": "Compatibilidad con el plan" },
+    "notes": { "type": ["string", "null"], "title": "Notas" },
+    "stats": {
+      "type": "object",
+      "readOnly": true,
+      "properties": {
+        "timesCooked": { "type": "integer", "minimum": 0 },
+        "firstCooked": { "type": ["string", "null"] },
+        "lastCooked": { "type": ["string", "null"] },
+        "months": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+      }
+    }
+  },
+  "additionalProperties": false
+}

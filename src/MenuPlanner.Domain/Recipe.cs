@@ -82,7 +82,23 @@ public class RecipeIngredient
 
 public class RecipeStats
 {
+    /// <summary>Veces que la confirmaste en un menú de la app.</summary>
     public int TimesCooked { get; set; }
 
     public DateTime? LastCooked { get; set; }
+
+    /// <summary>Veces que aparece en tu historial importado de Keep (suma de los platillos ligados a esta receta).</summary>
+    public int HistoryCount { get; set; }
+
+    public DateTime? HistoryLastCooked { get; set; }
+
+    /// <summary>Veces por mes del año en el historial (índice 0 = enero).</summary>
+    public List<int> HistoryMonths { get; set; } = [];
+
+    public int TotalCount => TimesCooked + HistoryCount;
+
+    public DateTime? LatestCooked =>
+        LastCooked is null ? HistoryLastCooked
+        : HistoryLastCooked is null ? LastCooked
+        : LastCooked > HistoryLastCooked ? LastCooked : HistoryLastCooked;
 }

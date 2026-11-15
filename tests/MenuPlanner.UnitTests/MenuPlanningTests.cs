@@ -67,7 +67,7 @@ public class MenuGeneratorTests
     }
 
     private static GenerationRequest Request(int seed, int count = 5, string[]? must = null, string[]? exclude = null) =>
-        new(count, WeekOf, seed, must ?? [], exclude ?? [], new GenerationOptions { MaxLegumeIncludedDishes = 2 });
+        new(count, WeekOf, seed, must ?? [], exclude ?? [], new GenerationOptions { MaxSameProtein = 2, MaxLegumeIncludedDishes = 2 });
 
     [Fact]
     public void Same_seed_gives_the_same_menu()
@@ -98,10 +98,10 @@ public class MenuGeneratorTests
     [Fact]
     public void Honors_must_include_and_exclude()
     {
-        var result = new MenuGenerator().Select(Request(7, must: ["tinga-pollo"], exclude: ["caldo-pollo", "fajitas-res"]), Candidates());
+        var result = new MenuGenerator().Select(Request(7, must: ["tinga-pollo"], exclude: ["alambre", "pollo-teriyaki"]), Candidates());
 
         Assert.Equal("tinga-pollo", result.Selected[0].Id);
-        Assert.DoesNotContain(result.Selected, c => c.Id is "caldo-pollo" or "fajitas-res");
+        Assert.DoesNotContain(result.Selected, c => c.Id is "alambre" or "pollo-teriyaki");
     }
 
     [Fact]
@@ -119,9 +119,10 @@ public class MenuGeneratorTests
     [Fact]
     public void Warns_when_the_catalog_is_too_small()
     {
-        var result = new MenuGenerator().Select(Request(1, count: 20), Candidates());
+        var total = Candidates().Count;
+        var result = new MenuGenerator().Select(Request(1, count: total + 5), Candidates());
 
-        Assert.Equal(13, result.Selected.Count);
-        Assert.Contains(result.Warnings, w => w.Contains("Solo hay 13"));
+        Assert.Equal(total, result.Selected.Count);
+        Assert.Contains(result.Warnings, w => w.Contains($"Solo hay {total}"));
     }
 }

@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MenuPlanner.Domain\MenuPlanner.Domain.csproj" />
     <ProjectReference Include="..\MenuPlanner.Portioning\MenuPlanner.Portioning.csproj" />
+    <ProjectReference Include="..\MenuPlanner.Importers\MenuPlanner.Importers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -11,9 +12,6 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
 </Project>

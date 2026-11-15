@@ -95,6 +95,131 @@ public sealed class RecipeRepository(MongoContext db) : IRecipeRepository
             .Set(r => r.Stats.LastCooked, date);
         return db.Recipes.UpdateManyAsync(Builders<Recipe>.Filter.In(r => r.Id, ids), update, cancellationToken: ct);
     }
+
+    public async Task SetHistoryAsync(IReadOnlyDictionary<string, RecipeHistory> history, CancellationToken ct = default)
+    {
+        var models = new List<WriteModel<Recipe>>
+        {
+            new UpdateManyModel<Recipe>(
+                Builders<Recipe>.Filter.Nin(r => r.Id, history.Keys),
+                Builders<Recipe>.Update
+                    .Set(r => r.Stats.HistoryCount, 0)
+                    .Set(r => r.Stats.HistoryLastCooked, null)
+                    .Set(r => r.Stats.HistoryMonths, new List<int>())),
+        };
+        models.AddRange(history.Select(h => new UpdateOneModel<Recipe>(
+            Builders<Recipe>.Filter.Eq(r => r.Id, h.Key),
+            Builders<Recipe>.Update
+                .Set(r => r.Stats.HistoryCount, h.Value.Count)
+                .Set(r => r.Stats.HistoryLastCooked, h.Value.LastCooked)
+                .Set(r => r.Stats.HistoryMonths, h.Value.Months.ToList()))));
+        await db.Recipes.BulkWriteAsync(models, cancellationToken: ct);
+    }
+}
+
+public sealed class DishRepository(MongoContext db) : IDishRepository
+{
+    public async Task<List<Dish>> ListAsync(CancellationToken ct = default) =>
+        await db.Dishes.Find(FilterDefinition<Dish>.Empty).SortBy(d => d.Name).ToListAsync(ct);
+
+    public async Task<Dish?> GetAsync(string id, CancellationToken ct = default) =>
+        await db.Dishes.Find(d => d.Id == id).FirstOrDefaultAsync(ct);
+
+    public Task UpsertAsync(Dish dish, CancellationToken ct = default) =>
+        db.Dishes.ReplaceOneAsync(d => d.Id == dish.Id, dish, new ReplaceOptions { IsUpsert = true }, ct);
+
+    public async Task UpsertManyAsync(IEnumerable<Dish> dishes, CancellationToken ct = default)
+    {
+        var models = dishes
+            .Select(d => new ReplaceOneModel<Dish>(Builders<Dish>.Filter.Eq(x => x.Id, d.Id), d) { IsUpsert = true })
+            .ToList();
+        if (models.Count > 0)
+        {
+            await db.Dishes.BulkWriteAsync(models, cancellationToken: ct);
+        }
+    }
+}
+
+public sealed class ImportRepository(MongoContext db) : IImportRepository
+{
+    public async Task<HashSet<string>> GetExistingNoteIdsAsync(IEnumerable<string> noteIds, CancellationToken ct = default)
+    {
+        var ids = noteIds.Distinct().ToList();
+        var found = await db.ImportedNotes.Find(Builders<ImportedNote>.Filter.In(n => n.Id, ids))
+            .Project(n => n.Id)
+            .ToListAsync(ct);
+        return found.ToHashSet(StringComparer.Ordinal);
+    }
+
+    public async Task SaveImportAsync(
+        ImportJob job,
+        IReadOnlyList<ImportedNote> notes,
+        IReadOnlyList<DishOccurrence> occurrences,
+        IReadOnlyList<PurchaseRecord> purchases,
+        CancellationToken ct = default)
+    {
+        // Mongo local sin replica set: sin transacción. El orden (historial → notas → resumen) hace que un
+        // fallo a la mitad solo deje renglones que se vuelven a escribir al reintentar (ids deterministas).
+        var unordered = new InsertManyOptions { IsOrdered = false };
+        if (occurrences.Count > 0)
+        {
+            await Upsert(db.DishHistory, occurrences, o => o.Id, ct);
+        }
+
+        if (purchases.Count > 0)
+        {
+            await Upsert(db.PurchaseHistory, purchases, p => p.Id, ct);
+        }
+
+        if (notes.Count > 0)
+        {
+            try
+            {
+                await db.ImportedNotes.InsertManyAsync(notes, unordered, ct);
+            }
+            catch (MongoBulkWriteException ex) when (ex.WriteErrors.All(e => e.Category == ServerErrorCategory.DuplicateKey))
+            {
+                // Otra importación ya registró esas notas: es idempotente.
+            }
+        }
+
+        await SaveJobAsync(job, ct);
+    }
+
+    public async Task<List<DishOccurrence>> ListOccurrencesAsync(string? importId = null, CancellationToken ct = default)
+    {
+        var filter = importId is null
+            ? FilterDefinition<DishOccurrence>.Empty
+            : Builders<DishOccurrence>.Filter.Eq(o => o.ImportId, importId);
+        return await db.DishHistory.Find(filter).SortByDescending(o => o.Date).ToListAsync(ct);
+    }
+
+    public Task UpdateOccurrencesAsync(IEnumerable<DishOccurrence> occurrences, CancellationToken ct = default)
+    {
+        var list = occurrences.ToList();
+        return list.Count == 0 ? Task.CompletedTask : Upsert(db.DishHistory, list, o => o.Id, ct);
+    }
+
+    public async Task<List<PurchaseRecord>> ListPurchasesAsync(CancellationToken ct = default) =>
+        await db.PurchaseHistory.Find(FilterDefinition<PurchaseRecord>.Empty).ToListAsync(ct);
+
+    public async Task<ImportJob?> GetJobAsync(string id, CancellationToken ct = default) =>
+        await db.ImportJobs.Find(j => j.Id == id).FirstOrDefaultAsync(ct);
+
+    public async Task<List<ImportJob>> ListJobsAsync(int limit = 20, CancellationToken ct = default) =>
+        await db.ImportJobs.Find(FilterDefinition<ImportJob>.Empty)
+            .SortByDescending(j => j.CreatedAt)
+            .Limit(Math.Clamp(limit, 1, 200))
+            .ToListAsync(ct);
+
+    public Task SaveJobAsync(ImportJob job, CancellationToken ct = default) =>
+        db.ImportJobs.ReplaceOneAsync(j => j.Id == job.Id, job, new ReplaceOptions { IsUpsert = true }, ct);
+
+    private static Task Upsert<T>(IMongoCollection<T> collection, IEnumerable<T> items, Func<T, string> id, CancellationToken ct) =>
+        collection.BulkWriteAsync(
+            items.Select(i => new ReplaceOneModel<T>(Builders<T>.Filter.Eq("_id", id(i)), i) { IsUpsert = true }),
+            new BulkWriteOptions { IsOrdered = false },
+            ct);
 }
 
 public sealed class MenuRepository(MongoContext db) : IMenuRepository
@@ -133,5 +258,14 @@ public sealed class SettingsRepository(MongoContext db) : ISettingsRepository
     {
         basics.Id = DefaultId;
         return db.Basics.ReplaceOneAsync(b => b.Id == DefaultId, basics, new ReplaceOptions { IsUpsert = true }, ct);
+    }
+
+    public async Task<ImportRules> GetImportRulesAsync(CancellationToken ct = default) =>
+        await db.ImportRules.Find(r => r.Id == DefaultId).FirstOrDefaultAsync(ct) ?? new ImportRules();
+
+    public Task SaveImportRulesAsync(ImportRules rules, CancellationToken ct = default)
+    {
+        rules.Id = DefaultId;
+        return db.ImportRules.ReplaceOneAsync(r => r.Id == DefaultId, rules, new ReplaceOptions { IsUpsert = true }, ct);
     }
 }

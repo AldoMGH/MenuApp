@@ -323,3 +323,93 @@ Alcance: backend + datos iniciales + pruebas. Blazor, MCP, el import de Keep y l
 - Se usa el valor superior del rango de proteína por defecto (configurable).
 - Desayuno y cena entran solo como básicos configurables en la lista, no los genera el menú.
 - Los datos personales y de contacto del PDF no se guardan ni se mandan a servicios externos; solo la estructura del plan.
+
+---
+
+## Fase 2: importador de Keep (vía Google Docs)
+
+### Contexto
+El administrador de la organización bloqueó Takeout para Keep. Copiaste las notas a un Google Doc llamado **"Menus"**. Lo leí completo con el conector de Drive. Lo que encontré:
+- **71 notas** en orden de la más reciente a la más antigua: "Noviembre 1" (nov 2026) → "Lista mayo 2" (may 2024). Se separan con `-----`.
+- **Título = mes + número de semana, sin año.** Variantes: emojis (que llegan mal codificados), prefijo "Lista", "Julio - 2", meses sin semana, un "Septiembre 3" repetido.
+- **Secciones fijas:** Comidas, Vegetales/Verduras/Verdura, Procesados, Carnes/Carne, Limpieza.
+- **"Comidas": 386 apariciones con 177 nombres escritos de distinta forma**, que se agrupan en unos 60 platillos. Hay ortografía juguetona ("Poyo", "Mollo con Pole", "Anvorgesas", "Bongles"), combinaciones ("pollo adobado/lentejas", "teriyaki c arroz") y algunas líneas que no son platillos ("vinagre de arroz", "desayuno jueves").
+- **Las listas de compras traen cantidades** ("1 kg piernil deshuesado", "3/4 kg pechuga", "3 latas de atún").
+
+Decisiones confirmadas:
+- Importar **solo alimentos** (se ignora Limpieza).
+- Redacto las recetas ajustadas de los **~20 platillos más frecuentes**. Los que no cumplen el plan llevan versión adaptada y se marcan para revisión.
+- **Reemplazar las 8 recetas inventadas** por las de tu historial (se conservan las 5 del plan).
+
+### Diseño
+
+**Cómo entra el archivo.** Descargas el Doc (Archivo → Descargar → Markdown o Texto) y lo subes con `POST /api/imports/keep`. El archivo **nunca va al repo**: `data/` queda en `.gitignore`. La normalización corre **sin LLM y sin API key**: uso un diccionario de platillos que armo ahora a partir de tu documento, más coincidencia aproximada. Lo que no coincida pasa a tu revisión. Normalizar con Claude queda como opción futura.
+
+1. **`KeepNotesParser`** (proyecto nuevo `src/MenuPlanner.Importers`)
+   - Separa notas por líneas `---`/`___`/`***` o por un título nuevo. Limpia viñetas (`- * • ● ○ ◦`), `<!-- end list -->`, negritas y emojis o mojibake.
+   - Título: regex `mes [-] [semana]`. Ignora "Lista" y los emojis.
+   - Secciones (sin importar mayúsculas ni acentos): comidas → platillos; carnes, vegetales/verduras/frutas y procesados → historial de compras; limpieza o sección desconocida → se ignora.
+   - Cantidades: `3/4 kg pechuga`, `1kg`, `600g`, `2L de leche`, `3 latas de atún` → (cantidad, unidad, nombre).
+   - **Año deducido:** se toma el año de la nota más reciente (por defecto el actual; si su mes es posterior al mes actual, el anterior; también se puede indicar con `latestYear`). Al bajar por la lista, si el mes "sube" se resta un año. Fecha = lunes de la semana N del mes; sin semana = primer lunes. Los títulos duplicados se reportan como aviso.
+   - **Idempotencia:** cada nota tiene un hash (título + contenido normalizado) con índice único. Reimportar no duplica nada.
+2. **`DishMatcher`**
+   - Normaliza: minúsculas, sin acentos, correcciones (poyo→pollo, tortiya→tortilla, triyaki→teriyaki, koreano→coreano, anvorgesa(s)→hamburguesa, bongles→boneless, "mollo con pole"→pollo con mole, aloz→arroz, `c/`→con).
+   - En combinaciones con "/" toma el primer platillo y guarda la otra parte como acompañamiento o alternativa.
+   - Busca en `seed/dish-aliases.json` (unos 60 platillos canónicos con alias y una lista `ignore`). Si no lo encuentra, usa similitud aproximada (≥ 0.88) con un nivel de confianza; si tampoco, el nombre queda como *sin asignar*.
+3. **Modelo nuevo en Mongo**
+   - `dishes`: `{id, name, aliases[], recipeId?, compatibility: compatible|adaptada|noCompatible, stats {timesCooked, firstCooked, lastCooked, months[]}}`
+   - `dishHistory`: `{noteHash, date, rawName, dishId?, side?, importId}`
+   - `purchaseHistory`: `{noteHash, date, section, raw, qty?, unit?, name, ingredientId?}`
+   - `importJobs`: resumen (notas nuevas y duplicadas, coincidencias, sin asignar con frecuencia y sugerencias, avisos)
+   - `Recipe` gana `dishId?`. `RecipeStats` gana `historyCount` y `historyLastCooked`. `MenuGenerator.Weight` pasa a usar `timesCooked + historyCount`, la última vez cocinado más reciente y un **bonus de temporada** (×1.25 si lo cocinaste en ese mes en años anteriores).
+4. **API**
+   - `POST /api/imports/keep`: archivo `.md`/`.txt` o texto plano; opciones `latestYear` y `dryRun`.
+   - `GET /api/imports`, `GET /api/imports/{id}`.
+   - `POST /api/imports/{id}/review` con `{mappings:[{raw, dishId | newDish | ignore}]}`: guarda alias, vuelve a asignar y recalcula estadísticas.
+   - `GET /api/dishes` (ordenado por frecuencia), `PUT /api/dishes/{id}` (alias, receta ligada, compatibilidad).
+   - `GET /api/pantry/suggestions`: ingredientes por frecuencia de compra, ligados al catálogo por alias. Los aceptas con los `PUT` de despensa y básicos que ya existen.
+   - `POST /api/seed/recipes`: inserta o actualiza las recetas del seed y borra las de origen `semilla`, para tu base que ya tiene el seed anterior.
+5. **Recetas (seed)**
+   - ~20 recetas nuevas que cubren cerca del 75% de lo que cocinas: alambre, enchiladas suizas, pollo teriyaki, pollo con mole, hamburguesas, enchiladas rojas, tacos de carne al vapor, sopa de tortilla, pollo ajonjolí, boneless, pollo a las hierbas, picadillo, pipián, quesatacos, pollo mostaza/honey mustard, puerco en salsa verde, pollo adobado, pollo a la naranja, pollo coreano, tinga/tostadas de pollo y shawarma.
+   - Las que no cumplen el plan van **adaptadas**, con la etiqueta `revisar-nutriologa`: boneless al horno sin empanizar, hamburguesa de res magra con pan integral o lechuga, enchiladas suizas con yogurt griego y panela, quesatacos con panela.
+   - Se agregan los ingredientes que faltan: pierna de cerdo, paleta de res, tortilla de harina integral, yogurt griego, queso panela, salsa de soya, ajonjolí, col napa, cebollín, pasta de mole y pipián, chile guajillo, jengibre, mostaza, miel…
+   - Se quitan las 8 recetas inventadas (`source: semilla`).
+6. **Privacidad:** el Doc no se versiona. Las pruebas usan un archivo de muestra corto, sintético, con el mismo formato.
+
+### Archivos
+- Nuevos:
+  - `src/MenuPlanner.Importers/{KeepNotesParser,DishMatcher,TextNormalizer,QuantityParser}.cs`
+  - `src/MenuPlanner.Domain/Dish.cs`
+  - `src/MenuPlanner.Application/Imports/ImportService.cs`
+  - `src/MenuPlanner.Api/Endpoints/ImportEndpoints.cs`
+  - `seed/dish-aliases.json`
+  - `schemas/dish.schema.json`
+- Cambios:
+  - `seed/recipes.json`, `seed/ingredients.json`
+  - `MenuGenerator.Weight`
+  - `Recipe` / `RecipeStats`
+  - `MongoContext` (colecciones e índices)
+  - Repositorios, `DependencyInjection`, `.gitignore` (`data/`), README
+
+### Verificación
+- Unitarias:
+  - Parser: títulos con emojis, "Lista Julio - 2", sin semana, secciones variantes, viñetas de `.md` y `.txt`, cantidades.
+  - Inferencia de año: cruce dic→nov y el orden completo de 71 títulos con la secuencia real.
+  - Matcher: correcciones, alias, aproximados, combinaciones, ignorados.
+  - Idempotencia del import y flujo de revisión.
+  - Pesos y temporada en el generador.
+  - Las pruebas del seed que ya existen validan las nuevas recetas: schema, catálogo y porcionado sin avisos.
+- API (`WebApplicationFactory`): import, revisión, platillos y sugerencias de despensa.
+- Integración con Mongo: ida y vuelta del import.
+- **Validación con tu documento real**, aquí en la sesión y sin versionarlo: correr el parser y el matcher sobre el contenido leído de Drive. Se espera 71 notas, ~386 apariciones, ≥ 90% asignadas y reimportar = 0 nuevas. Te reporto la tasa y la lista de nombres sin asignar.
+- Local: descargar "Menus" como `.md`, luego `curl -F file=@Menus.md http://localhost:5033/api/imports/keep`, y generar un menú de 5 donde tus favoritos aparezcan más.
+
+### Resultado con tu documento real
+- 71 notas (13 may 2024 → 2 nov 2026), 386 líneas de "Comidas": **376 asignadas (100%)**, 10 ignoradas, 0 sin asignar.
+- 1 216 renglones de compras; 69% quedan ligados a un ingrediente del catálogo.
+- Las recetas del seed cubren el **73%** de lo que cocinas (274 de 376).
+- Un aviso: hay dos notas tituladas "Septiembre 3" (2026); se importan ambas.
+- Cambios de criterio durante la implementación:
+  - `MaxSameProtein` pasó de 2 a 3: el pollo domina tu historial.
+  - El generador ahora asegura que haya platillos con leguminosa suficiente para cumplir 2–3 veces por semana.
+

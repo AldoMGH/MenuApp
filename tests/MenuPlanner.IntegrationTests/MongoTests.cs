@@ -91,6 +91,39 @@ public class MongoTests(MongoFixture fixture)
         await plans.ActivateAsync("plan-2");
     }
 
+    [SkippableFact]
+    public async Task Keep_import_round_trip_is_idempotent()
+    {
+        Skip.If(fixture.SkipReason is not null, fixture.SkipReason);
+        var service = fixture.CreateImportService();
+        var text = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", "keep-sample-drive.md"));
+
+        var job = await service.ImportKeepAsync(text, "Menus.md", latestYear: 2026, dryRun: false);
+        Assert.Equal(5, job.NewNotes);
+        Assert.Single(job.Unmatched);
+
+        var again = await service.ImportKeepAsync(text, "Menus.md", latestYear: 2026, dryRun: false);
+        Assert.Equal(0, again.NewNotes);
+
+        var stored = await new ImportRepository(fixture.Context!).GetJobAsync(job.Id);
+        Assert.Equal(job.DishOccurrences, stored!.DishOccurrences);
+        Assert.Equal("platillo misterioso", stored.Unmatched[0].Name);
+
+        var dish = await new DishRepository(fixture.Context!).GetAsync("enchiladas-suizas");
+        Assert.True(dish!.Stats.TimesCooked >= 2);
+        Assert.Equal(12, dish.Stats.Months.Count);
+
+        var recipe = await new RecipeRepository(fixture.Context!).GetAsync("enchiladas-suizas");
+        Assert.True(recipe!.Stats.HistoryCount >= 2);
+
+        var reviewed = await service.ReviewAsync(job.Id, new MenuPlanner.Application.Imports.ReviewRequest(
+            [new MenuPlanner.Application.Imports.ReviewMapping("platillo misterioso", Ignore: true)]));
+        Assert.Empty(reviewed.Unmatched);
+
+        var suggestions = await service.GetPantrySuggestionsAsync(12, 0.5);
+        Assert.Contains(suggestions, s => s.IngredientId == "pierna-cerdo");
+    }
+
     private sealed class ProviderFor(MongoContext context) : IServiceProvider
     {
         public object? GetService(Type serviceType) => serviceType == typeof(MongoContext) ? context : null;

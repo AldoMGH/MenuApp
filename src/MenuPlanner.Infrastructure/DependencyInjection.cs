@@ -19,6 +19,8 @@ public static class DependencyInjection
         services.AddSingleton<IRecipeRepository, RecipeRepository>();
         services.AddSingleton<IMenuRepository, MenuRepository>();
         services.AddSingleton<ISettingsRepository, SettingsRepository>();
+        services.AddSingleton<IDishRepository, DishRepository>();
+        services.AddSingleton<IImportRepository, ImportRepository>();
         return services;
     }
 
@@ -54,6 +56,18 @@ public static class DependencyInjection
         {
             await db.Recipes.InsertManyAsync(seed.Recipes, cancellationToken: ct);
             logger.LogInformation("Seed: {Count} recetas cargadas.", seed.Recipes.Count);
+        }
+
+        if (await db.Dishes.EstimatedDocumentCountAsync(cancellationToken: ct) == 0 && seed.Dishes.Count > 0)
+        {
+            await db.Dishes.InsertManyAsync(seed.Dishes, cancellationToken: ct);
+            logger.LogInformation("Seed: {Count} platillos del diccionario de Keep cargados.", seed.Dishes.Count);
+        }
+
+        if (await db.ImportRules.EstimatedDocumentCountAsync(cancellationToken: ct) == 0)
+        {
+            seed.ImportRules.Id = "default";
+            await db.ImportRules.InsertOneAsync(seed.ImportRules, cancellationToken: ct);
         }
     }
 }

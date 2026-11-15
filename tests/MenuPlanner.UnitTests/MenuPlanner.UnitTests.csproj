@@ -16,6 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Xunit.SkippableFact" Version="1.4.13" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
   <ItemGroup>
     <None Include="..\..\schemas\*.json" Link="schemas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\seed\*.json" Link="seed\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Fixtures\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

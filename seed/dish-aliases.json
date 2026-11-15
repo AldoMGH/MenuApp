@@ -1,0 +1,779 @@
+{
+  "spellingFixes": [
+    {
+      "from": "poyo",
+      "to": "pollo"
+    },
+    {
+      "from": "poblo",
+      "to": "pollo"
+    },
+    {
+      "from": "pollano",
+      "to": "poblano"
+    },
+    {
+      "from": "tortiya",
+      "to": "tortilla"
+    },
+    {
+      "from": "triyaki",
+      "to": "teriyaki"
+    },
+    {
+      "from": "koreano",
+      "to": "coreano"
+    },
+    {
+      "from": "aloz",
+      "to": "arroz"
+    },
+    {
+      "from": "ppino",
+      "to": "pepino"
+    },
+    {
+      "from": "bimrria",
+      "to": "birria"
+    },
+    {
+      "from": "anvorgesas",
+      "to": "hamburguesas"
+    },
+    {
+      "from": "anvorgesa",
+      "to": "hamburguesas"
+    },
+    {
+      "from": "anborgesas",
+      "to": "hamburguesas"
+    },
+    {
+      "from": "bongles",
+      "to": "boneless"
+    },
+    {
+      "from": "keso",
+      "to": "queso"
+    },
+    {
+      "from": "webo",
+      "to": "huevo"
+    },
+    {
+      "from": "seboya",
+      "to": "cebolla"
+    },
+    {
+      "from": "awakate",
+      "to": "aguacate"
+    },
+    {
+      "from": "glasiadas",
+      "to": "glaseadas"
+    },
+    {
+      "from": "hotcocks",
+      "to": "hotcakes"
+    },
+    {
+      "from": "hot cocks",
+      "to": "hotcakes"
+    },
+    {
+      "from": "jjajangmyeon",
+      "to": "jajangmyeon"
+    },
+    {
+      "from": "ramyeon",
+      "to": "ramen"
+    },
+    {
+      "from": "kai",
+      "to": "kay"
+    },
+    {
+      "from": "espicanas",
+      "to": "espinacas"
+    },
+    {
+      "from": "freejoules",
+      "to": "frijoles"
+    },
+    {
+      "from": "tosino",
+      "to": "tocino"
+    },
+    {
+      "from": "mollo con pole",
+      "to": "pollo con mole"
+    },
+    {
+      "from": "garlic",
+      "to": "ajo"
+    },
+    {
+      "from": "rellena",
+      "to": "rellenas"
+    }
+  ],
+  "ignore": [
+    "pollo desayunos",
+    "vinagre de arroz",
+    "procesado",
+    "papel arroz",
+    "soda sin azucar toronja limon",
+    "harina integral",
+    "desayuno jueves",
+    "hotcakes",
+    "lentejas complemento"
+  ],
+  "dishes": [
+    {
+      "id": "alambre",
+      "name": "Alambre",
+      "aliases": [
+        "alambre",
+        "alambre de pollo",
+        "alambre de res"
+      ],
+      "recipeId": "alambre",
+      "compatibility": "adaptada",
+      "notes": "Versión sin tocino y con queso panela."
+    },
+    {
+      "id": "enchiladas-suizas",
+      "name": "Enchiladas suizas",
+      "aliases": [
+        "enchiladas suizas",
+        "enchiladas"
+      ],
+      "recipeId": "enchiladas-suizas",
+      "compatibility": "adaptada",
+      "notes": "Crema → yogurt griego; queso manchego → panela."
+    },
+    {
+      "id": "pollo-teriyaki",
+      "name": "Pollo teriyaki",
+      "aliases": [
+        "teriyaki",
+        "pollo teriyaki"
+      ],
+      "recipeId": "pollo-teriyaki",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-con-mole",
+      "name": "Pollo con mole",
+      "aliases": [
+        "pollo con mole",
+        "mole",
+        "mole con pollo"
+      ],
+      "recipeId": "pollo-con-mole",
+      "compatibility": "adaptada",
+      "notes": "Mole desgrasado y en menor cantidad."
+    },
+    {
+      "id": "hamburguesas",
+      "name": "Hamburguesas",
+      "aliases": [
+        "hamburguesas",
+        "hamburguesa"
+      ],
+      "recipeId": "hamburguesas",
+      "compatibility": "adaptada",
+      "notes": "Res magra, en lechuga, con papa al horno."
+    },
+    {
+      "id": "enchiladas-rojas",
+      "name": "Enchiladas rojas",
+      "aliases": [
+        "enchiladas rojas"
+      ],
+      "recipeId": "enchiladas-rojas",
+      "compatibility": "adaptada",
+      "notes": "Tortillas sin freír."
+    },
+    {
+      "id": "tacos-carne-al-vapor",
+      "name": "Tacos de carne al vapor",
+      "aliases": [
+        "tacos de carne al vapor",
+        "tacos carne al vapor",
+        "carne al vapor",
+        "tacos al vapor"
+      ],
+      "recipeId": "tacos-carne-al-vapor",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "sopa-de-tortilla",
+      "name": "Sopa de tortilla",
+      "aliases": [
+        "sopa de tortilla"
+      ],
+      "recipeId": "sopa-de-tortilla",
+      "compatibility": "adaptada",
+      "notes": "Tiras de tortilla horneadas, no fritas."
+    },
+    {
+      "id": "pollo-ajonjoli",
+      "name": "Pollo ajonjolí",
+      "aliases": [
+        "pollo ajonjoli",
+        "pollo al ajonjoli",
+        "sesame noodles"
+      ],
+      "recipeId": "pollo-ajonjoli",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "boneless",
+      "name": "Boneless",
+      "aliases": [
+        "boneless",
+        "alitas"
+      ],
+      "recipeId": "boneless",
+      "compatibility": "adaptada",
+      "notes": "Al horno o air fryer, sin empanizar."
+    },
+    {
+      "id": "pollo-a-las-hierbas",
+      "name": "Pollo a las hierbas",
+      "aliases": [
+        "pollo a las hierbas",
+        "pollo hierbas"
+      ],
+      "recipeId": "pollo-a-las-hierbas",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "picadillo",
+      "name": "Picadillo",
+      "aliases": [
+        "picadillo"
+      ],
+      "recipeId": "picadillo-res",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-en-pipian",
+      "name": "Pollo en pipián",
+      "aliases": [
+        "pipian",
+        "pollo con pipian",
+        "pipian con pollo",
+        "pollo en pipian"
+      ],
+      "recipeId": "pollo-en-pipian",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "puerco-en-pipian",
+      "name": "Puerco en pipián",
+      "aliases": [
+        "pipian con puerco",
+        "puerco con pipian",
+        "puerco en pipian"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "quesatacos",
+      "name": "Quesatacos de deshebrada",
+      "aliases": [
+        "quesatacos",
+        "tacos deshebrada",
+        "tacos de deshebrada"
+      ],
+      "recipeId": "quesatacos",
+      "compatibility": "adaptada",
+      "notes": "Queso panela en lugar de oaxaca; sin freír."
+    },
+    {
+      "id": "pollo-mostaza",
+      "name": "Pollo a la mostaza (honey mustard)",
+      "aliases": [
+        "pollo mostaza",
+        "pollo honey mustard",
+        "pollo a la mostaza",
+        "pollo mostaza limon"
+      ],
+      "recipeId": "pollo-mostaza",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "puerco-en-salsa-verde",
+      "name": "Puerco en salsa verde",
+      "aliases": [
+        "puerco en salsa verde",
+        "puerco en la salsa verde",
+        "chuleta de cerdo en salsa verde",
+        "puerco en salsa"
+      ],
+      "recipeId": "lomo-salsa-verde-nopales",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-adobado",
+      "name": "Pollo adobado",
+      "aliases": [
+        "pollo adobado"
+      ],
+      "recipeId": "pollo-adobado",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-a-la-naranja",
+      "name": "Pollo a la naranja",
+      "aliases": [
+        "pollo a la naranja",
+        "pollo naranja",
+        "pollo a la naranja y sopa de napa"
+      ],
+      "recipeId": "pollo-a-la-naranja",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-en-salsa-verde",
+      "name": "Pollo en salsa verde",
+      "aliases": [
+        "pollo en salsa verde"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-coreano",
+      "name": "Pollo coreano",
+      "aliases": [
+        "pollo coreano"
+      ],
+      "recipeId": "pollo-coreano",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "puerco-coreano",
+      "name": "Puerco coreano",
+      "aliases": [
+        "puerco coreano"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "tinga-de-pollo",
+      "name": "Tinga / tostadas de pollo",
+      "aliases": [
+        "tinga de pollo",
+        "tostadas de pollo",
+        "tinga"
+      ],
+      "recipeId": "tinga-pollo",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "tacos-de-pollo",
+      "name": "Tacos de pollo",
+      "aliases": [
+        "tacos de pollo"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "shawarma",
+      "name": "Shawarma",
+      "aliases": [
+        "shawarma",
+        "pollo shawarma",
+        "shawarma de res",
+        "shawarma asado res",
+        "carne shawarma",
+        "cerdo shawarma",
+        "kebab"
+      ],
+      "recipeId": "shawarma-pollo",
+      "compatibility": "adaptada",
+      "notes": "En bowl con arroz (la tortilla de harina no está en tu tabla de intercambios)."
+    },
+    {
+      "id": "flautas",
+      "name": "Flautas / tacos dorados",
+      "aliases": [
+        "flautas",
+        "flautas de res",
+        "tacos dorados",
+        "tacos dorados de pollo"
+      ],
+      "compatibility": "noCompatible",
+      "notes": "Fritas: pendiente versión horneada."
+    },
+    {
+      "id": "carbonara",
+      "name": "Pasta carbonara con pollo",
+      "aliases": [
+        "carbonara",
+        "carbonara con pollo",
+        "pasta carbonara"
+      ],
+      "compatibility": "noCompatible",
+      "notes": "Crema y tocino: pendiente versión adaptada."
+    },
+    {
+      "id": "ceviche",
+      "name": "Ceviche",
+      "aliases": [
+        "ceviche"
+      ],
+      "recipeId": "ceviche-pescado",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "aguachile",
+      "name": "Aguachile",
+      "aliases": [
+        "aguachile",
+        "aguachile de arrachera"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "kay-kiu",
+      "name": "Kay kiu",
+      "aliases": [
+        "kay kiu"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "rollos-primavera",
+      "name": "Rollos primavera",
+      "aliases": [
+        "rollos primavera"
+      ],
+      "compatibility": "noCompatible",
+      "notes": "Fritos."
+    },
+    {
+      "id": "puerco-al-horno",
+      "name": "Puerco al horno",
+      "aliases": [
+        "puerco al horno"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "jajangmyeon",
+      "name": "Jajangmyeon / ramen negro",
+      "aliases": [
+        "jajangmyeon",
+        "pollo jajangmyeon",
+        "jajangmyeon puerco",
+        "ramen negro"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-thai",
+      "name": "Pollo thai",
+      "aliases": [
+        "pollo thai"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-poblano",
+      "name": "Pollo poblano",
+      "aliases": [
+        "pollo poblano"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "salpicon",
+      "name": "Salpicón",
+      "aliases": [
+        "salpicon",
+        "salpicon de pollo"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "bowl-asiatico",
+      "name": "Bowl asiático",
+      "aliases": [
+        "bowl asiatico"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "albondigas",
+      "name": "Albóndigas",
+      "aliases": [
+        "albondigas",
+        "albondigas con pasta",
+        "albondigas wagyu",
+        "albondigas italianas",
+        "albondigas glaseadas",
+        "caldo de albondigas"
+      ],
+      "recipeId": "sopa-verdura-albondigas",
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-chino-con-verduras",
+      "name": "Pollo chino con verduras",
+      "aliases": [
+        "pollo chino con verduras",
+        "pollo chino con verdura",
+        "pollo chino"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "carne-con-brocoli",
+      "name": "Carne con brócoli",
+      "aliases": [
+        "carne con brocoli"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "sopes",
+      "name": "Sopes",
+      "aliases": [
+        "sopes"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "estofado-de-res",
+      "name": "Estofado de res",
+      "aliases": [
+        "estofado de res",
+        "estofado"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "ramen",
+      "name": "Ramen / udon",
+      "aliases": [
+        "ramen",
+        "ramen puerco",
+        "udon",
+        "udon con pollo"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "sopa-miso",
+      "name": "Sopa miso",
+      "aliases": [
+        "sopa miso",
+        "miso",
+        "miso con pollo",
+        "sopa miso con pollo y napa"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "sopa-de-napa",
+      "name": "Sopa de napa con pollo",
+      "aliases": [
+        "sopa de napa",
+        "sopa de napa con pollo"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "puerco-bbq",
+      "name": "Puerco / costilla BBQ",
+      "aliases": [
+        "puerco bbq",
+        "costilla bbq"
+      ],
+      "compatibility": "noCompatible",
+      "notes": "Salsa BBQ con azúcar; costilla grasosa."
+    },
+    {
+      "id": "memelas",
+      "name": "Memelas",
+      "aliases": [
+        "memelas",
+        "memelas de carne",
+        "memelas carne",
+        "memelas asada"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-ajo-parmesano",
+      "name": "Pollo ajo y parmesano",
+      "aliases": [
+        "pollo ajo parmesano",
+        "pollo parmesano ajo",
+        "pollo ajo y parmesano",
+        "pollo con crema de ajo"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "molletes-de-pollo",
+      "name": "Molletes de pollo",
+      "aliases": [
+        "molletes de pollo",
+        "molletes"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-agridulce",
+      "name": "Pollo / puerco agridulce",
+      "aliases": [
+        "pollo agridulce",
+        "puerco agridulce"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "ensalada-de-atun",
+      "name": "Ensalada de atún",
+      "aliases": [
+        "ensalada de atun"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "chiles-rellenos",
+      "name": "Chiles rellenos",
+      "aliases": [
+        "chiles rellenos"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pozole",
+      "name": "Pozole",
+      "aliases": [
+        "pozole"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "birria",
+      "name": "Birria",
+      "aliases": [
+        "birria",
+        "birria de res"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-en-tomate",
+      "name": "Pollo en tomate",
+      "aliases": [
+        "pollo en tomate"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pasta-verde-con-pollo",
+      "name": "Pasta verde con pollo",
+      "aliases": [
+        "pasta verde",
+        "pasta verde con pollo"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "milanesas",
+      "name": "Milanesas",
+      "aliases": [
+        "milanesas",
+        "milanesas de res"
+      ],
+      "compatibility": "noCompatible",
+      "notes": "Empanizadas."
+    },
+    {
+      "id": "enfrijoladas",
+      "name": "Enfrijoladas con pollo",
+      "aliases": [
+        "enfrijoladas",
+        "enfrijoladas con pollo"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "chuleta",
+      "name": "Chuleta / costilla en salsa",
+      "aliases": [
+        "chuleta",
+        "chuleta con ensalada",
+        "costilla en salsa morita"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-al-horno",
+      "name": "Pollo al horno / asado",
+      "aliases": [
+        "pollo al horno",
+        "pollo asado"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "wrap-de-pollo",
+      "name": "Wrap de pollo",
+      "aliases": [
+        "wrap de pollo"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "hot-dogs",
+      "name": "Hot dogs",
+      "aliases": [
+        "hot dogs"
+      ],
+      "compatibility": "noCompatible",
+      "notes": "Embutidos."
+    },
+    {
+      "id": "papas-rellenas",
+      "name": "Papas rellenas",
+      "aliases": [
+        "papas rellenas"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "tostadas-de-res",
+      "name": "Tostadas de res",
+      "aliases": [
+        "tostadas res",
+        "tostadas de res"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "pollo-crema-chipotle",
+      "name": "Pollo en crema de chipotle",
+      "aliases": [
+        "pollo en crema chipotle",
+        "pollo en crema de chipotle"
+      ],
+      "compatibility": "compatible"
+    },
+    {
+      "id": "crema-de-esparragos",
+      "name": "Crema de espárragos",
+      "aliases": [
+        "crema de esparragos"
+      ],
+      "compatibility": "compatible"
+    }
+  ]
+}

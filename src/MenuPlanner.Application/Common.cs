@@ -22,6 +22,9 @@ public static class AppJson
 {
     public static JsonSerializerOptions Options { get; } = Configure(new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
+    /// <summary>Copia profunda vía JSON (para no modificar objetos compartidos como el seed cargado).</summary>
+    public static T Clone<T>(T value) => JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(value, Options), Options)!;
+
     public static JsonSerializerOptions Configure(JsonSerializerOptions options)
     {
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -80,6 +83,46 @@ public interface IRecipeRepository
 
     /// <summary>Incrementa <c>timesCooked</c> y fija <c>lastCooked</c> para las recetas de un menú confirmado.</summary>
     Task RegisterCookedAsync(IEnumerable<string> recipeIds, DateTime date, CancellationToken ct = default);
+
+    /// <summary>Fija las estadísticas del historial importado; las recetas que no están en el diccionario quedan en cero.</summary>
+    Task SetHistoryAsync(IReadOnlyDictionary<string, RecipeHistory> history, CancellationToken ct = default);
+}
+
+public sealed record RecipeHistory(int Count, DateTime? LastCooked, IReadOnlyList<int> Months);
+
+public interface IDishRepository
+{
+    Task<List<Dish>> ListAsync(CancellationToken ct = default);
+
+    Task<Dish?> GetAsync(string id, CancellationToken ct = default);
+
+    Task UpsertAsync(Dish dish, CancellationToken ct = default);
+
+    Task UpsertManyAsync(IEnumerable<Dish> dishes, CancellationToken ct = default);
+}
+
+public interface IImportRepository
+{
+    Task<HashSet<string>> GetExistingNoteIdsAsync(IEnumerable<string> noteIds, CancellationToken ct = default);
+
+    Task SaveImportAsync(
+        ImportJob job,
+        IReadOnlyList<ImportedNote> notes,
+        IReadOnlyList<DishOccurrence> occurrences,
+        IReadOnlyList<PurchaseRecord> purchases,
+        CancellationToken ct = default);
+
+    Task<List<DishOccurrence>> ListOccurrencesAsync(string? importId = null, CancellationToken ct = default);
+
+    Task UpdateOccurrencesAsync(IEnumerable<DishOccurrence> occurrences, CancellationToken ct = default);
+
+    Task<List<PurchaseRecord>> ListPurchasesAsync(CancellationToken ct = default);
+
+    Task<ImportJob?> GetJobAsync(string id, CancellationToken ct = default);
+
+    Task<List<ImportJob>> ListJobsAsync(int limit = 20, CancellationToken ct = default);
+
+    Task SaveJobAsync(ImportJob job, CancellationToken ct = default);
 }
 
 public interface IMenuRepository
@@ -100,4 +143,8 @@ public interface ISettingsRepository
     Task<BasicsConfig> GetBasicsAsync(CancellationToken ct = default);
 
     Task SaveBasicsAsync(BasicsConfig basics, CancellationToken ct = default);
+
+    Task<ImportRules> GetImportRulesAsync(CancellationToken ct = default);
+
+    Task SaveImportRulesAsync(ImportRules rules, CancellationToken ct = default);
 }

@@ -13,6 +13,9 @@ builder.Services.AddExceptionHandler<AppExceptionHandler>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o => o.SupportNonNullableReferenceTypes());
 
+builder.Services.AddSingleton(
+    builder.Configuration.GetSection("MenuGeneration").Get<MenuPlanner.Application.Menus.GenerationOptions>()
+    ?? new MenuPlanner.Application.Menus.GenerationOptions());
 builder.Services.AddMenuPlannerApplication();
 builder.Services.AddMenuPlannerInfrastructure(builder.Configuration);
 
@@ -52,6 +55,7 @@ app.MapPlanEndpoints();
 app.MapCatalogEndpoints();
 app.MapMenuEndpoints();
 app.MapSettingsEndpoints();
+app.MapImportEndpoints();
 
 app.Run();
 

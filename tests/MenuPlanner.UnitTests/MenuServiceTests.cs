@@ -44,7 +44,7 @@ public class MenuServiceTests
     {
         var store = InMemoryStore.FromSeed();
         var service = store.CreateService();
-        var menu = await service.GenerateAsync(new GenerateMenuRequest(3, Seed: 5, Exclude: ["tinga-pollo"]));
+        var menu = await service.GenerateAsync(new GenerateMenuRequest(3, Seed: 5, Exclude: ["tinga-pollo", "lomo-salsa-verde-nopales"]));
 
         menu = await service.AddDishAsync(menu.Id, "tinga-pollo");
         Assert.Equal(4, menu.Dishes.Count);

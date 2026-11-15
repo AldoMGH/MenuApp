@@ -5,7 +5,7 @@ Genera tu menú semanal de **comidas** a partir de tu plan de alimentación, con
 - Stack: .NET 8 (C#) · MongoDB local · Minimal APIs + Swagger
 - Arquitectura y decisiones de diseño: [`docs/arquitectura.md`](docs/arquitectura.md)
 
-> Estado: **Fase 0 + 1 (MVP de backend)**. Pendientes: importador de Google Keep, PWA en Blazor, servidor MCP y sugerencia de platillos nuevos con IA (ver roadmap en la documentación).
+> Estado: **Fases 0, 1 y 2**: backend, motor de porciones, menú, lista de compras e **importador de tu historial de Google Keep**. Pendientes: PWA en Blazor, servidor MCP y sugerencia de platillos nuevos con IA (ver roadmap en la documentación).
 
 ## Cómo funciona
 
@@ -17,6 +17,60 @@ El plan no se basa en macros: es una **plantilla por tiempo de comida**. Para la
 2. **Generador** (`MenuGenerator`): elige N platillos por muestreo ponderado (frecuencia × penalización si se cocinó hace menos de 3 semanas) con reglas de variedad. Usa una semilla, así que el mismo pedido da el mismo menú.
 3. **Leguminosa por porciones** (`LegumeBalancer`): reparte "2–3 veces por semana" entre las porciones del lote. Usa guisados que ya la incluyen o le agrega frijolitos como acompañamiento a algunas porciones.
 4. **Lista de compras** (`ShoppingListBuilder`): suma lo que piden las recetas y los básicos diarios (colación × 7), convierte a unidad de compra redondeando hacia arriba (tortillas de 250 en 250 g, carne de 50 en 50 g…), separa lo que tienes en la despensa y agrupa por pasillo.
+
+## Importar tu historial de Keep (fase 2)
+
+Takeout está bloqueado para tu cuenta, así que el historial entra por **Google Docs**:
+
+1. En Keep, selecciona tus notas de menú → ⋮ → **Copiar en Documentos de Google** (ya lo hiciste: documento "Menus").
+2. En el documento: **Archivo → Descargar → Markdown (.md)** o **Texto sin formato (.txt)**.
+3. Guárdalo en `data/` (esa carpeta está en `.gitignore`: tus notas nunca se suben al repo).
+4. Primero revisa sin guardar nada (`dryRun=true`):
+
+```bash
+curl -s -F "file=@data/Menus.md" "http://localhost:5033/api/imports/keep?dryRun=true"
+```
+
+5. Importa en serio:
+
+```bash
+curl -s -F "file=@data/Menus.md" "http://localhost:5033/api/imports/keep"
+```
+
+**Qué hace:**
+- **Notas:** lee cada nota (título "Mes N" = semana del mes) y **deduce el año** por el orden: la primera es la más reciente. Si hace falta, indícalo con `latestYear=2026`.
+- **Platillos:** las líneas de "Comidas" se asignan con el diccionario `seed/dish-aliases.json`, armado a partir de tus 177 formas de escribir unos 66 platillos ("Poyo ajonjolí", "Mollo con Pole", "Anvorgesas", "Bongles/Alitas"…). Con tu documento real: **376 de 376 asignados**; las 10 líneas que no son platillos se ignoran ("vinagre de arroz", "desayuno jueves"…).
+- **Compras:** guarda Carnes, Verduras y Procesados como historial (con cantidades: "3/4 kg pechuga" → 750 g). Limpieza se ignora.
+- **Idempotente:** reimportar el mismo documento (en `.md` o `.txt`) no duplica nada; solo agrega notas nuevas.
+- **Estadísticas:** cada platillo ligado a una receta suma su frecuencia, última vez y meses del año. El generador las usa: tus favoritos salen más, lo que cocinaste hace menos de 3 semanas sale menos, y hay un bonus de temporada.
+
+**Revisión** (si aparecen nombres sin asignar):
+
+```bash
+curl -s "http://localhost:5033/api/imports/{importId}"
+```
+
+```bash
+curl -s -X POST "http://localhost:5033/api/imports/{importId}/review" -H "Content-Type: application/json" -d '{"mappings":[{"name":"pozole verde","newDishName":"Pozole verde"},{"name":"alambreh","dishId":"alambre"},{"name":"desayuno viernes","ignore":true}]}'
+```
+
+**Tus platillos y la despensa:**
+
+```bash
+curl -s "http://localhost:5033/api/dishes"
+```
+
+```bash
+curl -s "http://localhost:5033/api/pantry/suggestions?months=6&minShare=0.4"
+```
+
+Para ligar un platillo a una receta o marcar su compatibilidad: `PUT /api/dishes/{id}` (valida con `schemas/dish.schema.json`).
+
+**Si ya tenías la base de la fase 1**, trae las recetas e ingredientes nuevos (no pisa tus datos; quita las 8 recetas de arranque que inventé):
+
+```bash
+curl -s -X POST "http://localhost:5033/api/seed/sync"
+```
 
 ## Requisitos
 
@@ -108,8 +162,11 @@ curl -s -X PUT "http://localhost:5033/api/pantry" -H "Content-Type: application/
 | Ingredientes | `GET /api/ingredients`, `GET/PUT/DELETE /api/ingredients/{id}` |
 | Recetas | `GET /api/recipes?meal=comida`, `GET/PUT/DELETE /api/recipes/{id}`, `GET /api/recipes/{id}/portioned` |
 | Menús | `POST /api/menus/generate`, `GET /api/menus`, `GET /api/menus/{id}`, `POST /api/menus/{id}/dishes`, `DELETE /api/menus/{id}/dishes/{recipeId}`, `POST /api/menus/{id}/dishes/{recipeId}/swap`, `POST /api/menus/{id}/confirm`, `GET /api/menus/{id}/shopping-list` |
-| Despensa y básicos | `GET/PUT /api/pantry`, `GET/PUT /api/basics` |
-| Schemas | `GET /api/schemas/{nutrition-plan|recipe|ingredient}` (para formularios dinámicos) |
+| Despensa y básicos | `GET/PUT /api/pantry`, `GET /api/pantry/suggestions`, `GET/PUT /api/basics` |
+| Importar Keep | `POST /api/imports/keep`, `GET /api/imports`, `GET /api/imports/{id}`, `POST /api/imports/{id}/review` |
+| Platillos (historial) | `GET /api/dishes?sort=frequency|name`, `GET/PUT /api/dishes/{id}` |
+| Seed | `POST /api/seed/sync` |
+| Schemas | `GET /api/schemas/{nutrition-plan|recipe|ingredient|dish}` (para formularios dinámicos) |
 
 Los `PUT` de plan, receta e ingrediente se validan contra `schemas/*.schema.json`. Además se revisa que los ingredientes existan y que el cereal y la grasa estén en la tabla de intercambios del plan.
 
@@ -119,10 +176,24 @@ Los `PUT` de plan, receta e ingrediente se validan contra `schemas/*.schema.json
 |---|---|
 | `schemas/` | JSON Schema (draft 2020-12) de plan, receta e ingrediente. La misma fuente sirve para la API, el seed y los futuros formularios. |
 | `seed/plan-2.json` | Estructura del plan v2 (sin datos personales): plantilla de la comida, tabla de intercambios, colación y reglas. |
-| `seed/ingredients.json` | 47 ingredientes con conversiones (taza ↔ g), rendimiento crudo→cocido, unidad de compra y pasillo. **Los rendimientos son aproximados: afínalos pesando una vez.** |
-| `seed/recipes.json` | Las 5 comidas de ejemplo del plan y 8 recetas caseras de arranque. Se reemplazarán o completarán con tu historial de Keep. |
+| `seed/ingredients.json` | 69 ingredientes con conversiones (taza ↔ g), rendimiento crudo→cocido, unidad de compra, pasillo y alias para ligar tus listas de compras. **Los rendimientos son aproximados: afínalos pesando una vez.** |
+| `seed/recipes.json` | 25 recetas: las 5 comidas de ejemplo del plan y 20 de tus platillos más frecuentes, ajustadas al plan. Cubren el 73% de lo que cocinas. Las adaptadas (boneless al horno, hamburguesa en lechuga, enchiladas suizas con yogurt griego…) llevan la etiqueta `revisar-nutriologa`. |
+| `seed/dish-aliases.json` | Diccionario de platillos: unos 66 platillos con sus alias, correcciones de ortografía y líneas a ignorar. |
 
 Cuando la nutrióloga cambie el plan, crea una versión nueva (`PUT /api/plans/plan-3` con `"active": true`). Los menús confirmados conservan el cálculo de la versión con la que se hicieron.
+
+## Ajustes del generador
+
+En `appsettings.json` → `MenuGeneration`:
+
+| Ajuste | Valor por defecto | Qué controla |
+|---|---|---|
+| `MaxSameProtein` | 3 | Máximo de platillos con la misma proteína por menú |
+| `MaxLaborious` | 1 | Máximo de platillos laboriosos por menú |
+| `RequireFishFrom` | 4 | Desde cuántos platillos se pide al menos uno de pescado |
+| `RecentDays` | 21 | Días en que un platillo cuenta como "cocinado hace poco" |
+| `RecentPenalty` | 0.2 | Multiplicador del peso si se cocinó hace poco |
+| `SeasonBonus` | 1.25 | Multiplicador si lo cocinaste en ese mes en años anteriores |
 
 ## Pruebas
 
@@ -132,7 +203,7 @@ Todas las pruebas:
 dotnet test
 ```
 
-- `MenuPlanner.UnitTests`: motor de porciones, conversiones, generador, regla de leguminosa, lista de compras (golden test), validez del seed contra los schemas y casos de uso con repositorios en memoria.
+- `MenuPlanner.UnitTests`: motor de porciones, conversiones, generador, regla de leguminosa, lista de compras (golden test), validez del seed contra los schemas y casos de uso con repositorios en memoria. También cubre el importador de Keep: títulos, años, dos formatos de exportación, cantidades, asignación, revisión, idempotencia y despensa. Si guardas tu documento en `data/Menus-drive.md`, una prueba extra lo valida completo.
 - `MenuPlanner.ApiTests`: la API HTTP real con `WebApplicationFactory` y repositorios en memoria.
 - `MenuPlanner.IntegrationTests`: contra tu Mongo local, en una base temporal `menuplanner_test_*` que se borra al terminar. **Se omiten si no defines la variable.**
 
@@ -154,10 +225,11 @@ $env:MENUPLANNER_TEST_MONGO = "mongodb://localhost:27017"; dotnet test
 src/
   MenuPlanner.Domain/          Entidades: plan, ingrediente, receta, menú, lista
   MenuPlanner.Portioning/      Conversión de unidades, redondeo y motor de porciones
-  MenuPlanner.Application/     Generador, leguminosa, lista de compras, casos de uso, schemas, seed
+  MenuPlanner.Importers/       Parser de notas de Keep, cantidades y asignación de platillos e ingredientes
+  MenuPlanner.Application/     Generador, leguminosa, lista de compras, importación, casos de uso, schemas, seed
   MenuPlanner.Infrastructure/  MongoDB (repositorios, índices, carga del seed)
   MenuPlanner.Api/             Minimal APIs + Swagger
 tests/
   MenuPlanner.UnitTests/  MenuPlanner.ApiTests/  MenuPlanner.IntegrationTests/
-schemas/  seed/  docs/
+schemas/  seed/  docs/  data/ (tus notas; no se versiona)
 ```

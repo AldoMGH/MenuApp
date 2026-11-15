@@ -69,6 +69,18 @@ public sealed class MongoFixture : IAsyncLifetime
             TimeProvider.System);
     }
 
+    public MenuPlanner.Application.Imports.ImportService CreateImportService()
+    {
+        var db = Context!;
+        return new MenuPlanner.Application.Imports.ImportService(
+            new ImportRepository(db),
+            new DishRepository(db),
+            new IngredientRepository(db),
+            new RecipeRepository(db),
+            new SettingsRepository(db),
+            TimeProvider.System);
+    }
+
     private sealed class SingleServiceProvider(MongoContext context) : IServiceProvider
     {
         public object? GetService(Type serviceType) => serviceType == typeof(MongoContext) ? context : null;

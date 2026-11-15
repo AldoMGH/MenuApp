@@ -26,6 +26,7 @@
   <ItemGroup>
     <None Include="..\..\schemas\*.json" Link="schemas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\seed\*.json" Link="seed\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\MenuPlanner.UnitTests\Fixtures\**" Link="Fixtures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
