@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <UserSecretsId>menuplanner-api</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.34" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MenuPlanner.Infrastructure\MenuPlanner.Infrastructure.csproj" />
+    <ProjectReference Include="..\MenuPlanner.Web\MenuPlanner.Web.csproj" />
+  </ItemGroup>
+
+  <!-- Los schemas y el seed viven en la raíz del repo; se copian junto al ejecutable. -->
+  <ItemGroup>
+    <Content Include="..\..\schemas\*.json" Link="schemas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\..\seed\*.json" Link="seed\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="MenuPlanner.Contracts" />
+  </ItemGroup>
+
+</Project>

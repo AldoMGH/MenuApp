@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\MenuPlanner.Domain\MenuPlanner.Domain.csproj" />
+    <ProjectReference Include="..\MenuPlanner.Portioning\MenuPlanner.Portioning.csproj" />
+    <ProjectReference Include="..\MenuPlanner.Importers\MenuPlanner.Importers.csproj" />
+    <ProjectReference Include="..\MenuPlanner.Contracts\MenuPlanner.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonSchema.Net" Version="7.2.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="MenuPlanner.Contracts" />
+  </ItemGroup>
+
+</Project>

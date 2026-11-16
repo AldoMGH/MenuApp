@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Datos personales importados (Keep / Google Docs): nunca se versionan
+data/

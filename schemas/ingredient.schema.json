@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ingrediente",
+  "description": "Ingrediente del catálogo. Cantidades en unidad base cruda; conversiones y rendimiento traducen medidas del plan.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "baseUnit",
+    "purchase",
+    "aisle"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "title": "Identificador"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Nombre"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "title": "Alias"
+      },
+      "title": "Alias"
+    },
+    "group": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/group"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Grupo"
+    },
+    "baseUnit": {
+      "enum": [
+        "g",
+        "ml",
+        "pieza",
+        "diente",
+        "paquete",
+        "lata"
+      ],
+      "title": "Unidad base"
+    },
+    "conversions": {
+      "type": "array",
+      "title": "Equivalencias",
+      "items": {
+        "type": "object",
+        "required": [
+          "unit",
+          "grams"
+        ],
+        "properties": {
+          "unit": {
+            "$ref": "#/$defs/unit",
+            "title": "Unidad"
+          },
+          "grams": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "title": "Gramos"
+          },
+          "state": {
+            "enum": [
+              "crudo",
+              "cocido"
+            ],
+            "default": "crudo",
+            "title": "Estado"
+          }
+        },
+        "additionalProperties": false,
+        "title": "Equivalencia"
+      }
+    },
+    "cookedYield": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 10,
+      "default": 1,
+      "title": "Rendimiento crudo → cocido"
+    },
+    "purchase": {
+      "type": "object",
+      "title": "Compra",
+      "required": [
+        "unit",
+        "step"
+      ],
+      "properties": {
+        "unit": {
+          "$ref": "#/$defs/unit",
+          "title": "Unidad"
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "title": "Incremento de compra"
+        },
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Etiqueta de compra"
+        }
+      },
+      "additionalProperties": false
+    },
+    "aisle": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Pasillo"
+    },
+    "isLean": {
+      "type": "boolean",
+      "default": true,
+      "title": "Proteína magra"
+    },
+    "proteinFamily": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "title": "Familia de proteína"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "title": "Notas"
+    },
+    "nutrition": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Nutrición (aprox., por 100 g o 100 ml en crudo)",
+      "description": "Valores de referencia SMAE/USDA, solo informativos. Se calculan sobre la unidad base en crudo.",
+      "required": [
+        "kcal",
+        "protein",
+        "carbs",
+        "fat"
+      ],
+      "properties": {
+        "kcal": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Energía (kcal)"
+        },
+        "protein": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Proteína (g)"
+        },
+        "carbs": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Carbohidratos (g)"
+        },
+        "fat": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Grasa (g)"
+        },
+        "fiber": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Fibra (g)"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "unit": {
+      "enum": [
+        "g",
+        "ml",
+        "pieza",
+        "taza",
+        "cda",
+        "cdita",
+        "porcion",
+        "diente",
+        "paquete",
+        "lata"
+      ]
+    },
+    "group": {
+      "enum": [
+        "verdura",
+        "proteina",
+        "leguminosa",
+        "cereal",
+        "grasa"
+      ]
+    }
+  }
+}

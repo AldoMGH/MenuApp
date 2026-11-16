@@ -1,0 +1,210 @@
+@page "/"
+@page "/menus/{MenuId}"
+@inherits AppPage
+
+<PageTitle>Menú de la semana</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">Menú de la semana</MudText>
+
+<MudGrid>
+    <MudItem xs="12" md="8">
+        <MudPaper Class="pa-4 mb-4" Outlined="true">
+            <MudText Typo="Typo.h6">Generar un menú</MudText>
+            <MudGrid Spacing="2" Class="mt-1">
+                <MudItem xs="12" sm="4">
+                    <MudNumericField T="int" @bind-Value="_dishCount" Label="Platillos (4 porciones c/u)" Min="1" Max="14"
+                                     Variant="Variant.Outlined" Margin="Margin.Dense" data-testid="dish-count" />
+                </MudItem>
+                <MudItem xs="12" sm="4">
+                    <MudDatePicker @bind-Date="_weekOf" Label="Semana (lunes)" Placeholder="Próximo lunes"
+                                   Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" />
+                </MudItem>
+                <MudItem xs="12" sm="4" Class="d-flex align-center">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.AutoAwesome"
+                               Disabled="Busy" OnClick="Generate" FullWidth="true" data-testid="generate">
+                        Generar menú
+                    </MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudSelect T="string" Label="Incluir sí o sí" MultiSelection="true" @bind-SelectedValues="_include"
+                               Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" ToStringFunc="RecipeName">
+                        @foreach (var recipe in _recipes)
+                        {
+                            <MudSelectItem T="string" Value="@recipe.Id">@recipe.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudSelect T="string" Label="No incluir" MultiSelection="true" @bind-SelectedValues="_exclude"
+                               Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true" ToStringFunc="RecipeName">
+                        @foreach (var recipe in _recipes)
+                        {
+                            <MudSelectItem T="string" Value="@recipe.Id">@recipe.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" md="4">
+        <MudPaper Class="pa-4 mb-4" Outlined="true">
+            <MudText Typo="Typo.h6">Menús recientes</MudText>
+            @if (_history.Count == 0)
+            {
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">Aún no hay menús.</MudText>
+            }
+            <MudList T="string" Dense="true">
+                @foreach (var item in _history.Take(8))
+                {
+                    <MudListItem T="string" Href="@($"menus/{item.Id}")" Icon="@(item.Status == MenuStatus.Confirmed ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.EditNote)">
+                        <MudText Typo="Typo.body2">@Formatting.Week(item.WeekOf) · @Formatting.Status(item.Status)</MudText>
+                        <MudText Typo="Typo.caption" Class="mud-text-secondary">@string.Join(", ", item.Dishes)</MudText>
+                    </MudListItem>
+                }
+            </MudList>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@if (Busy)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-2" />
+}
+
+@if (_menu is not null)
+{
+    var s = _menu.Summary;
+    var legumeOk = s.LegumeServings >= s.LegumeMinServings && s.LegumeServings <= s.LegumeMaxServings;
+    var draft = _menu.Status == MenuStatus.Draft;
+
+    <MudPaper Class="pa-4 mb-4" Outlined="true" data-testid="menu-summary">
+        <div class="d-flex flex-wrap align-center gap-2">
+            <MudText Typo="Typo.h5">Semana del @Formatting.Week(_menu.WeekOf)</MudText>
+            <MudChip T="string" Color="@(draft ? Color.Default : Color.Success)">@Formatting.Status(_menu.Status)</MudChip>
+            <MudSpacer />
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ShoppingCart" Href="@($"menus/{_menu.Id}/compras")" data-testid="shopping-link">Lista de compras</MudButton>
+            @if (draft)
+            {
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Refresh" Disabled="Busy" OnClick="Regenerate">Otra propuesta</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Check" Disabled="Busy" OnClick="Confirm" data-testid="confirm">Confirmar</MudButton>
+            }
+        </div>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+            <MudChip T="string" Icon="@(legumeOk ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Warning)" Color="@(legumeOk ? Color.Success : Color.Warning)">
+                Leguminosa: @s.LegumeServings de @s.TotalServings porciones (≈ @s.LegumeMealsPerWeek.ToString("0.#") de @s.MealsPerWeek comidas/sem)
+            </MudChip>
+            <MudChip T="string" Icon="@Icons.Material.Filled.AcUnit">
+                @s.TotalServings porciones para @s.MealsPerWeek comidas@(s.SurplusServings > 0 ? $" · sobran {s.SurplusServings} para congelar" : string.Empty)
+            </MudChip>
+            <MudChip T="string" Icon="@Icons.Material.Filled.Assignment">Plan v@_menu.PlanVersion</MudChip>
+            @if (_menu.Dishes.Where(d => d.Portioned.Nutrition is not null).ToList() is { Count: > 0 } withMacros)
+            {
+                <MudChip T="string" Icon="@Icons.Material.Filled.LocalFireDepartment" data-testid="avg-kcal">
+                    Promedio por comida ≈ @withMacros.Average(d => d.Portioned.Nutrition!.PerServing.Kcal).ToString("0") kcal · @withMacros.Average(d => d.Portioned.Nutrition!.PerServing.Protein).ToString("0") g proteína (aprox.)
+                </MudChip>
+            }
+        </div>
+        @foreach (var warning in s.Warnings)
+        {
+            <MudAlert Severity="Severity.Warning" Dense="true" Class="mt-2">@warning</MudAlert>
+        }
+    </MudPaper>
+
+    <MudGrid>
+        @foreach (var dish in _menu.Dishes)
+        {
+            <MudItem xs="12" md="6" @key="dish.RecipeId">
+                <DishCard Dish="dish" Editable="draft" OnSwap="protein => Swap(dish.RecipeId, protein)" OnRemove="() => Remove(dish.RecipeId)" />
+            </MudItem>
+        }
+    </MudGrid>
+
+    @if (draft)
+    {
+        <MudPaper Class="pa-4 mt-4" Outlined="true">
+            <div class="d-flex flex-wrap align-center gap-2">
+                <MudSelect T="string" @bind-Value="_toAdd" Label="Agregar un platillo" Variant="Variant.Outlined" Margin="Margin.Dense" Style="min-width: 320px">
+                    @foreach (var recipe in _recipes.Where(r => _menu.Dishes.All(d => d.RecipeId != r.Id)))
+                    {
+                        <MudSelectItem T="string" Value="@recipe.Id">@recipe.Name</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Add" Disabled="@(Busy || _toAdd is null)" OnClick="Add">Agregar</MudButton>
+            </div>
+        </MudPaper>
+    }
+}
+else if (!Busy)
+{
+    <MudAlert Severity="Severity.Info">Elige cuántos platillos quieres y pulsa <b>Generar menú</b>.</MudAlert>
+}
+
+@code {
+    [Parameter] public string? MenuId { get; set; }
+
+    private MenuView? _menu;
+    private List<MenuListItem> _history = [];
+    private List<Recipe> _recipes = [];
+    private int _dishCount = 5;
+    private DateTime? _weekOf;
+    private IReadOnlyCollection<string> _include = [];
+    private IReadOnlyCollection<string> _exclude = [];
+    private string? _toAdd;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Run(async () =>
+        {
+            _recipes = (await Api.ListRecipesAsync()).OrderBy(r => r.Name).ToList();
+            _history = await Api.ListMenusAsync();
+            var id = MenuId ?? _history.FirstOrDefault(m => m.Status == MenuStatus.Draft)?.Id;
+            _menu = id is null ? null : await Api.GetMenuAsync(id);
+        });
+    }
+
+    private string RecipeName(string id) => _recipes.FirstOrDefault(r => r.Id == id)?.Name ?? id;
+
+    private Task Generate() => GenerateWith(seed: null);
+
+    private Task Regenerate() => GenerateWith(seed: null, count: _menu?.Dishes.Count);
+
+    private async Task GenerateWith(int? seed, int? count = null)
+    {
+        var request = new GenerateMenuRequest(
+            count ?? _dishCount,
+            _weekOf is null ? (_menu is null ? null : _menu.WeekOf) : DateOnly.FromDateTime(_weekOf.Value),
+            seed,
+            _include.ToList(),
+            _exclude.ToList());
+        if (await Run(async () => _menu = await Api.GenerateMenuAsync(request), "Menú generado."))
+        {
+            _history = await Api.ListMenusAsync();
+            Nav.NavigateTo($"menus/{_menu!.Id}", replace: MenuId is null);
+        }
+    }
+
+    private Task Swap(string recipeId, string? protein) =>
+        Run(async () => _menu = await Api.SwapDishAsync(_menu!.Id, recipeId, new SwapCriteria(protein)), "Platillo cambiado.");
+
+    private Task Remove(string recipeId) =>
+        Run(async () => _menu = await Api.RemoveDishAsync(_menu!.Id, recipeId), "Platillo quitado.");
+
+    private async Task Add()
+    {
+        if (_toAdd is null)
+        {
+            return;
+        }
+
+        await Run(async () => _menu = await Api.AddDishAsync(_menu!.Id, _toAdd), "Platillo agregado.");
+        _toAdd = null;
+    }
+
+    private async Task Confirm()
+    {
+        if (await Run(async () => _menu = await Api.ConfirmMenuAsync(_menu!.Id), "Menú confirmado: se guardó en tu historial."))
+        {
+            _history = await Api.ListMenusAsync();
+        }
+    }
+}

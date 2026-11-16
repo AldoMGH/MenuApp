@@ -1,0 +1,72 @@
+@page "/platillos"
+@inherits AppPage
+
+<PageTitle>Mis platillos</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">Mis platillos</MudText>
+<MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">
+    Lo que has cocinado según tu historial de Keep. Un platillo ligado a una receta suma su frecuencia al generador de menús.
+</MudText>
+
+<MudTable T="DishView" Items="_dishes" Filter="Matches" Hover="true" Dense="true" Loading="Busy" Breakpoint="Breakpoint.Sm" data-testid="dishes-table">
+    <ToolBarContent>
+        <MudTextField @bind-Value="_search" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" Margin="Margin.Dense" Class="mr-4" />
+        <MudSwitch T="bool" @bind-Value="_onlyWithoutRecipe" Label="Solo sin receta" Color="Color.Primary" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Platillo</MudTh>
+        <MudTh><MudTableSortLabel T="DishView" SortBy="d => d.Dish.Stats.TimesCooked" InitialDirection="SortDirection.Descending">Veces</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="DishView" SortBy="d => d.Dish.Stats.LastCooked ?? DateTime.MinValue">Última vez</MudTableSortLabel></MudTh>
+        <MudTh>Meses (ene→dic)</MudTh>
+        <MudTh>Receta</MudTh>
+        <MudTh>Plan</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Platillo">
+            <MudText Typo="Typo.body2"><b>@context.Dish.Name</b></MudText>
+            <MudText Typo="Typo.caption" Class="mud-text-secondary">@string.Join(", ", context.Dish.Aliases.Take(4))</MudText>
+        </MudTd>
+        <MudTd DataLabel="Veces">@context.Dish.Stats.TimesCooked</MudTd>
+        <MudTd DataLabel="Última vez">@Formatting.Date(context.Dish.Stats.LastCooked)</MudTd>
+        <MudTd DataLabel="Meses">
+            @for (var m = 0; m < 12; m++)
+            {
+                var count = context.Dish.Stats.Months.Count == 12 ? context.Dish.Stats.Months[m] : 0;
+                <span class="month-cell @(count > 0 ? "on" : null)" title="@($"{System.Globalization.CultureInfo.GetCultureInfo("es-MX").DateTimeFormat.GetMonthName(m + 1)}: {count}")"></span>
+            }
+        </MudTd>
+        <MudTd DataLabel="Receta">
+            @if (context.RecipeName is not null)
+            {
+                <MudLink Href="@($"recetas/{context.Dish.RecipeId}")">@context.RecipeName</MudLink>
+            }
+            else
+            {
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">—</MudText>
+            }
+        </MudTd>
+        <MudTd DataLabel="Plan"><MudChip T="string" Size="Size.Small" Color="@Formatting.CompatibilityColor(context.Dish.Compatibility)">@Formatting.Compatibility(context.Dish.Compatibility)</MudChip></MudTd>
+        <MudTd><MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" Href="@($"editar/platillo/{context.Dish.Id}")" aria-label="Editar" /></MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No hay platillos. Importa tu historial en <MudLink Href="importar">Importar Keep</MudLink>.</MudText>
+    </NoRecordsContent>
+    <PagerContent>
+        <MudTablePager RowsPerPageString="Por página:" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private List<DishView> _dishes = [];
+    private string _search = string.Empty;
+    private bool _onlyWithoutRecipe;
+
+    protected override Task OnInitializedAsync() => Run(async () => _dishes = await Api.ListDishesAsync());
+
+    private bool Matches(DishView view) =>
+        (!_onlyWithoutRecipe || view.Dish.RecipeId is null)
+        && (string.IsNullOrWhiteSpace(_search)
+            || view.Dish.Name.Contains(_search, StringComparison.CurrentCultureIgnoreCase)
+            || view.Dish.Aliases.Any(a => a.Contains(_search, StringComparison.CurrentCultureIgnoreCase)));
+}

@@ -1,0 +1,338 @@
+@* Campo del formulario dinámico: se dibuja según el JSON Schema y se llama a sí mismo para objetos y arreglos. *@
+@{
+    var d = Ctx.Describe(Schema);
+    var s = d.Schema;
+    var label = SchemaContext.Title(s) ?? Label ?? Key ?? string.Empty;
+    var help = SchemaContext.Description(s);
+    var readOnly = SchemaContext.IsReadOnly(s) || Ctx.LockedPaths.Contains(Path);
+    var errors = Ctx.ErrorsAt(Path);
+    var errorText = errors.Count == 0 ? null : string.Join(" · ", errors);
+    var value = GetValue();
+}
+
+@switch (d.Kind)
+{
+    case SchemaKind.Object:
+        var obj = value as JsonObject;
+        <div class="@(Depth > 0 ? "schema-object" : null)" data-path="@Path">
+            @if (Depth > 0)
+            {
+                <div class="d-flex align-center gap-2">
+                    <MudText Typo="Typo.subtitle2">@label</MudText>
+                    @if (obj is not null && !readOnly && (d.Nullable || !Required))
+                    {
+                        <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Close" aria-label="@($"Quitar {label}")" OnClick="Remove" />
+                    }
+                </div>
+                @if (help is not null)
+                {
+                    <MudText Typo="Typo.caption" Class="mud-text-secondary">@help</MudText>
+                }
+            }
+            @if (obj is null)
+            {
+                @if (!readOnly)
+                {
+                    <MudButton Size="Size.Small" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="CreateObject">Agregar @label.ToLowerInvariant()</MudButton>
+                }
+            }
+            else if (readOnly)
+            {
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">@Summary(obj)</MudText>
+            }
+            else
+            {
+                var required = SchemaContext.RequiredOf(s);
+                <MudGrid Spacing="1">
+                    @foreach (var (name, propSchema) in Ctx.Properties(s))
+                    {
+                        var child = Ctx.Describe(propSchema).Kind;
+                        var wide = child is SchemaKind.Object or SchemaKind.Array or SchemaKind.Unknown;
+                        <MudItem xs="12" sm="@(wide ? 12 : 6)" md="@(wide ? 12 : 4)" @key="name">
+                            <SchemaField Ctx="Ctx" Schema="propSchema" Container="obj" Key="@name"
+                                         Path="@SchemaContext.Child(Path, name)" Label="@name"
+                                         Required="@required.Contains(name)" Depth="@(Depth + 1)" />
+                        </MudItem>
+                    }
+                </MudGrid>
+            }
+            @foreach (var error in errors)
+            {
+                <MudText Typo="Typo.caption" Color="Color.Error">@error</MudText>
+            }
+        </div>
+        break;
+
+    case SchemaKind.Array:
+        var array = value as JsonArray;
+        var itemSchema = s["items"] as JsonObject ?? new JsonObject();
+        var itemTitle = SchemaContext.Title(Ctx.Resolve(itemSchema));
+        <div class="schema-object" data-path="@Path">
+            <div class="d-flex align-center gap-2">
+                <MudText Typo="Typo.subtitle2">@label (@(array?.Count ?? 0))</MudText>
+                <MudSpacer />
+                @if (!readOnly)
+                {
+                    <MudButton Size="Size.Small" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="() => AddItem(itemSchema)">Agregar</MudButton>
+                }
+            </div>
+            @if (help is not null)
+            {
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">@help</MudText>
+            }
+            @if (array is not null)
+            {
+                @for (var i = 0; i < array.Count; i++)
+                {
+                    var index = i;
+                    <div class="schema-item d-flex align-start gap-1" @key="index">
+                        <div class="flex-grow-1">
+                            <SchemaField Ctx="Ctx" Schema="itemSchema" Container="array" Index="index"
+                                         Path="@SchemaContext.Child(Path, index)" Label="@($"{itemTitle ?? label} {index + 1}")"
+                                         Required="true" Depth="@(Depth + 1)" />
+                        </div>
+                        @if (!readOnly)
+                        {
+                            <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.ArrowUpward" Disabled="@(index == 0)" aria-label="Subir" OnClick="() => Move(index, -1)" />
+                            <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.ArrowDownward" Disabled="@(index == array.Count - 1)" aria-label="Bajar" OnClick="() => Move(index, 1)" />
+                            <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="Eliminar" OnClick="() => RemoveItem(index)" />
+                        }
+                    </div>
+                }
+            }
+            @foreach (var error in errors)
+            {
+                <MudText Typo="Typo.caption" Color="Color.Error">@error</MudText>
+            }
+        </div>
+        break;
+
+    case SchemaKind.Enum:
+        var current = value?.ToString() ?? string.Empty;
+        <MudSelect T="string" Value="@current" ValueChanged="v => SetEnum(v, d)" Label="@label" HelperText="@help"
+                   Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" ReadOnly="@readOnly"
+                   Error="@(errorText is not null)" ErrorText="@errorText" data-path="@Path">
+            @if (d.Nullable || !Required)
+            {
+                <MudSelectItem T="string" Value="@string.Empty">—</MudSelectItem>
+            }
+            @foreach (var option in d.EnumValues)
+            {
+                <MudSelectItem T="string" Value="@option">@option</MudSelectItem>
+            }
+        </MudSelect>
+        break;
+
+    case SchemaKind.String:
+        var text = value?.GetValue<string>();
+        var options = Key is null ? null : Ctx.OptionsFor?.Invoke(Key);
+        if (options is not null && !readOnly)
+        {
+            <MudAutocomplete T="string" Value="@text" ValueChanged="v => SetString(v, d)" Label="@label" HelperText="@help"
+                             SearchFunc="(q, ct) => Search(options, q)" ToStringFunc="id => LabelOf(options, id)"
+                             Variant="Variant.Outlined" Margin="Margin.Dense" Dense="true" CoerceValue="false" Clearable="true"
+                             MaxItems="30" Error="@(errorText is not null)" ErrorText="@errorText" data-path="@Path" />
+        }
+        else
+        {
+            <MudTextField T="string" Value="@text" ValueChanged="v => SetString(v, d)" Label="@label" HelperText="@help"
+                          Variant="Variant.Outlined" Margin="Margin.Dense" ReadOnly="@readOnly" Sizing="InputSizing.Auto" MaxLines="6"
+                          Error="@(errorText is not null)" ErrorText="@errorText" data-path="@Path" />
+        }
+        break;
+
+    case SchemaKind.Integer:
+        <MudNumericField T="int?" Value="@(ToDouble(value) is { } iv ? (int?)iv : null)" ValueChanged="v => SetNumber(v, d)"
+                         Label="@label" HelperText="@help" Variant="Variant.Outlined" Margin="Margin.Dense" ReadOnly="@readOnly"
+                         Error="@(errorText is not null)" ErrorText="@errorText" data-path="@Path" />
+        break;
+
+    case SchemaKind.Number:
+        <MudNumericField T="double?" Value="@ToDouble(value)" ValueChanged="v => SetNumber(v, d)"
+                         Label="@label" HelperText="@help" Variant="Variant.Outlined" Margin="Margin.Dense" ReadOnly="@readOnly" Step="0.25"
+                         Error="@(errorText is not null)" ErrorText="@errorText" data-path="@Path" />
+        break;
+
+    case SchemaKind.Boolean:
+        <MudSwitch T="bool" Value="@(value is JsonValue bv && bv.GetValue<bool>())" ValueChanged="SetBool" Label="@label"
+                   Color="Color.Primary" ReadOnly="@readOnly" data-path="@Path" />
+        break;
+
+    default:
+        <MudTextField T="string" Value="@(value?.ToJsonString())" ValueChanged="SetJson" Label="@($"{label} (JSON)")" HelperText="@help"
+                      Variant="Variant.Outlined" Margin="Margin.Dense" Lines="3" ReadOnly="@readOnly"
+                      Error="@(errorText is not null)" ErrorText="@errorText" data-path="@Path" />
+        break;
+}
+
+@code {
+    [Parameter, EditorRequired] public SchemaContext Ctx { get; set; } = default!;
+
+    [Parameter, EditorRequired] public JsonObject Schema { get; set; } = default!;
+
+    /// <summary>Objeto o arreglo que contiene el valor; null para la raíz.</summary>
+    [Parameter] public JsonNode? Container { get; set; }
+
+    /// <summary>Valor raíz (solo cuando <see cref="Container"/> es null).</summary>
+    [Parameter] public JsonNode? RootValue { get; set; }
+
+    [Parameter] public string? Key { get; set; }
+
+    [Parameter] public int Index { get; set; }
+
+    [Parameter] public string Path { get; set; } = string.Empty;
+
+    [Parameter] public string? Label { get; set; }
+
+    [Parameter] public bool Required { get; set; }
+
+    [Parameter] public int Depth { get; set; }
+
+    private JsonNode? GetValue() => Container switch
+    {
+        JsonObject obj when Key is not null => obj[Key],
+        JsonArray array => Index < array.Count ? array[Index] : null,
+        _ => RootValue,
+    };
+
+    private void SetValue(JsonNode? value, bool keepNull = false)
+    {
+        switch (Container)
+        {
+            case JsonObject obj when Key is not null:
+                if (value is null && !keepNull && !Required)
+                {
+                    obj.Remove(Key);
+                }
+                else
+                {
+                    obj[Key] = value;
+                }
+
+                break;
+            case JsonArray array when Index < array.Count:
+                array[Index] = value;
+                break;
+        }
+
+        Ctx.NotifyChanged();
+    }
+
+    private void SetString(string? v, SchemaDescription d)
+    {
+        if (string.IsNullOrEmpty(v))
+        {
+            SetValue(d.Nullable ? null : Required ? JsonValue.Create(string.Empty) : null, keepNull: d.Nullable && Required);
+            return;
+        }
+
+        SetValue(JsonValue.Create(v));
+    }
+
+    private void SetEnum(string? v, SchemaDescription d) =>
+        SetValue(string.IsNullOrEmpty(v) ? null : JsonValue.Create(v), keepNull: d.Nullable && Required);
+
+    private void SetNumber(int? v, SchemaDescription d) => SetValue(v is null ? null : JsonValue.Create(v.Value), keepNull: d.Nullable && Required);
+
+    private void SetNumber(double? v, SchemaDescription d) => SetValue(v is null ? null : JsonValue.Create(v.Value), keepNull: d.Nullable && Required);
+
+    private void SetBool(bool v) => SetValue(JsonValue.Create(v));
+
+    private void SetJson(string? text)
+    {
+        try
+        {
+            SetValue(string.IsNullOrWhiteSpace(text) ? null : JsonNode.Parse(text));
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            // JSON incompleto: se espera a que el usuario termine de escribir.
+        }
+    }
+
+    private void CreateObject() => SetValue(Ctx.CreateDefault(Schema) ?? new JsonObject());
+
+    private void Remove() => SetValue(null);
+
+    private void AddItem(JsonObject itemSchema)
+    {
+        if (GetValue() is not JsonArray array)
+        {
+            array = [];
+            SetValue(array);
+        }
+
+        array.Add(Ctx.CreateDefault(itemSchema));
+        Ctx.NotifyChanged();
+    }
+
+    private void RemoveItem(int index)
+    {
+        if (GetValue() is JsonArray array && index < array.Count)
+        {
+            array.RemoveAt(index);
+            Ctx.NotifyChanged();
+        }
+    }
+
+    private void Move(int index, int delta)
+    {
+        if (GetValue() is not JsonArray array)
+        {
+            return;
+        }
+
+        var target = index + delta;
+        if (target < 0 || target >= array.Count)
+        {
+            return;
+        }
+
+        var item = array[index];
+        array.RemoveAt(index);
+        array.Insert(target, item);
+        Ctx.NotifyChanged();
+    }
+
+    private static Task<IEnumerable<string>> Search(IReadOnlyList<FieldOption> options, string? query)
+    {
+        IEnumerable<string> result = string.IsNullOrWhiteSpace(query)
+            ? options.Select(o => o.Value)
+            : options
+                .Where(o => o.Label.Contains(query, StringComparison.CurrentCultureIgnoreCase) || o.Value.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .Select(o => o.Value);
+        return Task.FromResult(result);
+    }
+
+    private static string LabelOf(IReadOnlyList<FieldOption> options, string? id) =>
+        id is null ? string.Empty : options.FirstOrDefault(o => o.Value == id)?.Label is { } label ? $"{label} ({id})" : id;
+
+    /// <summary>Lee un número sin importar si el JsonValue guarda int, long, decimal o double.</summary>
+    private static double? ToDouble(JsonNode? node)
+    {
+        if (node is not JsonValue v)
+        {
+            return null;
+        }
+
+        if (v.TryGetValue<double>(out var d))
+        {
+            return d;
+        }
+
+        if (v.TryGetValue<int>(out var i))
+        {
+            return i;
+        }
+
+        if (v.TryGetValue<long>(out var l))
+        {
+            return l;
+        }
+
+        return v.TryGetValue<decimal>(out var m) ? (double)m : null;
+    }
+
+    private static string Summary(JsonObject obj) =>
+        string.Join(" · ", obj.Where(p => p.Value is JsonValue).Select(p => $"{p.Key}: {p.Value}"));
+}

@@ -1,0 +1,2005 @@
+[
+  {
+    "id": "ceviche-pescado",
+    "name": "Ceviche de pescado con verdura picada y aguacate",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "curado-en-limon",
+    "tags": [
+      "pescado",
+      "fresco",
+      "rapida"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "filete-pescado"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "pepino",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "salmas"
+          }
+        ]
+      },
+      {
+        "group": "grasa",
+        "ingredients": [
+          {
+            "ingredientId": "aguacate"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "limon",
+        "qty": 12,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "chile-serrano",
+        "qty": 2,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Corta el pescado en cubos pequeños y cúbrelo con jugo de limón; refrigera 30–40 min hasta que se vea blanco.",
+      "Pica finamente pepino, jitomate, zanahoria, cebolla, cilantro y chile.",
+      "Escurre el exceso de limón, mezcla con las verduras y sazona con sal y pimienta.",
+      "Sirve tu porción con ¼ de aguacate y salmas."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "sopa-verdura-albondigas",
+    "name": "Sopa de verdura + albóndigas sin grasa en salsa",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "caldo",
+    "tags": [
+      "res",
+      "caldo"
+    ],
+    "laborious": true,
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "res-molida-magra"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "chayote",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "huevo",
+        "qty": 1,
+        "unit": "pieza",
+        "note": "para ligar las albóndigas"
+      },
+      {
+        "ingredientId": "jitomate",
+        "qty": 300,
+        "unit": "g",
+        "note": "salsa"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Mezcla la carne con el huevo, sal y pimienta; forma albóndigas pequeñas.",
+      "Licúa jitomate, ajo y cebolla con agua; hierve la salsa y cuece ahí las albóndigas 20 min.",
+      "Aparte, cuece las verduras picadas en caldo para la sopa.",
+      "Cuece el arroz sin aceite (o sólo una gota)."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "lomo-salsa-verde-nopales",
+    "name": "Lomo de cerdo en salsa verde con nopales y champiñones",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "cerdo",
+      "salsa-verde"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "lomo-cerdo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "nopal",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "champinon",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "frijol"
+          }
+        ],
+        "optional": true
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "tomate-verde",
+        "qty": 500,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "chile-serrano",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Corta el lomo en cubos y séllalo en sartén antiadherente sin grasa.",
+      "Hierve tomate verde, chiles, ajo y cebolla; licúa con cilantro.",
+      "Agrega la salsa al lomo con nopales y champiñones; cocina 25 min a fuego bajo.",
+      "Si te toca leguminosa, acompaña con ½ tz de frijoles de la olla."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "garbanzos-mexicana-pescado",
+    "name": "Garbanzos a la mexicana + filete de pescado + puré de papa y verduras salteadas",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "plancha",
+    "tags": [
+      "pescado",
+      "leguminosa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "filete-pescado"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "brocoli",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "garbanzo"
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "papa"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "jitomate",
+        "qty": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "chile-serrano",
+        "qty": 1,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 4,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cuece los garbanzos (remojados la noche anterior) y guísalos con jitomate, cebolla y chile picados.",
+      "Prepara el pescado a la parrilla, al limón o miel-mostaza.",
+      "Cuece la papa y hazla puré natural (sin lácteos).",
+      "Saltea las verduras con unas gotas de aceite."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "lentejas-tacos-pescado",
+    "name": "Ensalada fría de lentejas + tacos de pescado (sin empanizar) con aguacate",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "plancha",
+    "tags": [
+      "pescado",
+      "leguminosa",
+      "tacos"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "filete-pescado"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "col",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "lenteja"
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      },
+      {
+        "group": "grasa",
+        "ingredients": [
+          {
+            "ingredientId": "aguacate"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "limon",
+        "qty": 4,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cuece las lentejas, enfríalas y mézclalas con jitomate, cebolla y cilantro picados y limón.",
+      "Cocina el pescado a la plancha con sal, pimienta y limón; desmenúzalo.",
+      "Sirve los tacos con col y zanahoria ralladas y ¼ de aguacate."
+    ],
+    "source": "plan-ejemplo",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "tinga-pollo",
+    "name": "Tinga de pollo en tostadas horneadas",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "pollo",
+      "tostadas"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "lechuga",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "frijol"
+          }
+        ],
+        "optional": true
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tostada-horneada"
+          }
+        ]
+      },
+      {
+        "group": "grasa",
+        "ingredients": [
+          {
+            "ingredientId": "aguacate"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "chile-chipotle",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 1,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 1,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Cuece y deshebra la pechuga.",
+      "Acitrona la cebolla en rodajas, agrega jitomate licuado con chipotle y ajo; integra el pollo.",
+      "Sirve sobre tostadas horneadas con lechuga y ¼ de aguacate."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "picadillo-res",
+    "name": "Picadillo de res con verduras",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "res"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "res-molida-magra"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "calabacita",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "chayote",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "jitomate",
+        "qty": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Dora la carne sin grasa y escurre el exceso.",
+      "Agrega la salsa de jitomate, cebolla y ajo, y las verduras en cubos chicos.",
+      "Cocina 15–20 min."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "alambre",
+    "name": "Alambre de res (sin tocino)",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "salteado",
+    "tags": [
+      "res",
+      "tacos",
+      "revisar-nutriologa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "bistec-res-magro"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "pimiento",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "cebolla",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "champinon",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "frijol"
+          }
+        ],
+        "optional": true
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "queso-panela",
+        "qty": 100,
+        "unit": "g",
+        "note": "rallado encima; opcional"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 1,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Corta la carne en tiras y saltéala a fuego alto en sartén antiadherente, sin aceite extra.",
+      "Agrega pimiento, cebolla y champiñón en tiras; cocina 5 min.",
+      "Sirve tu porción con 2 tortillas y, si quieres, un poco de panela rallada (en lugar de tocino y queso amarillo)."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "enchiladas-suizas",
+    "name": "Enchiladas suizas ligeras (yogurt griego y panela)",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "horneado",
+    "tags": [
+      "pollo",
+      "enchiladas",
+      "revisar-nutriologa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "lechuga",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "pepino",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "tomate-verde",
+        "qty": 500,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "chile-serrano",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 1,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "yogurt-griego",
+        "qty": 0.5,
+        "unit": "taza",
+        "note": "en lugar de crema"
+      },
+      {
+        "ingredientId": "queso-panela",
+        "qty": 120,
+        "unit": "g",
+        "note": "en lugar de manchego"
+      }
+    ],
+    "steps": [
+      "Cuece y deshebra la pechuga.",
+      "Licúa tomate verde, chile, ajo, cebolla y cilantro cocidos; al final integra el yogurt griego (fuera del fuego).",
+      "Calienta las tortillas en comal (sin freír), rellénalas con pollo, baña con la salsa y gratina con panela 10 min.",
+      "Acompaña con la ensalada de lechuga, pepino y jitomate."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-teriyaki",
+    "name": "Pollo teriyaki con verduras y arroz",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "salteado",
+    "tags": [
+      "pollo",
+      "asiatica"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "brocoli",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "pimiento",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "salsa-soya",
+        "qty": 60,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "miel",
+        "qty": 1,
+        "unit": "cda"
+      },
+      {
+        "ingredientId": "jengibre",
+        "qty": 10,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "ajonjoli",
+        "qty": 1,
+        "unit": "cda"
+      }
+    ],
+    "steps": [
+      "Mezcla soya, miel, jengibre y ajo rallados para la salsa.",
+      "Dora el pollo en cubos, agrega las verduras y saltea 4 min.",
+      "Añade la salsa y reduce 2 min; termina con ajonjolí. Sirve con ½ tz de arroz."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-con-mole",
+    "name": "Pollo con mole y verduras",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "pollo",
+      "mole",
+      "revisar-nutriologa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "ejote",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "pasta-mole",
+        "qty": 100,
+        "unit": "g",
+        "note": "diluida en caldo desgrasado"
+      },
+      {
+        "ingredientId": "ajonjoli",
+        "qty": 1,
+        "unit": "cda"
+      }
+    ],
+    "steps": [
+      "Cuece la pechuga y guarda el caldo; desgrásalo.",
+      "Diluye la pasta de mole en el caldo y cocina 10 min.",
+      "Agrega el pollo en piezas; sirve con verduras al vapor y ½ tz de arroz."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "hamburguesas",
+    "name": "Hamburguesas de res magra en lechuga con papas al horno",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "plancha",
+    "tags": [
+      "res",
+      "revisar-nutriologa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "res-molida-magra"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "lechuga",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "cebolla",
+            "share": 0.15
+          },
+          {
+            "ingredientId": "pepino",
+            "share": 0.15
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "papa"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "mostaza",
+        "qty": 1,
+        "unit": "cda"
+      },
+      {
+        "ingredientId": "huevo",
+        "qty": 1,
+        "unit": "pieza",
+        "note": "para ligar"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 1,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Mezcla la carne con huevo, ajo, sal y pimienta; forma 4 tortas por cada 4 porciones.",
+      "Cocínalas a la plancha sin aceite; hornea la papa en gajos 25 min a 200 °C.",
+      "Sirve la carne envuelta en hojas de lechuga con jitomate, cebolla, pepino y mostaza."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "enchiladas-rojas",
+    "name": "Enchiladas rojas de pollo (sin freír)",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "horneado",
+    "tags": [
+      "pollo",
+      "enchiladas",
+      "revisar-nutriologa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "lechuga",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "chile-guajillo",
+        "qty": 6,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "jitomate",
+        "qty": 300,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "queso-panela",
+        "qty": 100,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Hidrata los guajillos y licúalos con jitomate, ajo y cebolla; cuela y hierve la salsa 10 min.",
+      "Pasa las tortillas por la salsa caliente (sin freírlas), rellena con pollo deshebrado.",
+      "Termina con panela desmoronada; acompaña con lechuga y zanahoria cocida."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "tacos-carne-al-vapor",
+    "name": "Tacos de carne al vapor",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "vapor",
+    "tags": [
+      "res",
+      "tacos"
+    ],
+    "laborious": true,
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "paleta-res"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "col",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "cebolla",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "chile-guajillo",
+        "qty": 3,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cilantro",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 4,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cuece la paleta en olla de presión con guajillo licuado, ajo y sal (40 min); deshébrala y desgrasa el jugo.",
+      "Calienta las tortillas al vapor con la carne.",
+      "Sirve con col rallada, cebolla, cilantro, jitomate y limón."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "sopa-de-tortilla",
+    "name": "Sopa de tortilla con pollo (tortilla horneada)",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "caldo",
+    "tags": [
+      "pollo",
+      "sopa",
+      "revisar-nutriologa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      },
+      {
+        "group": "grasa",
+        "ingredients": [
+          {
+            "ingredientId": "aguacate"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "jitomate",
+        "qty": 400,
+        "unit": "g",
+        "note": "caldillo"
+      },
+      {
+        "ingredientId": "chile-guajillo",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "queso-panela",
+        "qty": 80,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Licúa jitomate, guajillo, ajo y cebolla; sofríe en una gota de aceite y agrega el caldo de pollo desgrasado.",
+      "Cuece ahí las verduras en cubos y el pollo deshebrado.",
+      "Corta las tortillas en tiras y hornéalas hasta que estén crujientes (no fritas). Sirve con aguacate y panela."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-ajonjoli",
+    "name": "Pollo al ajonjolí con verduras y arroz",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "salteado",
+    "tags": [
+      "pollo",
+      "asiatica"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "brocoli",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "pimiento",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "cebollin",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "salsa-soya",
+        "qty": 45,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "ajonjoli",
+        "qty": 2,
+        "unit": "cda"
+      },
+      {
+        "ingredientId": "jengibre",
+        "qty": 10,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "miel",
+        "qty": 1,
+        "unit": "cda"
+      }
+    ],
+    "steps": [
+      "Saltea el pollo en cubos hasta dorar.",
+      "Agrega brócoli, pimiento y cebollín; cocina 4 min.",
+      "Añade soya, miel, jengibre y ajo; termina con ajonjolí tostado."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "boneless",
+    "name": "Boneless al horno sin empanizar",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "horneado",
+    "tags": [
+      "pollo",
+      "revisar-nutriologa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "apio",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "papa"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "salsa-picante",
+        "qty": 60,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 1,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Corta la pechuga en trozos, sazona con ajo, sal y pimienta.",
+      "Hornéalos (o air fryer) 18–20 min a 200 °C, sin empanizar.",
+      "Báñalos con la salsa picante y limón; sirve con bastones de zanahoria y apio, y papa en gajos al horno."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-a-las-hierbas",
+    "name": "Pollo a las hierbas con verduras al horno",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "horneado",
+    "tags": [
+      "pollo"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "brocoli",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "papa"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "ajo",
+        "qty": 3,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "aceite-oliva",
+        "qty": 1,
+        "unit": "cda"
+      }
+    ],
+    "steps": [
+      "Marina el pollo con ajo, limón, hierbas finas, sal y pimienta.",
+      "Hornea con las verduras y la papa en charola 25–30 min a 200 °C."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-en-pipian",
+    "name": "Pollo en pipián con verduras",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "guisado",
+    "tags": [
+      "pollo",
+      "pipian"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "ejote",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "pasta-pipian",
+        "qty": 100,
+        "unit": "g",
+        "note": "diluida en caldo desgrasado"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 1,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cuece el pollo con ajo y cebolla; desgrasa el caldo.",
+      "Diluye el pipián en el caldo, agrega calabacita y ejote y cocina 10 min.",
+      "Integra el pollo y sirve con arroz."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "quesatacos",
+    "name": "Quesatacos de deshebrada con panela",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "plancha",
+    "tags": [
+      "res",
+      "tacos",
+      "revisar-nutriologa"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "paleta-res"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "col",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "cebolla",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "pepino",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "tortilla-maiz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "queso-panela",
+        "qty": 120,
+        "unit": "g",
+        "note": "en lugar de oaxaca"
+      },
+      {
+        "ingredientId": "chile-guajillo",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 2,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Cuece y deshebra la paleta con guajillo y ajo; desgrasa.",
+      "Arma los tacos con carne y panela y dóralos en comal sin aceite.",
+      "Sirve con col, cebolla y pepino con limón."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-mostaza",
+    "name": "Pollo honey mustard con ensalada y papa",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "horneado",
+    "tags": [
+      "pollo"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "lechuga",
+            "share": 0.4
+          },
+          {
+            "ingredientId": "pepino",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.3
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "papa"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "mostaza",
+        "qty": 3,
+        "unit": "cda"
+      },
+      {
+        "ingredientId": "miel",
+        "qty": 1,
+        "unit": "cda"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 2,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 1,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Mezcla mostaza, miel, limón y ajo; barniza el pollo.",
+      "Hornea 20–25 min a 200 °C con la papa en cubos.",
+      "Sirve con ensalada de lechuga, pepino y zanahoria."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-adobado",
+    "name": "Pollo adobado con verduras",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "horneado",
+    "tags": [
+      "pollo"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "calabacita",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "leguminosa",
+        "ingredients": [
+          {
+            "ingredientId": "lenteja"
+          }
+        ],
+        "optional": true
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "chile-guajillo",
+        "qty": 4,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "cebolla",
+        "qty": 0.5,
+        "unit": "pieza"
+      },
+      {
+        "ingredientId": "naranja",
+        "qty": 1,
+        "unit": "pieza",
+        "note": "jugo"
+      }
+    ],
+    "steps": [
+      "Licúa guajillos hidratados, ajo, cebolla y jugo de naranja; marina el pollo 30 min.",
+      "Hornea 25 min a 200 °C con las verduras.",
+      "Si te toca leguminosa, acompaña con ½ tz de lentejas."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-a-la-naranja",
+    "name": "Pollo a la naranja con verduras salteadas",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "salteado",
+    "tags": [
+      "pollo",
+      "asiatica"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "brocoli",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "pimiento",
+            "share": 0.25
+          },
+          {
+            "ingredientId": "zanahoria",
+            "share": 0.25
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "naranja",
+        "qty": 3,
+        "unit": "pieza",
+        "note": "jugo y ralladura"
+      },
+      {
+        "ingredientId": "salsa-soya",
+        "qty": 30,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "jengibre",
+        "qty": 10,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 2,
+        "unit": "diente"
+      }
+    ],
+    "steps": [
+      "Dora el pollo en cubos sin capear.",
+      "Agrega las verduras (stir fry) 4 min.",
+      "Reduce jugo de naranja, soya, jengibre y ajo hasta espesar y baña el pollo."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "pollo-coreano",
+    "name": "Pollo coreano con ensalada de pepino y napa",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "salteado",
+    "tags": [
+      "pollo",
+      "asiatica"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "pepino",
+            "share": 0.5
+          },
+          {
+            "ingredientId": "col-napa",
+            "share": 0.5
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "gochujang",
+        "qty": 2,
+        "unit": "cda"
+      },
+      {
+        "ingredientId": "salsa-soya",
+        "qty": 30,
+        "unit": "ml"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 3,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "jengibre",
+        "qty": 10,
+        "unit": "g"
+      },
+      {
+        "ingredientId": "ajonjoli",
+        "qty": 1,
+        "unit": "cda"
+      },
+      {
+        "ingredientId": "miel",
+        "qty": 1,
+        "unit": "cda"
+      }
+    ],
+    "steps": [
+      "Mezcla gochujang, soya, ajo, jengibre y miel; marina el pollo.",
+      "Cocínalo a fuego alto hasta caramelizar sin freír.",
+      "Sirve con ensalada de pepino y napa con ajonjolí y ½ tz de arroz."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  },
+  {
+    "id": "shawarma-pollo",
+    "name": "Shawarma de pollo en bowl",
+    "meal": "comida",
+    "servings": 4,
+    "cookingMethod": "plancha",
+    "tags": [
+      "pollo",
+      "bowl"
+    ],
+    "components": [
+      {
+        "group": "proteina",
+        "ingredients": [
+          {
+            "ingredientId": "pechuga-pollo"
+          }
+        ]
+      },
+      {
+        "group": "verdura",
+        "ingredients": [
+          {
+            "ingredientId": "pepino",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "jitomate",
+            "share": 0.3
+          },
+          {
+            "ingredientId": "lechuga",
+            "share": 0.2
+          },
+          {
+            "ingredientId": "cebolla",
+            "share": 0.2
+          }
+        ]
+      },
+      {
+        "group": "cereal",
+        "ingredients": [
+          {
+            "ingredientId": "arroz"
+          }
+        ]
+      }
+    ],
+    "fixedIngredients": [
+      {
+        "ingredientId": "yogurt-griego",
+        "qty": 0.5,
+        "unit": "taza",
+        "note": "salsa de yogurt"
+      },
+      {
+        "ingredientId": "ajo",
+        "qty": 3,
+        "unit": "diente"
+      },
+      {
+        "ingredientId": "limon",
+        "qty": 2,
+        "unit": "pieza"
+      }
+    ],
+    "steps": [
+      "Marina el pollo con ajo, limón, comino, paprika y cúrcuma; cocínalo a la plancha y rebánalo.",
+      "Prepara salsa de yogurt griego con ajo y limón.",
+      "Arma el bowl: arroz, verduras picadas, pollo y salsa."
+    ],
+    "source": "keep-import",
+    "stats": {
+      "timesCooked": 0
+    }
+  }
+]

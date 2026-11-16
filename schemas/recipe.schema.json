@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Receta",
+  "description": "Guisado + acompañamientos. Los componentes se porcionan según el plan; los ingredientes fijos no se escalan.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "meal",
+    "servings",
+    "cookingMethod",
+    "components"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "title": "Identificador"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Nombre"
+    },
+    "meal": {
+      "enum": [
+        "desayuno",
+        "colacion",
+        "comida",
+        "snack",
+        "cena"
+      ],
+      "default": "comida",
+      "title": "Tiempo de comida"
+    },
+    "servings": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12,
+      "default": 4,
+      "title": "Porciones"
+    },
+    "cookingMethod": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Método de cocción"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "title": "Etiqueta"
+      },
+      "title": "Etiquetas"
+    },
+    "laborious": {
+      "type": "boolean",
+      "default": false,
+      "title": "Laborioso"
+    },
+    "components": {
+      "type": "array",
+      "title": "Componentes del plato",
+      "items": {
+        "type": "object",
+        "required": [
+          "group",
+          "ingredients"
+        ],
+        "properties": {
+          "group": {
+            "enum": [
+              "verdura",
+              "proteina",
+              "leguminosa",
+              "cereal",
+              "grasa"
+            ],
+            "title": "Grupo"
+          },
+          "ingredients": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "ingredientId"
+              ],
+              "properties": {
+                "ingredientId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Ingrediente"
+                },
+                "share": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "default": 1,
+                  "title": "Proporción",
+                  "description": "Reparte la porción del plan entre los ingredientes del componente."
+                }
+              },
+              "additionalProperties": false,
+              "title": "Ingrediente"
+            },
+            "title": "Ingredientes"
+          },
+          "optional": {
+            "type": "boolean",
+            "default": false,
+            "title": "Opcional",
+            "description": "Solo leguminosa: acompañamiento que el menú activa en algunas porciones."
+          }
+        },
+        "additionalProperties": false,
+        "title": "Componente"
+      }
+    },
+    "fixedIngredients": {
+      "type": "array",
+      "title": "Ingredientes fijos (salsa, condimentos)",
+      "items": {
+        "type": "object",
+        "required": [
+          "ingredientId",
+          "qty",
+          "unit"
+        ],
+        "properties": {
+          "ingredientId": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Ingrediente"
+          },
+          "qty": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "title": "Cantidad"
+          },
+          "unit": {
+            "enum": [
+              "g",
+              "ml",
+              "pieza",
+              "taza",
+              "cda",
+              "cdita",
+              "diente",
+              "paquete",
+              "lata"
+            ],
+            "title": "Unidad"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "title": "Nota"
+          }
+        },
+        "additionalProperties": false,
+        "title": "Ingrediente fijo"
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "title": "Paso"
+      },
+      "title": "Pasos"
+    },
+    "source": {
+      "type": "string",
+      "default": "manual",
+      "title": "Origen"
+    },
+    "stats": {
+      "type": "object",
+      "properties": {
+        "timesCooked": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "Veces cocinada en la app"
+        },
+        "lastCooked": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "title": "Última vez"
+        },
+        "historyCount": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "Veces en tu historial"
+        },
+        "historyLastCooked": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "title": "Última vez en tu historial"
+        },
+        "historyMonths": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "title": "Meses en tu historial"
+        },
+        "totalCount": {
+          "type": "integer",
+          "readOnly": true,
+          "title": "Total de veces"
+        },
+        "latestCooked": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true,
+          "title": "Última vez (total)"
+        }
+      },
+      "additionalProperties": false,
+      "title": "Estadísticas"
+    }
+  },
+  "additionalProperties": false
+}

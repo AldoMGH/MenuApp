@@ -1,0 +1,173 @@
+@page "/recetas/{RecipeId}"
+@inherits AppPage
+@inject IDialogService Dialogs
+
+<PageTitle>@(_recipe?.Name ?? "Receta")</PageTitle>
+
+@if (_recipe is not null && _portioned is not null)
+{
+    <div class="d-flex flex-wrap align-center gap-2 mb-2">
+        <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Href="recetas" aria-label="Volver a recetas" />
+        <MudText Typo="Typo.h4">@_recipe.Name</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Edit" Href="@($"editar/receta/{RecipeId}")">Editar</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Error" StartIcon="@Icons.Material.Filled.Delete" OnClick="Delete">Eliminar</MudButton>
+    </div>
+
+    <div class="d-flex flex-wrap gap-1 mb-3">
+        <MudChip T="string" Size="Size.Small">@_recipe.CookingMethod</MudChip>
+        <MudChip T="string" Size="Size.Small">Cocinada @_recipe.Stats.TotalCount veces</MudChip>
+        <MudChip T="string" Size="Size.Small">Última vez: @Formatting.Date(_recipe.Stats.LatestCooked)</MudChip>
+        @foreach (var tag in _recipe.Tags)
+        {
+            <MudChip T="string" Size="Size.Small" Color="@(tag == "revisar-nutriologa" ? Color.Warning : Color.Default)">@tag</MudChip>
+        }
+    </div>
+
+    @if (_recipe.Tags.Contains("revisar-nutriologa"))
+    {
+        <MudAlert Severity="Severity.Warning" Class="mb-3">Es una versión adaptada al plan: conviene revisarla con tu nutrióloga.</MudAlert>
+    }
+
+    <MudPaper Outlined="true" Class="pa-3 mb-3">
+        <div class="d-flex flex-wrap gap-3 align-center">
+            <MudSelect T="string" Value="@_target" ValueChanged="SetTarget" Label="Proteína por plato" Variant="Variant.Outlined" Margin="Margin.Dense" Style="max-width: 260px">
+                <MudSelectItem T="string" Value="@string.Empty">Según el plan</MudSelectItem>
+                <MudSelectItem T="string" Value="@("min")">Mínimo del rango</MudSelectItem>
+                <MudSelectItem T="string" Value="@("mid")">Punto medio</MudSelectItem>
+                <MudSelectItem T="string" Value="@("max")">Máximo del rango</MudSelectItem>
+            </MudSelect>
+            @if (_recipe.LegumeMode == LegumeMode.Side)
+            {
+                <MudNumericField T="int" Value="@_legume" ValueChanged="SetLegume" Min="0" Max="@_recipe.Servings" Label="Porciones con frijolitos"
+                                 Variant="Variant.Outlined" Margin="Margin.Dense" Style="max-width: 220px" />
+            }
+        </div>
+    </MudPaper>
+
+    <MudGrid>
+        <MudItem xs="12" md="6">
+            <MudPaper Outlined="true" Class="pa-3 h-100">
+                <MudText Typo="Typo.h6">Tu porción al servir</MudText>
+                @foreach (var line in _portioned.Serving)
+                {
+                    <MudText Typo="Typo.body1" Class="serving-line">• <b>@Formatting.Group(line.Group):</b> @line.Text</MudText>
+                }
+                @foreach (var text in _portioned.Suggestions)
+                {
+                    <MudAlert Severity="Severity.Info" Dense="true" Class="mt-2">@text</MudAlert>
+                }
+                @foreach (var text in _portioned.Warnings)
+                {
+                    <MudAlert Severity="Severity.Warning" Dense="true" Class="mt-2">@text</MudAlert>
+                }
+            </MudPaper>
+        </MudItem>
+        @if (_portioned.Nutrition is { } n)
+        {
+            <MudItem xs="12">
+                <MudPaper Outlined="true" Class="pa-3" data-testid="macros">
+                    <MudText Typo="Typo.h6">Macros aproximados</MudText>
+                    <MudText Typo="Typo.caption" Class="mud-text-secondary">Valores de referencia (SMAE/USDA), solo informativos: tu plan se sigue por porciones, no por calorías.</MudText>
+                    <MudSimpleTable Dense="true" Elevation="0">
+                        <thead><tr><th></th><th>Energía</th><th>Proteína</th><th>Carbohidratos</th><th>Grasa</th><th>Fibra</th></tr></thead>
+                        <tbody>
+                            <tr><td><b>Por porción</b></td><td>@n.PerServing.Kcal.ToString("0") kcal</td><td>@n.PerServing.Protein.ToString("0.#") g</td><td>@n.PerServing.Carbs.ToString("0.#") g</td><td>@n.PerServing.Fat.ToString("0.#") g</td><td>@n.PerServing.Fiber.ToString("0.#") g</td></tr>
+                            <tr><td>Lote (@_portioned.Servings porciones)</td><td>@n.Batch.Kcal.ToString("0") kcal</td><td>@n.Batch.Protein.ToString("0") g</td><td>@n.Batch.Carbs.ToString("0") g</td><td>@n.Batch.Fat.ToString("0") g</td><td>@n.Batch.Fiber.ToString("0") g</td></tr>
+                        </tbody>
+                    </MudSimpleTable>
+                    @if (n.Missing.Count > 0)
+                    {
+                        <MudText Typo="Typo.caption" Color="Color.Warning">Sin datos nutrimentales: @string.Join(", ", n.Missing)</MudText>
+                    }
+                </MudPaper>
+            </MudItem>
+        }
+        <MudItem xs="12" md="6">
+            <MudPaper Outlined="true" Class="pa-3 h-100">
+                <MudText Typo="Typo.h6">Para cocinar (@_portioned.Servings porciones, en crudo)</MudText>
+                <MudSimpleTable Dense="true" Elevation="0">
+                    <tbody>
+                        @foreach (var line in _portioned.Batch)
+                        {
+                            <tr>
+                                <td><b>@line.Display</b></td>
+                                <td>@line.Name</td>
+                                <td><MudText Typo="Typo.caption" Class="mud-text-secondary">@Formatting.Group(line.Group)@(line.Suggested ? " · sugerido" : string.Empty)</MudText></td>
+                            </tr>
+                        }
+                    </tbody>
+                </MudSimpleTable>
+            </MudPaper>
+        </MudItem>
+        @if (_portioned.Steps.Count > 0)
+        {
+            <MudItem xs="12">
+                <MudPaper Outlined="true" Class="pa-3">
+                    <MudText Typo="Typo.h6">Pasos</MudText>
+                    <ol>
+                        @foreach (var step in _portioned.Steps)
+                        {
+                            <li><MudText Typo="Typo.body1">@step</MudText></li>
+                        }
+                    </ol>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+}
+else if (Busy)
+{
+    <MudProgressLinear Indeterminate="true" />
+}
+
+@code {
+    [Parameter] public string RecipeId { get; set; } = string.Empty;
+
+    private Recipe? _recipe;
+    private PortionedRecipe? _portioned;
+    private string _target = string.Empty;
+    private int _legume;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Run(async () =>
+        {
+            _recipe = (await Api.ListRecipesAsync()).FirstOrDefault(r => r.Id == RecipeId);
+            if (_recipe is null)
+            {
+                throw new ApiException($"No existe la receta '{RecipeId}'.", 404, []);
+            }
+
+            _legume = _recipe.LegumeMode == LegumeMode.Side ? _recipe.Servings : 0;
+            await LoadPortionAsync();
+        });
+    }
+
+    private async Task LoadPortionAsync()
+    {
+        ProteinTarget? target = _target.Length == 0 ? null : Enum.Parse<ProteinTarget>(_target, ignoreCase: true);
+        _portioned = await Api.GetPortionedAsync(RecipeId, target, _recipe?.LegumeMode == LegumeMode.Side ? _legume : null);
+    }
+
+    private Task SetTarget(string value)
+    {
+        _target = value;
+        return Run(LoadPortionAsync);
+    }
+
+    private Task SetLegume(int value)
+    {
+        _legume = value;
+        return Run(LoadPortionAsync);
+    }
+
+    private async Task Delete()
+    {
+        var confirmed = await Dialogs.ShowMessageBoxAsync("Eliminar receta", $"¿Eliminar '{_recipe?.Name}'? Los menús confirmados conservan su copia.", yesText: "Eliminar", cancelText: "Cancelar");
+        if (confirmed == true && await Run(() => Api.DeleteAsync($"api/recipes/{Uri.EscapeDataString(RecipeId)}"), "Receta eliminada."))
+        {
+            Nav.NavigateTo("recetas");
+        }
+    }
+}

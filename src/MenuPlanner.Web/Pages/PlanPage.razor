@@ -1,0 +1,153 @@
+@page "/plan"
+@inherits AppPage
+
+<PageTitle>Plan de alimentación</PageTitle>
+
+<div class="d-flex flex-wrap align-center gap-2 mb-3">
+    <MudText Typo="Typo.h4">Plan de alimentación</MudText>
+    <MudSpacer />
+    @if (_active is not null)
+    {
+        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Edit" Href="@($"editar/plan/{_active.Id}")">Editar esta versión</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.NoteAdd" Href="@($"editar/plan?desde={_active.Id}")">Nueva versión (cita con la nutrióloga)</MudButton>
+    }
+</div>
+
+@if (_active is not null)
+{
+    var comida = _active.GetMeal(Meals.Comida);
+    <MudPaper Outlined="true" Class="pa-4 mb-4">
+        <MudText Typo="Typo.h6">@_active.Name · versión @_active.Version</MudText>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary">Vigente desde @Formatting.Date(_active.ValidFrom) · proteína en el punto @_active.ProteinTarget.ToString().ToLowerInvariant() del rango · @_active.MealsPerWeek comidas por semana</MudText>
+
+        @if (comida is not null)
+        {
+            <MudText Typo="Typo.subtitle1" Class="mt-3"><b>Comida: tu plato</b></MudText>
+            <MudSimpleTable Dense="true" Elevation="0" data-testid="plan-components">
+                <thead><tr><th>Grupo</th><th>Por plato</th><th>Notas</th></tr></thead>
+                <tbody>
+                    @foreach (var slot in comida.Components)
+                    {
+                        <tr>
+                            <td>@Formatting.Group(slot.Group)</td>
+                            <td>
+                                @(slot.Min == slot.Max ? Number(slot.Max) : $"{Number(slot.Min)}–{Number(slot.Max)}") @Formatting.Unit(slot.Unit)
+                                @(slot.State == FoodState.Cocido ? " (cocido)" : string.Empty)
+                                @if (slot.WeeklyFrequency is not null)
+                                {
+                                    <MudChip T="string" Size="Size.Small">@slot.WeeklyFrequency.Min–@slot.WeeklyFrequency.Max veces/semana</MudChip>
+                                }
+                                @if (slot.Optional)
+                                {
+                                    <MudChip T="string" Size="Size.Small">opcional</MudChip>
+                                }
+                            </td>
+                            <td><MudText Typo="Typo.caption">@slot.Notes</MudText></td>
+                        </tr>
+                    }
+                </tbody>
+            </MudSimpleTable>
+        }
+
+        @foreach (var exchange in _active.Exchanges)
+        {
+            <MudText Typo="Typo.subtitle1" Class="mt-3"><b>1 porción de @Formatting.Group(exchange.Group).ToLowerInvariant() =</b></MudText>
+            <div class="d-flex flex-wrap gap-1">
+                @foreach (var option in exchange.Options)
+                {
+                    <MudChip T="string" Size="Size.Small">@Number(option.Qty) @Formatting.Unit(option.Unit) @Name(option.IngredientId)@(option.State == FoodState.Cocido ? " cocido" : string.Empty)</MudChip>
+                }
+            </div>
+        }
+
+        <MudText Typo="Typo.subtitle1" Class="mt-3"><b>Reglas</b></MudText>
+        <div class="d-flex flex-wrap gap-1">
+            @foreach (var method in _active.Rules.ForbiddenMethods)
+            {
+                <MudChip T="string" Size="Size.Small" Color="Color.Error" Icon="@Icons.Material.Filled.Block">@method</MudChip>
+            }
+        </div>
+        @foreach (var note in _active.Rules.Notes)
+        {
+            <MudText Typo="Typo.body2">• @note</MudText>
+        }
+    </MudPaper>
+}
+
+<MudPaper Outlined="true" Class="pa-4 mb-4">
+    <MudText Typo="Typo.h6">Versiones</MudText>
+    <MudSimpleTable Dense="true" Elevation="0">
+        <thead><tr><th>Versión</th><th>Nombre</th><th>Vigente desde</th><th></th></tr></thead>
+        <tbody>
+            @foreach (var plan in _plans)
+            {
+                <tr>
+                    <td>v@plan.Version</td>
+                    <td>@plan.Name</td>
+                    <td>@Formatting.Date(plan.ValidFrom)</td>
+                    <td>
+                        @if (plan.Active)
+                        {
+                            <MudChip T="string" Size="Size.Small" Color="Color.Success">Activa</MudChip>
+                        }
+                        else
+                        {
+                            <MudButton Size="Size.Small" Variant="Variant.Text" OnClick="() => Activate(plan.Id)">Activar</MudButton>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </MudSimpleTable>
+</MudPaper>
+
+<MudPaper Outlined="true" Class="pa-4">
+    <MudText Typo="Typo.h6">Datos iniciales (seed)</MudText>
+    <MudText Typo="Typo.body2" Class="mud-text-secondary mb-2">
+        Trae a tu base las recetas, ingredientes y platillos nuevos del repositorio sin pisar tus datos.
+    </MudText>
+    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Sync" Disabled="Busy" OnClick="SyncSeed">Sincronizar seed</MudButton>
+</MudPaper>
+
+@code {
+    private List<NutritionPlan> _plans = [];
+    private NutritionPlan? _active;
+    private Dictionary<string, string> _names = [];
+
+    protected override Task OnInitializedAsync() => Load();
+
+    private Task Load() => Run(async () =>
+    {
+        _plans = await Api.ListPlansAsync();
+        _active = _plans.FirstOrDefault(p => p.Active);
+        _names = (await Api.ListIngredientsAsync()).ToDictionary(i => i.Id, i => i.Name);
+    });
+
+    private string Name(string id) => _names.GetValueOrDefault(id, id).ToLowerInvariant();
+
+    private static string Number(double value) => value switch
+    {
+        0.25 => "¼",
+        0.5 => "½",
+        0.75 => "¾",
+        _ => value.ToString("0.##", System.Globalization.CultureInfo.GetCultureInfo("es-MX")),
+    };
+
+    private async Task Activate(string id)
+    {
+        if (await Run(() => Api.ActivatePlanAsync(id), "Versión activada."))
+        {
+            await Load();
+        }
+    }
+
+    private async Task SyncSeed()
+    {
+        SeedSyncResult? result = null;
+        if (await Run(async () => result = await Api.SyncSeedAsync()))
+        {
+            Snackbar.Add($"Seed sincronizado: {result!.IngredientsAdded} ingredientes, {result.DishesAdded} platillos nuevos, {result.RecipesRemoved} recetas de arranque quitadas.", Severity.Success);
+            await Load();
+        }
+    }
+}
