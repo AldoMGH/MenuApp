@@ -1,0 +1,54 @@
+@page "/ingredientes"
+@inherits AppPage
+
+<PageTitle>Ingredientes</PageTitle>
+
+<div class="d-flex flex-wrap align-center gap-2 mb-3">
+    <MudText Typo="Typo.h4">Ingredientes</MudText>
+    <MudSpacer />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Href="editar/ingrediente">Nuevo ingrediente</MudButton>
+</div>
+
+<MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">
+    El rendimiento crudo→cocido y las equivalencias (taza ↔ g) definen cuánto comprar. Son aproximados: afínalos pesando una vez.
+</MudText>
+
+<MudTable T="Ingredient" Items="_ingredients" Filter="Matches" Hover="true" Dense="true" Loading="Busy" Breakpoint="Breakpoint.Sm">
+    <ToolBarContent>
+        <MudTextField @bind-Value="_search" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" Margin="Margin.Dense" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel T="Ingredient" SortBy="i => i.Name">Nombre</MudTableSortLabel></MudTh>
+        <MudTh>Grupo</MudTh>
+        <MudTh>Rinde (crudo→cocido)</MudTh>
+        <MudTh>Equivalencias</MudTh>
+        <MudTh>Se compra por</MudTh>
+        <MudTh><MudTableSortLabel T="Ingredient" SortBy="i => i.Aisle">Pasillo</MudTableSortLabel></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nombre"><b>@context.Name</b><br /><MudText Typo="Typo.caption" Class="mud-text-secondary">@context.Id</MudText></MudTd>
+        <MudTd DataLabel="Grupo">@(context.Group is null ? "—" : Formatting.Group(context.Group))</MudTd>
+        <MudTd DataLabel="Rinde">@(context.CookedYield == 1 ? "—" : $"×{context.CookedYield:0.##}")</MudTd>
+        <MudTd DataLabel="Equivalencias">@string.Join(" · ", context.Conversions.Select(c => $"1 {Formatting.Unit(c.Unit)}{(c.State == FoodState.Cocido ? " cocido" : string.Empty)} = {c.Grams:0.#} g"))</MudTd>
+        <MudTd DataLabel="Compra">@Formatting.Quantity(context.Purchase.Step, context.Purchase.Unit)@(context.Purchase.Label is null ? string.Empty : $" ({context.Purchase.Label})")</MudTd>
+        <MudTd DataLabel="Pasillo">@context.Aisle</MudTd>
+        <MudTd><MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" Href="@($"editar/ingrediente/{context.Id}")" aria-label="Editar" /></MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager RowsPerPageString="Por página:" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private List<Ingredient> _ingredients = [];
+    private string _search = string.Empty;
+
+    protected override Task OnInitializedAsync() => Run(async () => _ingredients = await Api.ListIngredientsAsync());
+
+    private bool Matches(Ingredient ingredient) =>
+        string.IsNullOrWhiteSpace(_search)
+        || ingredient.Name.Contains(_search, StringComparison.CurrentCultureIgnoreCase)
+        || ingredient.Id.Contains(_search, StringComparison.OrdinalIgnoreCase)
+        || ingredient.Aliases.Any(a => a.Contains(_search, StringComparison.CurrentCultureIgnoreCase));
+}

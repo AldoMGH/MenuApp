@@ -3,8 +3,6 @@ using MenuPlanner.Application.Shopping;
 
 namespace MenuPlanner.Api.Endpoints;
 
-public sealed record AddDishRequest(string RecipeId);
-
 public static class MenuEndpoints
 {
     public static IEndpointRouteBuilder MapMenuEndpoints(this IEndpointRouteBuilder app)

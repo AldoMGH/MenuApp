@@ -116,8 +116,8 @@ public class MongoTests(MongoFixture fixture)
         var recipe = await new RecipeRepository(fixture.Context!).GetAsync("enchiladas-suizas");
         Assert.True(recipe!.Stats.HistoryCount >= 2);
 
-        var reviewed = await service.ReviewAsync(job.Id, new MenuPlanner.Application.Imports.ReviewRequest(
-            [new MenuPlanner.Application.Imports.ReviewMapping("platillo misterioso", Ignore: true)]));
+        var reviewed = await service.ReviewAsync(job.Id, new ReviewRequest(
+            [new ReviewMapping("platillo misterioso", Ignore: true)]));
         Assert.Empty(reviewed.Unmatched);
 
         var suggestions = await service.GetPantrySuggestionsAsync(12, 0.5);

@@ -10,7 +10,7 @@ public class MenuServiceTests
     [Fact]
     public async Task Generates_a_weekly_menu_with_five_dishes()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var service = store.CreateService();
 
         var menu = await service.GenerateAsync(new GenerateMenuRequest(5, Seed: 123));
@@ -28,7 +28,7 @@ public class MenuServiceTests
     [Fact]
     public async Task Text_summary_reads_like_the_example()
     {
-        var service = InMemoryStore.FromSeed().CreateService();
+        var service = TestData.Store().CreateService();
         var menu = await service.GenerateAsync(new GenerateMenuRequest(5, Seed: 123));
 
         var text = MenuTextFormatter.Format(menu);
@@ -42,7 +42,7 @@ public class MenuServiceTests
     [Fact]
     public async Task Add_remove_and_swap_dishes()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var service = store.CreateService();
         var menu = await service.GenerateAsync(new GenerateMenuRequest(3, Seed: 5, Exclude: ["tinga-pollo", "lomo-salsa-verde-nopales"]));
 
@@ -62,7 +62,7 @@ public class MenuServiceTests
     [Fact]
     public async Task Confirm_freezes_the_menu_and_updates_history()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         store.Pantry = new Pantry { IngredientIds = ["ajo", "aceite-oliva"] };
         var service = store.CreateService();
         var menu = await service.GenerateAsync(new GenerateMenuRequest(4, Seed: 9));
@@ -90,7 +90,7 @@ public class MenuServiceTests
     [Fact]
     public async Task Confirmed_menu_keeps_its_snapshot_when_the_plan_changes()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var service = store.CreateService();
         var menu = await service.GenerateAsync(new GenerateMenuRequest(2, Seed: 3));
         await service.ConfirmAsync(menu.Id);
@@ -114,7 +114,7 @@ public class MenuServiceTests
     [Fact]
     public async Task Rejects_invalid_requests()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var service = store.CreateService();
 
         await Assert.ThrowsAsync<BadRequestException>(() => service.GenerateAsync(new GenerateMenuRequest(0)));

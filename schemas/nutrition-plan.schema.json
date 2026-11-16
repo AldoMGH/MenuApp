@@ -3,114 +3,337 @@
   "title": "Plan de alimentación",
   "description": "Plantilla por tiempo de comida (grupos y porciones en medidas caseras) con tablas de intercambio. Versionado: cada cita con la nutrióloga genera una versión nueva.",
   "type": "object",
-  "required": ["id", "version", "name", "meals"],
+  "required": [
+    "id",
+    "version",
+    "name",
+    "meals"
+  ],
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "title": "Identificador" },
-    "version": { "type": "integer", "minimum": 1, "title": "Versión" },
-    "name": { "type": "string", "minLength": 1, "title": "Nombre" },
-    "validFrom": { "type": ["string", "null"], "format": "date-time", "title": "Vigente desde" },
-    "active": { "type": "boolean", "default": false, "title": "Activo" },
-    "proteinTarget": { "enum": ["min", "mid", "max"], "default": "max", "title": "Punto del rango de proteína" },
-    "mealsPerWeek": { "type": "integer", "minimum": 1, "maximum": 21, "default": 7, "title": "Comidas por semana" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "title": "Identificador"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "title": "Versión"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Nombre"
+    },
+    "validFrom": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "title": "Vigente desde"
+    },
+    "active": {
+      "type": "boolean",
+      "default": false,
+      "title": "Activo"
+    },
+    "proteinTarget": {
+      "enum": [
+        "min",
+        "mid",
+        "max"
+      ],
+      "default": "max",
+      "title": "Punto del rango de proteína"
+    },
+    "mealsPerWeek": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 21,
+      "default": 7,
+      "title": "Comidas por semana"
+    },
     "meals": {
       "type": "array",
       "minItems": 1,
       "title": "Tiempos de comida",
-      "items": { "$ref": "#/$defs/mealTemplate" }
+      "items": {
+        "$ref": "#/$defs/mealTemplate",
+        "title": "Tiempo de comida"
+      }
     },
     "exchanges": {
       "type": "array",
       "title": "Tablas de intercambio",
-      "items": { "$ref": "#/$defs/exchangeList" }
+      "items": {
+        "$ref": "#/$defs/exchangeList",
+        "title": "Tabla de intercambio"
+      }
     },
     "weeklyBasics": {
       "type": "array",
       "title": "Básicos diarios del plan",
-      "items": { "$ref": "#/$defs/weeklyBasic" }
+      "items": {
+        "$ref": "#/$defs/weeklyBasic",
+        "title": "Básico"
+      }
     },
     "rules": {
       "type": "object",
       "title": "Reglas",
       "properties": {
-        "forbiddenMethods": { "type": "array", "items": { "type": "string" }, "title": "Métodos de cocción a evitar" },
-        "defaultVegetableSideId": { "type": ["string", "null"], "title": "Verdura de acompañamiento por defecto" },
-        "notes": { "type": "array", "items": { "type": "string" }, "title": "Notas" }
+        "forbiddenMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Métodos de cocción a evitar"
+        },
+        "defaultVegetableSideId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Verdura de acompañamiento por defecto"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Notas"
+        }
       },
       "additionalProperties": false
     }
   },
   "additionalProperties": false,
   "$defs": {
-    "unit": { "enum": ["g", "ml", "pieza", "taza", "cda", "cdita", "porcion", "diente", "paquete", "lata"] },
-    "group": { "enum": ["verdura", "proteina", "leguminosa", "cereal", "grasa"] },
-    "state": { "enum": ["crudo", "cocido"] },
+    "unit": {
+      "enum": [
+        "g",
+        "ml",
+        "pieza",
+        "taza",
+        "cda",
+        "cdita",
+        "porcion",
+        "diente",
+        "paquete",
+        "lata"
+      ]
+    },
+    "group": {
+      "enum": [
+        "verdura",
+        "proteina",
+        "leguminosa",
+        "cereal",
+        "grasa"
+      ]
+    },
+    "state": {
+      "enum": [
+        "crudo",
+        "cocido"
+      ]
+    },
     "mealTemplate": {
       "type": "object",
-      "required": ["meal", "components"],
+      "required": [
+        "meal",
+        "components"
+      ],
       "properties": {
-        "meal": { "enum": ["desayuno", "colacion", "comida", "snack", "cena"], "title": "Tiempo de comida" },
-        "components": { "type": "array", "items": { "$ref": "#/$defs/componentSlot" }, "title": "Componentes" }
+        "meal": {
+          "enum": [
+            "desayuno",
+            "colacion",
+            "comida",
+            "snack",
+            "cena"
+          ],
+          "title": "Tiempo de comida"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/componentSlot"
+          },
+          "title": "Componentes"
+        }
       },
       "additionalProperties": false
     },
     "componentSlot": {
       "type": "object",
-      "required": ["group", "min", "max", "unit"],
+      "required": [
+        "group",
+        "min",
+        "max",
+        "unit"
+      ],
       "properties": {
-        "group": { "$ref": "#/$defs/group", "title": "Grupo" },
-        "min": { "type": "number", "minimum": 0, "title": "Mínimo por plato" },
-        "max": { "type": "number", "minimum": 0, "title": "Máximo por plato" },
-        "unit": { "$ref": "#/$defs/unit", "title": "Unidad" },
-        "state": { "$ref": "#/$defs/state", "default": "crudo", "title": "Estado" },
-        "optional": { "type": "boolean", "default": false, "title": "Opcional" },
+        "group": {
+          "$ref": "#/$defs/group",
+          "title": "Grupo"
+        },
+        "min": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Mínimo por plato"
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Máximo por plato"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit",
+          "title": "Unidad"
+        },
+        "state": {
+          "$ref": "#/$defs/state",
+          "default": "crudo",
+          "title": "Estado"
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false,
+          "title": "Opcional"
+        },
         "weeklyFrequency": {
-          "type": ["object", "null"],
+          "type": [
+            "object",
+            "null"
+          ],
           "title": "Veces por semana",
-          "required": ["min", "max"],
+          "required": [
+            "min",
+            "max"
+          ],
           "properties": {
-            "min": { "type": "integer", "minimum": 0 },
-            "max": { "type": "integer", "minimum": 0 }
+            "min": {
+              "type": "integer",
+              "minimum": 0,
+              "title": "Mínimo"
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 0,
+              "title": "Máximo"
+            }
           },
           "additionalProperties": false
         },
-        "constraint": { "type": ["string", "null"], "title": "Restricción" },
-        "notes": { "type": ["string", "null"], "title": "Notas" }
+        "constraint": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Restricción"
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Notas"
+        }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "title": "Componente"
     },
     "exchangeList": {
       "type": "object",
-      "required": ["group", "options"],
+      "required": [
+        "group",
+        "options"
+      ],
       "properties": {
-        "group": { "$ref": "#/$defs/group" },
+        "group": {
+          "$ref": "#/$defs/group",
+          "title": "Grupo"
+        },
         "options": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
-            "required": ["ingredientId", "qty", "unit"],
+            "required": [
+              "ingredientId",
+              "qty",
+              "unit"
+            ],
             "properties": {
-              "ingredientId": { "type": "string", "minLength": 1 },
-              "qty": { "type": "number", "exclusiveMinimum": 0 },
-              "unit": { "$ref": "#/$defs/unit" },
-              "state": { "$ref": "#/$defs/state", "default": "crudo" }
+              "ingredientId": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Ingrediente"
+              },
+              "qty": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "title": "Cantidad"
+              },
+              "unit": {
+                "$ref": "#/$defs/unit",
+                "title": "Unidad"
+              },
+              "state": {
+                "$ref": "#/$defs/state",
+                "default": "crudo",
+                "title": "Estado"
+              }
             },
             "additionalProperties": false
-          }
+          },
+          "title": "Opciones"
         }
       },
       "additionalProperties": false
     },
     "weeklyBasic": {
       "type": "object",
-      "required": ["meal", "ingredientId", "qtyPerDay", "unit"],
+      "required": [
+        "meal",
+        "ingredientId",
+        "qtyPerDay",
+        "unit"
+      ],
       "properties": {
-        "meal": { "type": "string", "minLength": 1 },
-        "ingredientId": { "type": "string", "minLength": 1 },
-        "qtyPerDay": { "type": "number", "exclusiveMinimum": 0 },
-        "unit": { "$ref": "#/$defs/unit" },
-        "state": { "$ref": "#/$defs/state", "default": "crudo" },
-        "daysPerWeek": { "type": "integer", "minimum": 1, "maximum": 7, "default": 7 }
+        "meal": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Tiempo de comida"
+        },
+        "ingredientId": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Ingrediente"
+        },
+        "qtyPerDay": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "title": "Cantidad por día"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit",
+          "title": "Unidad"
+        },
+        "state": {
+          "$ref": "#/$defs/state",
+          "default": "crudo",
+          "title": "Estado"
+        },
+        "daysPerWeek": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 7,
+          "default": 7,
+          "title": "Días por semana"
+        }
       },
       "additionalProperties": false
     }

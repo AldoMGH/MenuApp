@@ -1,0 +1,251 @@
+@page "/importar"
+@inherits AppPage
+
+<PageTitle>Importar Keep</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">Importar tu historial de Keep</MudText>
+<MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">
+    En Keep: selecciona tus notas de menú → ⋮ → <b>Copiar en Documentos de Google</b>. En el documento:
+    <b>Archivo → Descargar → Markdown (.md)</b> o <b>Texto (.txt)</b>, y súbelo aquí. Reimportar no duplica nada.
+</MudText>
+
+<MudPaper Outlined="true" Class="pa-4 mb-4">
+    <div class="d-flex flex-wrap align-center gap-3">
+        <label class="mud-button-root mud-button mud-button-outlined mud-button-outlined-primary mud-button-outlined-size-medium mud-ripple" style="cursor:pointer">
+            <InputFile OnChange="OnFile" accept=".md,.txt,.markdown,text/plain" style="display:none" data-testid="file-input" />
+            <span class="mud-button-label">Elegir archivo…</span>
+        </label>
+        <MudText Typo="Typo.body2">@(_fileName ?? "Ningún archivo seleccionado")</MudText>
+        <MudNumericField T="int?" @bind-Value="_latestYear" Label="Año de la nota más reciente (opcional)" Variant="Variant.Outlined" Margin="Margin.Dense" Style="max-width: 280px" />
+        <MudSpacer />
+        <MudButton Variant="Variant.Outlined" Disabled="@(Busy || _text is null)" OnClick="() => Import(dryRun: true)" data-testid="dry-run">Revisar sin guardar</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(Busy || _text is null)" OnClick="() => Import(dryRun: false)" data-testid="import">Importar</MudButton>
+    </div>
+</MudPaper>
+
+@if (Busy)
+{
+    <MudProgressLinear Indeterminate="true" Class="mb-2" />
+}
+
+@if (_job is not null)
+{
+    <MudPaper Outlined="true" Class="pa-4 mb-4" data-testid="import-summary">
+        <MudText Typo="Typo.h6">@(_job.DryRun ? "Vista previa (no se guardó nada)" : "Importación guardada") · @(_job.FileName ?? _job.Id)</MudText>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+            <MudChip T="string">@_job.TotalNotes notas (@_job.NewNotes nuevas, @_job.DuplicateNotes ya importadas)</MudChip>
+            <MudChip T="string">@Formatting.Date(_job.FirstDate) → @Formatting.Date(_job.LastDate)</MudChip>
+            <MudChip T="string" Color="Color.Success">@MatchRate(_job) de platillos asignados</MudChip>
+            <MudChip T="string">@_job.DishOccurrences platillos · @_job.Ignored ignorados · @_job.Unmatched.Sum(u => u.Count) sin asignar · @_job.Fuzzy aproximados</MudChip>
+            <MudChip T="string">@_job.PurchaseRecords renglones de compras (@_job.PurchasesMatched ligados a ingredientes)</MudChip>
+        </div>
+        @foreach (var warning in _job.Warnings)
+        {
+            <MudAlert Severity="Severity.Warning" Dense="true" Class="mt-2">@warning</MudAlert>
+        }
+    </MudPaper>
+
+    @if (_rows.Count > 0)
+    {
+        <MudPaper Outlined="true" Class="pa-4 mb-4">
+            <MudText Typo="Typo.h6">Revisión</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary mb-2">
+                @(_job.DryRun ? "Importa primero para poder aplicar la revisión." : "Asigna cada nombre a un platillo, crea uno nuevo o ignóralo. La app aprende el alias para las siguientes importaciones.")
+            </MudText>
+            <MudSimpleTable Dense="true" Hover="true" data-testid="review-table">
+                <thead>
+                    <tr><th>Como lo escribiste</th><th>Veces</th><th>Acción</th><th>Platillo</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in _rows)
+                    {
+                        <tr>
+                            <td>
+                                <b>@row.Name</b>
+                                <MudText Typo="Typo.caption" Class="mud-text-secondary">@row.Hint</MudText>
+                            </td>
+                            <td>@row.Count</td>
+                            <td>
+                                <MudSelect T="ReviewAction" @bind-Value="row.Action" Margin="Margin.Dense" Dense="true" Style="min-width: 160px">
+                                    <MudSelectItem T="ReviewAction" Value="ReviewAction.Skip">Dejar pendiente</MudSelectItem>
+                                    <MudSelectItem T="ReviewAction" Value="ReviewAction.Assign">Asignar a…</MudSelectItem>
+                                    <MudSelectItem T="ReviewAction" Value="ReviewAction.New">Platillo nuevo</MudSelectItem>
+                                    <MudSelectItem T="ReviewAction" Value="ReviewAction.Ignore">No es platillo</MudSelectItem>
+                                </MudSelect>
+                            </td>
+                            <td style="min-width: 260px">
+                                @if (row.Action == ReviewAction.Assign)
+                                {
+                                    <MudSelect T="string" @bind-Value="row.DishId" Margin="Margin.Dense" Dense="true" Label="Platillo">
+                                        @foreach (var dish in _dishes)
+                                        {
+                                            <MudSelectItem T="string" Value="@dish.Dish.Id">@dish.Dish.Name</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                }
+                                else if (row.Action == ReviewAction.New)
+                                {
+                                    <MudTextField T="string" @bind-Value="row.NewName" Margin="Margin.Dense" Label="Nombre del platillo" />
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </MudSimpleTable>
+            <div class="d-flex justify-end mt-3">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(Busy || _job.DryRun || !_rows.Any(r => r.Action != ReviewAction.Skip))" OnClick="Review" data-testid="apply-review">Aplicar revisión</MudButton>
+            </div>
+        </MudPaper>
+    }
+    else if (!_job.DryRun)
+    {
+        <MudAlert Severity="Severity.Success" Class="mb-4">Todo quedó asignado. Revisa tus platillos en <MudLink Href="platillos">Mis platillos</MudLink>.</MudAlert>
+    }
+}
+
+<MudText Typo="Typo.h6" Class="mt-4">Importaciones anteriores</MudText>
+<MudList T="string" Dense="true">
+    @foreach (var job in _history)
+    {
+        <MudListItem T="string" OnClick="() => Open(job.Id)" Icon="@Icons.Material.Filled.History">
+            @Formatting.Date(job.CreatedAt) · @(job.FileName ?? job.Id) · @job.NewNotes notas nuevas · @MatchRate(job) asignados
+        </MudListItem>
+    }
+</MudList>
+
+@code {
+    private enum ReviewAction { Skip, Assign, New, Ignore }
+
+    private sealed class Row
+    {
+        public required string Name { get; init; }
+
+        public int Count { get; init; }
+
+        public string Hint { get; init; } = string.Empty;
+
+        public ReviewAction Action { get; set; }
+
+        public string? DishId { get; set; }
+
+        public string? NewName { get; set; }
+    }
+
+    private const long MaxFileSize = 10 * 1024 * 1024;
+
+    private string? _text;
+    private string? _fileName;
+    private int? _latestYear;
+    private ImportJob? _job;
+    private List<ImportJob> _history = [];
+    private List<DishView> _dishes = [];
+    private List<Row> _rows = [];
+
+    protected override Task OnInitializedAsync() => Run(async () =>
+    {
+        _history = await Api.ListImportsAsync();
+        _dishes = (await Api.ListDishesAsync("name")).ToList();
+    });
+
+    private async Task OnFile(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            using var reader = new StreamReader(e.File.OpenReadStream(MaxFileSize));
+            _text = await reader.ReadToEndAsync();
+            _fileName = e.File.Name;
+        }
+        catch (IOException ex)
+        {
+            Snackbar.Add($"No se pudo leer el archivo: {ex.Message}", Severity.Error);
+        }
+    }
+
+    private async Task Import(bool dryRun)
+    {
+        if (_text is null)
+        {
+            return;
+        }
+
+        if (await Run(async () => _job = await Api.ImportKeepAsync(_text, _fileName ?? "notas.md", dryRun, _latestYear),
+                dryRun ? null : "Historial importado."))
+        {
+            BuildRows();
+            if (!dryRun)
+            {
+                _history = await Api.ListImportsAsync();
+                _dishes = await Api.ListDishesAsync("name");
+            }
+        }
+    }
+
+    private async Task Open(string id)
+    {
+        if (await Run(async () => _job = await Api.GetImportAsync(id)))
+        {
+            BuildRows();
+        }
+    }
+
+    private void BuildRows()
+    {
+        _rows = [];
+        if (_job is null)
+        {
+            return;
+        }
+
+        foreach (var unmatched in _job.Unmatched)
+        {
+            var best = unmatched.Suggestions.FirstOrDefault();
+            _rows.Add(new Row
+            {
+                Name = unmatched.Name,
+                Count = unmatched.Count,
+                Hint = $"Ej.: {string.Join(", ", unmatched.Examples)}" + (best is null ? string.Empty : $" · ¿{best.DishName}?"),
+                DishId = best?.DishId,
+                NewName = unmatched.Examples.FirstOrDefault(),
+            });
+        }
+
+        foreach (var fuzzy in _job.FuzzyMatches)
+        {
+            _rows.Add(new Row
+            {
+                Name = fuzzy.Name,
+                Count = fuzzy.Count,
+                Hint = $"Asignado por parecido ({fuzzy.Confidence:P0}) a {DishName(fuzzy.DishId)}",
+                Action = ReviewAction.Skip,
+                DishId = fuzzy.DishId,
+            });
+        }
+    }
+
+    private string DishName(string id) => _dishes.FirstOrDefault(d => d.Dish.Id == id)?.Dish.Name ?? id;
+
+    private async Task Review()
+    {
+        var mappings = _rows
+            .Where(r => r.Action != ReviewAction.Skip)
+            .Select(r => r.Action switch
+            {
+                ReviewAction.Assign => new ReviewMapping(r.Name, DishId: r.DishId),
+                ReviewAction.New => new ReviewMapping(r.Name, NewDishName: r.NewName),
+                _ => new ReviewMapping(r.Name, Ignore: true),
+            })
+            .ToList();
+
+        if (await Run(async () => _job = await Api.ReviewImportAsync(_job!.Id, new ReviewRequest(mappings)), "Revisión aplicada."))
+        {
+            _dishes = await Api.ListDishesAsync("name");
+            BuildRows();
+        }
+    }
+
+    private static string MatchRate(ImportJob job)
+    {
+        var relevant = job.DishOccurrences - job.Ignored;
+        return relevant <= 0 ? "100 %" : ((job.Matched + job.Fuzzy) / (double)relevant).ToString("P0", System.Globalization.CultureInfo.GetCultureInfo("es-MX"));
+    }
+}

@@ -413,3 +413,104 @@ Decisiones confirmadas:
   - `MaxSameProtein` pasó de 2 a 3: el pollo domina tu historial.
   - El generador ahora asegura que haya platillos con leguminosa suficiente para cumplir 2–3 veces por semana.
 
+---
+
+## Fase 3: app web (Blazor + MudBlazor) y servidor MCP para Claude Desktop
+
+### Contexto
+El backend ya hace todo: plan, recetas, porciones, menú, lista de compras e import de Keep. Pero hoy solo se usa con `curl` o Swagger. La fase 3 agrega:
+- **Una app web local** para usarlo cómodo.
+- **Un servidor MCP** para pedir "Dame un menú semanal con 5 platillos" desde Claude Desktop.
+
+Decisiones confirmadas:
+- **Solo en la computadora** (localhost): sin PWA ni acceso por la red, y sin PIN.
+- **UI con MudBlazor.**
+- **MCP para Claude Desktop** (stdio).
+
+Versiones verificadas en NuGet (todas compatibles con .NET 8): MudBlazor 9.13.0, ModelContextProtocol 2.4.0, bUnit 2.15.2, Microsoft.AspNetCore.Components.WebAssembly 8.0.x.
+
+### Diseño
+
+### 1. Contratos compartidos (`src/MenuPlanner.Contracts`, nuevo)
+- Mover aquí los records de entrada y salida que hoy viven en Application, para que la app web no dependa de Application, Mongo ni JsonSchema:
+  - `MenuView`, `MenuDishView`, `MenuSummary`, `MenuListItem`
+  - `GenerateMenuRequest`, `SwapCriteria`, `AddDishRequest`
+  - `DishView`, `PantrySuggestion`, `ReviewRequest`, `ReviewMapping`
+  - `SeedSyncResult`
+- Referencia solo a Domain. Application, Api y Web lo referencian. El cambio es mecánico (namespaces).
+
+### 2. App web (`src/MenuPlanner.Web`, Blazor WebAssembly + MudBlazor)
+- **Servida por la misma API** (`UseBlazorFrameworkFiles` + `MapFallbackToFile("index.html")`): un solo `dotnet run`, mismo origen y sin CORS. La raíz `/` abre la app; Swagger sigue en `/swagger`.
+- **`ApiClient`** tipado sobre `HttpClient` con `AppJson.Options` (se mueve a Contracts). Convierte `ProblemDetails` en avisos (`ISnackbar`).
+- **Páginas** (menú lateral, adaptable):
+  1. **Menú** (`/`): elegir N (1–14), semana e incluir/excluir platillos. Cada platillo se muestra en una tarjeta con "tu porción", el lote y sugerencias, y botones para cambiar (filtro por proteína o etiqueta), quitar o agregar. Hay resumen de leguminosa y cobertura, avisos, y botones para regenerar y confirmar. Incluye el historial de menús.
+  2. **Lista de compras** (`/menus/{id}/compras`): checklist por pasillo, con las palomitas guardadas en `localStorage` por menú. Sección "ya tienes" y botón para **copiar como texto** (WhatsApp/Keep).
+  3. **Recetas**: lista con filtros (proteína, etiqueta, `revisar-nutriologa`, veces cocinada). El detalle muestra lo porcionado, con selector de proteína mín/medio/máx y leguminosa. Se editan con el formulario dinámico.
+  4. **Platillos** (historial): frecuencia, última vez, mapa de meses, receta ligada y compatibilidad. Se editan con el formulario dinámico.
+  5. **Importar Keep**: subir `.md`/`.txt`, revisar en seco (`dryRun`) y luego importar. Tabla de "sin asignar" y "aproximados" con acción por renglón (asignar a platillo, crear nuevo o ignorar) que llama a `review`.
+  6. **Despensa**: sugerencias con botones "a despensa" y "a básicos", y edición de despensa y básicos.
+  7. **Plan**: versión activa, editar o crear versión con el formulario dinámico, activar.
+  8. **Ingredientes**: tabla y edición con el formulario dinámico.
+- **Formulario dinámico desde JSON Schema** (`Components/SchemaForm.razor` + `SchemaFormModel`):
+  - Descarga el schema de `/api/schemas/{name}` y genera el formulario sobre un `JsonObject`.
+  - Soporta:
+    - tipos: `object`, `array` (agregar, quitar y reordenar), `string`, `number`/`integer`, `boolean`
+    - `enum` (select), `type` con `null`, `$ref` a `#/$defs`, `anyOf` con null
+    - `title`/`description`, `default`, `minimum`/`maximum`, `readOnly` (se muestra sin editar), `required`
+  - Valida **en el cliente con JsonSchema.Net** (mismo schema que el servidor) y muestra los errores junto al campo por `instanceLocation`. El servidor vuelve a validar (incluye las referencias del catálogo).
+  - Las listas de ids (`ingredientId`, `recipeId`) usan autocompletado con el catálogo (`x-ref`: el editor de recetas y platillos pasa un proveedor de opciones por nombre de campo).
+- **Sin PWA ni service worker** (decisión: solo localhost).
+
+### 3. Servidor MCP (`src/MenuPlanner.Mcp`, consola stdio)
+- `ModelContextProtocol` 2.4: `AddMcpServer().WithStdioServerTransport().WithToolsFromAssembly()`. **Logs a stderr** (stdout es el protocolo).
+- **Usa los mismos servicios en proceso** (Application + Infrastructure contra tu Mongo, con `appsettings.json` propio y `Mongo__ConnectionString`). No requiere que la API esté corriendo.
+- **Tools** (descripciones en español, salida en texto legible con los ids para encadenar):
+  - `generate_weekly_menu(dishCount, weekOf?, include?, exclude?, seed?)`: usa `MenuTextFormatter` y devuelve el id.
+  - `get_menu(menuId?)`: sin id, el borrador más reciente.
+  - `swap_dish(menuId, dish, proteinFamily?, tag?)`, `add_dish(menuId, dish)`, `remove_dish(menuId, dish)`, `confirm_menu(menuId)`.
+  - `get_shopping_list(menuId)`: texto por pasillo (`ShoppingListBuilder.ToText`).
+  - `get_recipe(dish, proteinTarget?)`: receta porcionada (lote + tu porción + pasos).
+  - `list_recipes(filter?)` y `list_favorites(top?)`: historial de Keep.
+  - `pantry_suggestions(months?)`.
+- **`DishResolver`** (Application): el usuario escribe "las enchiladas", "tinga", "Poyo ajonjolí". Se resuelve con `DishMatcher` (alias de Keep → `recipeId`), luego id o nombre exacto de receta, y si no, similitud. Cuando hay ambigüedad devuelve las opciones en el texto.
+- `docs/claude-desktop.md`: bloque para `claude_desktop_config.json` (`command: dotnet`, `args: [<ruta>/MenuPlanner.Mcp.dll]`, `env: Mongo__ConnectionString`) y cómo publicar con `dotnet publish -c Release`.
+
+### 4. Modo memoria (para probar sin Mongo)
+- Mover `InMemoryStore` de las pruebas a `MenuPlanner.Infrastructure/Memory/InMemoryRepositories.cs`. Se carga desde el seed al iniciar.
+- Se activa con `Storage:Provider = Memory` (por defecto `Mongo`). Sirve para demos, para las pruebas E2E y para que yo pueda verificar aquí la UI y el MCP, porque en este contenedor no hay Mongo. Las pruebas unitarias pasan a usarlo.
+
+### Archivos
+- Nuevos:
+  - `src/MenuPlanner.Contracts/*`
+  - `src/MenuPlanner.Web/` (`Program.cs`, `ApiClient.cs`, `Layout/`, `Pages/*.razor`, `Components/SchemaForm*.razor(.cs)`, `wwwroot/`)
+  - `src/MenuPlanner.Mcp/` (`Program.cs`, `MenuTools.cs`, `RecipeTools.cs`, `appsettings.json`)
+  - `src/MenuPlanner.Application/Menus/DishResolver.cs`
+  - `src/MenuPlanner.Infrastructure/Memory/InMemoryRepositories.cs`
+  - `tests/MenuPlanner.WebTests` (bUnit), `tests/MenuPlanner.McpTests`
+  - `docs/claude-desktop.md`
+- Cambios:
+  - `Program.cs` de la API (hospedar Web, proveedor de almacenamiento)
+  - `MenuService` / endpoints (usings de Contracts)
+  - `InMemoryStore` (se mueve)
+  - README
+
+### Verificación
+- **bUnit:**
+  - `SchemaForm` genera campos para los 4 schemas reales (enum → select, array → agregar/quitar, `readOnly` deshabilitado), edita y produce un JSON que valida contra el schema. Muestra los errores en el campo correcto.
+  - Checklist de compras (persistencia en `localStorage` simulada).
+  - Página de menú con `ApiClient` simulado.
+- **MCP:**
+  - Pruebas de cada tool con el modo memoria (texto con id, cambiar, confirmar, lista, receta).
+  - `DishResolver` ("enchiladas" → enchiladas-suizas, "poyo ajonjolí", ambiguo).
+  - **E2E por stdio con el cliente del SDK** (`McpClient` + `StdioClientTransport`) lanzando el servidor compilado en modo memoria: `ListTools` y `generate_weekly_menu(5)`.
+- **UI de punta a punta en este contenedor:** API en modo memoria + Playwright (Chromium ya instalado). Generar menú de 5 → cambiar un platillo → confirmar → lista de compras → importar el fixture de muestra → revisar. Capturas de pantalla para ti.
+- Las pruebas existentes (unitarias, API e integración) siguen pasando; las de Mongo las corres tú con `MENUPLANNER_TEST_MONGO`.
+
+### Resultado
+- La API sirve la app web: `dotnet run` → http://localhost:5033 (Swagger en `/swagger`).
+- Recorrido E2E con Playwright en modo memoria, sin errores en consola: generar 5 → cambiar a pescado → lista (palomitas persisten al recargar) → confirmar → receta → editar receta con el formulario dinámico (validación en el cliente y guardado) → importar el fixture → revisar → platillos → plan → despensa.
+- Servidor MCP probado por stdio con el cliente oficial: 12 herramientas.
+- Cambios durante la implementación:
+  - `DishResolver` usa la coincidencia aproximada del historial solo como último recurso, para que "lomo en salsa verde" no termine en "pollo en salsa verde".
+  - El formulario lee números tanto enteros como decimales.
+  - Los schemas ganaron títulos en español, que también son las etiquetas del formulario.

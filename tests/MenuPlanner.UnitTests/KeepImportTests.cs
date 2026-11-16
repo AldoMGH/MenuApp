@@ -204,7 +204,7 @@ public class ImportServiceTests
     [Fact]
     public async Task Imports_history_and_feeds_recipe_stats()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var service = store.CreateImportService();
 
         var job = await service.ImportKeepAsync(Fixtures.Drive, "Menus.md", latestYear: null, dryRun: false);
@@ -237,7 +237,7 @@ public class ImportServiceTests
     [Fact]
     public async Task Reimporting_any_export_format_adds_nothing()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var service = store.CreateImportService();
         await service.ImportKeepAsync(Fixtures.Drive, null, null, false);
 
@@ -251,7 +251,7 @@ public class ImportServiceTests
     [Fact]
     public async Task Dry_run_saves_nothing()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
 
         var job = await store.CreateImportService().ImportKeepAsync(Fixtures.Drive, null, null, dryRun: true);
 
@@ -264,7 +264,7 @@ public class ImportServiceTests
     [Fact]
     public async Task Review_creates_dishes_adds_aliases_and_ignores()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var service = store.CreateImportService();
         var job = await service.ImportKeepAsync(Fixtures.Drive, null, null, false);
 
@@ -290,7 +290,7 @@ public class ImportServiceTests
     [Fact]
     public async Task Pantry_suggestions_come_from_your_shopping_lists()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         store.Pantry = new Pantry { IngredientIds = ["pepino"] };
         var service = store.CreateImportService();
         await service.ImportKeepAsync(Fixtures.Drive, null, null, false);
@@ -309,7 +309,7 @@ public class ImportServiceTests
     [Fact]
     public async Task Rejects_text_without_notes() =>
         await Assert.ThrowsAsync<BadRequestException>(() =>
-            InMemoryStore.FromSeed().CreateImportService().ImportKeepAsync("hola\nmundo", null, null, false));
+            TestData.Store().CreateImportService().ImportKeepAsync("hola\nmundo", null, null, false));
 
     [SkippableFact]
     public async Task Real_document_if_present()
@@ -318,7 +318,7 @@ public class ImportServiceTests
         var file = FindRepoFile(Path.Combine("data", "Menus-drive.md"));
         Skip.If(file is null, "No hay data/Menus-drive.md (tus notas reales no se versionan).");
 
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var job = await store.CreateImportService().ImportKeepAsync(File.ReadAllText(file!), null, null, dryRun: true);
 
         Assert.True(job.TotalNotes >= 70, $"notas: {job.TotalNotes}");
@@ -366,7 +366,7 @@ public class HistoryWeightTests
     [Fact]
     public async Task Imported_favorites_show_up_more_often()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         foreach (var recipe in store.RecipeList)
         {
             recipe.Stats.HistoryCount = recipe.Id == "alambre" ? 25 : 0;
@@ -390,7 +390,7 @@ public class SeedSyncServiceTests
     [Fact]
     public async Task Brings_new_seed_into_an_existing_database_without_losing_stats()
     {
-        var store = InMemoryStore.FromSeed();
+        var store = TestData.Store();
         var seed = TestData.Load();
 
         // Base "vieja": sin los ingredientes nuevos, sin diccionario, con una receta inventada y estadísticas propias.

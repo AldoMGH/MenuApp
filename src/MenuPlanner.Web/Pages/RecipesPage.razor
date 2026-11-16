@@ -1,0 +1,67 @@
+@page "/recetas"
+@inherits AppPage
+
+<PageTitle>Recetas</PageTitle>
+
+<div class="d-flex flex-wrap align-center gap-2 mb-3">
+    <MudText Typo="Typo.h4">Recetas</MudText>
+    <MudSpacer />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Href="editar/receta">Nueva receta</MudButton>
+</div>
+
+<MudTable T="Recipe" Items="_recipes" Filter="Matches" Hover="true" Dense="true" Loading="Busy" Breakpoint="Breakpoint.Sm" data-testid="recipes-table">
+    <ToolBarContent>
+        <MudTextField @bind-Value="_search" Placeholder="Buscar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" Margin="Margin.Dense" Class="mr-4" />
+        <MudSelect T="string" @bind-Value="_tag" Label="Etiqueta" Clearable="true" Margin="Margin.Dense" Style="max-width: 240px">
+            @foreach (var tag in _recipes.SelectMany(r => r.Tags).Distinct().Order())
+            {
+                <MudSelectItem T="string" Value="@tag">@tag</MudSelectItem>
+            }
+        </MudSelect>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel T="Recipe" SortBy="r => r.Name">Nombre</MudTableSortLabel></MudTh>
+        <MudTh>Proteína</MudTh>
+        <MudTh>Método</MudTh>
+        <MudTh>Etiquetas</MudTh>
+        <MudTh><MudTableSortLabel T="Recipe" SortBy="r => r.Stats.TotalCount" InitialDirection="SortDirection.Descending">Veces cocinada</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nombre"><MudLink Href="@($"recetas/{context.Id}")">@context.Name</MudLink></MudTd>
+        <MudTd DataLabel="Proteína">@Protein(context)</MudTd>
+        <MudTd DataLabel="Método">@context.CookingMethod</MudTd>
+        <MudTd DataLabel="Etiquetas">
+            @foreach (var tag in context.Tags)
+            {
+                <MudChip T="string" Size="Size.Small" Color="@(tag == "revisar-nutriologa" ? Color.Warning : Color.Default)">@tag</MudChip>
+            }
+        </MudTd>
+        <MudTd DataLabel="Veces">@context.Stats.TotalCount</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager RowsPerPageString="Por página:" />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private List<Recipe> _recipes = [];
+    private Dictionary<string, Ingredient> _ingredients = [];
+    private string _search = string.Empty;
+    private string? _tag;
+
+    protected override Task OnInitializedAsync() => Run(async () =>
+    {
+        _recipes = await Api.ListRecipesAsync();
+        _ingredients = (await Api.ListIngredientsAsync()).ToDictionary(i => i.Id);
+    });
+
+    private bool Matches(Recipe recipe) =>
+        (string.IsNullOrWhiteSpace(_search) || recipe.Name.Contains(_search, StringComparison.CurrentCultureIgnoreCase) || recipe.Id.Contains(_search, StringComparison.OrdinalIgnoreCase))
+        && (_tag is null || recipe.Tags.Contains(_tag));
+
+    private string Protein(Recipe recipe)
+    {
+        var id = recipe.GetComponent(ComponentGroup.Proteina)?.Ingredients.FirstOrDefault()?.IngredientId;
+        return id is not null && _ingredients.TryGetValue(id, out var ingredient) ? ingredient.Name : "—";
+    }
+}

@@ -21,12 +21,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\MenuPlanner.Application\MenuPlanner.Application.csproj" />
+    <ProjectReference Include="..\..\src\MenuPlanner.Infrastructure\MenuPlanner.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\schemas\*.json" Link="schemas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\seed\*.json" Link="seed\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="Fixtures\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="MenuPlanner.Contracts" />
   </ItemGroup>
 
 </Project>

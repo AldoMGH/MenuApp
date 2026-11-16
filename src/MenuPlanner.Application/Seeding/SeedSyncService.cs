@@ -3,15 +3,6 @@ using MenuPlanner.Domain;
 
 namespace MenuPlanner.Application.Seeding;
 
-public sealed record SeedSyncResult(
-    int IngredientsAdded,
-    int RecipesUpserted,
-    int RecipesRemoved,
-    int DishesAdded,
-    int DishesUpdated,
-    int RulesAdded,
-    int PlansAdded);
-
 /// <summary>
 /// Trae a una base existente lo nuevo del seed sin pisar tus datos: agrega ingredientes, platillos y planes que falten,
 /// actualiza las recetas de origen seed (conservando sus estadísticas) y quita las recetas de arranque inventadas ("semilla").

@@ -1,0 +1,47 @@
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="_theme" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Color="Color.Primary">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(() => _drawerOpen = !_drawerOpen)" aria-label="Menú" />
+        <MudText Typo="Typo.h6" Class="ml-2">Menú semanal</MudText>
+        <MudSpacer />
+        <MudText Typo="Typo.caption">Plan de alimentación · solo en tu computadora</MudText>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="1">
+        <MudNavMenu>
+            <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.RestaurantMenu">Menú de la semana</MudNavLink>
+            <MudNavLink Href="recetas" Icon="@Icons.Material.Filled.MenuBook">Recetas</MudNavLink>
+            <MudNavLink Href="platillos" Icon="@Icons.Material.Filled.History">Mis platillos</MudNavLink>
+            <MudNavLink Href="importar" Icon="@Icons.Material.Filled.UploadFile">Importar Keep</MudNavLink>
+            <MudNavLink Href="despensa" Icon="@Icons.Material.Filled.Kitchen">Despensa y básicos</MudNavLink>
+            <MudNavLink Href="plan" Icon="@Icons.Material.Filled.Assignment">Plan de alimentación</MudNavLink>
+            <MudNavLink Href="ingredientes" Icon="@Icons.Material.Filled.Egg">Ingredientes</MudNavLink>
+            <MudDivider Class="my-2" />
+            <MudNavLink Href="swagger" ForceLoad="true" Icon="@Icons.Material.Filled.Api">API (Swagger)</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="py-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+
+    private readonly MudTheme _theme = new()
+    {
+        PaletteLight = new PaletteLight
+        {
+            Primary = "#2E7D32",
+            Secondary = "#F9A825",
+            AppbarBackground = "#2E7D32",
+        },
+    };
+}

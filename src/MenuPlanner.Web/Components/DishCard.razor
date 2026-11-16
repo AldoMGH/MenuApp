@@ -1,0 +1,88 @@
+@* Tarjeta de un platillo del menú: tu porción, el lote para cocinar y acciones. *@
+<MudCard Outlined="true" Class="h-100" data-testid="dish-card">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudLink Href="@($"recetas/{Dish.RecipeId}")" Typo="Typo.h6">@Dish.Name</MudLink>
+            <div class="d-flex flex-wrap gap-1 mt-1">
+                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@P.Servings porciones</MudChip>
+                <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@P.ProteinPerServingGrams.ToString("0") g proteína en cocido</MudChip>
+                @if (Dish.LegumeSideServings > 0)
+                {
+                    <MudChip T="string" Size="Size.Small" Color="Color.Secondary">+ leguminosa en @Dish.LegumeSideServings porciones</MudChip>
+                }
+                @if (!P.Compatible)
+                {
+                    <MudChip T="string" Size="Size.Small" Color="Color.Error">No cumple el plan</MudChip>
+                }
+            </div>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            @if (Editable)
+            {
+                <MudMenu Icon="@Icons.Material.Filled.SwapHoriz" AriaLabel="Cambiar platillo" Dense="true">
+                    <MudMenuItem OnClick="() => OnSwap.InvokeAsync(null)">Cambiar por otro</MudMenuItem>
+                    @foreach (var (value, label) in Formatting.ProteinFamilies)
+                    {
+                        <MudMenuItem OnClick="() => OnSwap.InvokeAsync(value)">Cambiar por uno de @label.ToLowerInvariant()</MudMenuItem>
+                    }
+                </MudMenu>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" aria-label="Quitar platillo" OnClick="() => OnRemove.InvokeAsync()" />
+            }
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent Class="pt-0">
+        <MudText Typo="Typo.subtitle2">Tu porción al servir</MudText>
+        @foreach (var line in P.Serving)
+        {
+            <MudText Typo="Typo.body2" Class="serving-line">• @line.Text</MudText>
+        }
+
+        @foreach (var suggestion in P.Suggestions)
+        {
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mt-2">@suggestion</MudAlert>
+        }
+        @foreach (var warning in P.Warnings)
+        {
+            <MudAlert Severity="Severity.Warning" Dense="true" Class="mt-2">@warning</MudAlert>
+        }
+
+        <MudExpansionPanels Elevation="0" Class="mt-2">
+            <MudExpansionPanel Text="@($"Para cocinar el lote ({P.Batch.Count} ingredientes)")" Dense="true">
+                @foreach (var line in P.Batch)
+                {
+                    <MudText Typo="Typo.body2" Class="batch-line">
+                        <b>@line.Display</b> @line.Name.ToLowerInvariant()
+                        @if (line.Suggested)
+                        {
+                            <MudText Typo="Typo.caption" Inline="true" Color="Color.Info"> (acompañamiento sugerido)</MudText>
+                        }
+                    </MudText>
+                }
+            </MudExpansionPanel>
+            @if (P.Steps.Count > 0)
+            {
+                <MudExpansionPanel Text="Pasos" Dense="true">
+                    <ol class="mb-0">
+                        @foreach (var step in P.Steps)
+                        {
+                            <li><MudText Typo="Typo.body2">@step</MudText></li>
+                        }
+                    </ol>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter, EditorRequired] public MenuDishView Dish { get; set; } = default!;
+
+    [Parameter] public bool Editable { get; set; }
+
+    /// <summary>Cambiar el platillo; el argumento es la proteína deseada (o null para cualquiera).</summary>
+    [Parameter] public EventCallback<string?> OnSwap { get; set; }
+
+    [Parameter] public EventCallback OnRemove { get; set; }
+
+    private PortionedRecipe P => Dish.Portioned;
+}

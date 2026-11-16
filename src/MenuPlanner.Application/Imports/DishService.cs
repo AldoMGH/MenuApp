@@ -2,8 +2,6 @@ using MenuPlanner.Domain;
 
 namespace MenuPlanner.Application.Imports;
 
-public sealed record DishView(Dish Dish, string? RecipeName);
-
 /// <summary>Catálogo de platillos de tu historial: consulta y edición (alias, receta ligada, compatibilidad).</summary>
 public sealed class DishService(IDishRepository dishes, IRecipeRepository recipes, ImportService imports)
 {

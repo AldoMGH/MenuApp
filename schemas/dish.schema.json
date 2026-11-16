@@ -3,23 +3,86 @@
   "title": "Platillo",
   "description": "Platillo de tu historial de Keep. Los alias son las formas en que lo escribes; puede ligarse a una receta porcionada.",
   "type": "object",
-  "required": ["id", "name"],
+  "required": [
+    "id",
+    "name"
+  ],
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z0-9-]+$", "title": "Identificador" },
-    "name": { "type": "string", "minLength": 1, "title": "Nombre" },
-    "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 }, "title": "Cómo lo escribes en tus notas" },
-    "recipeId": { "type": ["string", "null"], "title": "Receta ligada" },
-    "compatibility": { "enum": ["compatible", "adaptada", "noCompatible"], "default": "compatible", "title": "Compatibilidad con el plan" },
-    "notes": { "type": ["string", "null"], "title": "Notas" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "title": "Identificador"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "title": "Nombre"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "title": "Alias"
+      },
+      "title": "Cómo lo escribes en tus notas"
+    },
+    "recipeId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "title": "Receta ligada"
+    },
+    "compatibility": {
+      "enum": [
+        "compatible",
+        "adaptada",
+        "noCompatible"
+      ],
+      "default": "compatible",
+      "title": "Compatibilidad con el plan"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "title": "Notas"
+    },
     "stats": {
       "type": "object",
       "readOnly": true,
       "properties": {
-        "timesCooked": { "type": "integer", "minimum": 0 },
-        "firstCooked": { "type": ["string", "null"] },
-        "lastCooked": { "type": ["string", "null"] },
-        "months": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
-      }
+        "timesCooked": {
+          "type": "integer",
+          "minimum": 0,
+          "title": "Veces cocinada en la app"
+        },
+        "firstCooked": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Primera vez"
+        },
+        "lastCooked": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "Última vez"
+        },
+        "months": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "title": "Por mes"
+        }
+      },
+      "title": "Estadísticas"
     }
   },
   "additionalProperties": false

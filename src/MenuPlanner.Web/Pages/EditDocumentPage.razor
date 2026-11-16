@@ -1,0 +1,161 @@
+@page "/editar/{Kind}"
+@page "/editar/{Kind}/{Id}"
+@inherits AppPage
+
+@* Editor genérico: el formulario se genera del JSON Schema del documento (receta, platillo, ingrediente o plan). *@
+
+<PageTitle>@Title</PageTitle>
+
+<div class="d-flex flex-wrap align-center gap-2 mb-3">
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Href="@_kind?.BackHref" aria-label="Volver" />
+    <MudText Typo="Typo.h4">@Title</MudText>
+    <MudSpacer />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Save"
+               Disabled="@(Busy || _document is null || !_valid)" OnClick="Save" data-testid="save">Guardar</MudButton>
+</div>
+
+@if (_kind is null)
+{
+    <MudAlert Severity="Severity.Error">Tipo de documento desconocido: @Kind</MudAlert>
+}
+else if (_schema is not null && _document is not null)
+{
+    <MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">
+        Formulario generado desde <code>schemas/@(_kind.Schema).schema.json</code>; se valida aquí y otra vez en el servidor.
+    </MudText>
+
+    @if (_serverErrors.Count > 0)
+    {
+        <MudAlert Severity="Severity.Error" Class="mb-3" data-testid="server-errors">
+            <b>El servidor rechazó el documento:</b>
+            <ul class="mb-0">
+                @foreach (var error in _serverErrors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </MudAlert>
+    }
+
+    <MudPaper Outlined="true" Class="pa-4">
+        <SchemaForm SchemaText="@_schema" Document="_document" OptionsFor="OptionsFor"
+                    LockedProperties="@(Id is null ? Array.Empty<string>() : new[] { "id" })"
+                    ValidityChanged="v => _valid = v" @ref="_form" />
+    </MudPaper>
+}
+else if (Busy)
+{
+    <MudProgressLinear Indeterminate="true" />
+}
+
+@code {
+    [Parameter] public string Kind { get; set; } = string.Empty;
+
+    [Parameter] public string? Id { get; set; }
+
+    /// <summary>Para una versión nueva del plan: id del plan del que se parte.</summary>
+    [SupplyParameterFromQuery(Name = "desde")] public string? From { get; set; }
+
+    private sealed record DocumentKind(string Schema, string ApiPath, string BackHref, string Singular, string ListHref);
+
+    private static readonly Dictionary<string, DocumentKind> Kinds = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["receta"] = new("recipe", "api/recipes", "recetas", "receta", "recetas"),
+        ["platillo"] = new("dish", "api/dishes", "platillos", "platillo", "platillos"),
+        ["ingrediente"] = new("ingredient", "api/ingredients", "ingredientes", "ingrediente", "ingredientes"),
+        ["plan"] = new("nutrition-plan", "api/plans", "plan", "plan", "plan"),
+    };
+
+    private DocumentKind? _kind;
+    private string? _schema;
+    private JsonObject? _document;
+    private bool _valid;
+    private SchemaForm? _form;
+    private List<string> _serverErrors = [];
+    private List<FieldOption> _ingredients = [];
+    private List<FieldOption> _recipes = [];
+
+    private string Title => _kind is null ? "Editar" : Id is null ? $"Nuevo: {_kind.Singular}" : $"Editar {_kind.Singular}: {Id}";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _kind = Kinds.GetValueOrDefault(Kind);
+        if (_kind is null)
+        {
+            return;
+        }
+
+        await Run(async () =>
+        {
+            _schema = await Api.GetSchemaAsync(_kind.Schema);
+            _ingredients = (await Api.ListIngredientsAsync()).OrderBy(i => i.Name).Select(i => new FieldOption(i.Id, i.Name)).ToList();
+            _recipes = (await Api.ListRecipesAsync()).OrderBy(r => r.Name).Select(r => new FieldOption(r.Id, r.Name)).ToList();
+            _document = Id is not null
+                ? await Api.GetDocumentAsync($"{_kind.ApiPath}/{Uri.EscapeDataString(Id)}") ?? throw new ApiException($"No existe '{Id}'.", 404, [])
+                : await NewDocumentAsync(_kind);
+            if (_kind.Schema == "dish")
+            {
+                _document.Remove("stats"); // las estadísticas se calculan desde el historial
+            }
+        });
+        _valid = _form?.IsValid ?? false;
+    }
+
+    private async Task<JsonObject> NewDocumentAsync(DocumentKind kind)
+    {
+        if (kind.Schema == "nutrition-plan" && From is not null && await Api.GetDocumentAsync($"api/plans/{Uri.EscapeDataString(From)}") is { } source)
+        {
+            var version = (source["version"]?.GetValue<int>() ?? 1) + 1;
+            source["id"] = $"plan-{version}";
+            source["version"] = version;
+            source["active"] = false;
+            source["name"] = $"Plan de alimentación {version}";
+            return source;
+        }
+
+        var context = new SchemaContext((JsonObject)JsonNode.Parse(_schema!)!);
+        var document = context.CreateDefault(context.Root) as JsonObject ?? [];
+        if (kind.Schema == "recipe")
+        {
+            document["meal"] = "comida";
+            document["servings"] = 4;
+            document["cookingMethod"] = "guisado";
+        }
+
+        return document;
+    }
+
+    private IReadOnlyList<FieldOption>? OptionsFor(string property) => property switch
+    {
+        "ingredientId" or "defaultVegetableSideId" => _ingredients,
+        "recipeId" => _recipes,
+        _ => null,
+    };
+
+    private async Task Save()
+    {
+        if (_document is null || _kind is null)
+        {
+            return;
+        }
+
+        var id = Id ?? _document["id"]?.GetValue<string>();
+        if (string.IsNullOrWhiteSpace(id))
+        {
+            Snackbar.Add("Escribe un identificador (minúsculas y guiones).", Severity.Warning);
+            return;
+        }
+
+        _serverErrors = [];
+        try
+        {
+            await Api.PutDocumentAsync($"{_kind.ApiPath}/{Uri.EscapeDataString(id)}", _document);
+            Snackbar.Add("Guardado.", Severity.Success);
+            Nav.NavigateTo(_kind.Schema == "recipe" ? $"recetas/{id}" : _kind.ListHref);
+        }
+        catch (ApiException ex)
+        {
+            _serverErrors = ex.Errors.Count > 0 ? ex.Errors.ToList() : [ex.Message];
+        }
+    }
+}

@@ -10,8 +10,55 @@ namespace MenuPlanner.Infrastructure;
 
 public static class DependencyInjection
 {
+    public const string MemoryProvider = "Memory";
+
+    /// <summary><c>Storage:Provider</c>: <c>Mongo</c> (por defecto) o <c>Memory</c> (sin base de datos; para probar y demos).</summary>
+    public static bool UsesMemoryStorage(IConfiguration configuration) =>
+        string.Equals(configuration["Storage:Provider"], MemoryProvider, StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>Ruta de una carpeta de datos (<c>seed</c>, <c>schemas</c>): configurada, junto al ejecutable o en la raíz del repo.</summary>
+    public static string ResolveDataPath(string? configured, string folder)
+    {
+        if (!string.IsNullOrWhiteSpace(configured))
+        {
+            return Path.GetFullPath(configured);
+        }
+
+        var local = Path.Combine(AppContext.BaseDirectory, folder);
+        if (Directory.Exists(local))
+        {
+            return local;
+        }
+
+        for (var dir = new DirectoryInfo(Directory.GetCurrentDirectory()); dir is not null; dir = dir.Parent)
+        {
+            var candidate = Path.Combine(dir.FullName, folder);
+            if (Directory.Exists(candidate) && File.Exists(Path.Combine(dir.FullName, "MenuApp.sln")))
+            {
+                return candidate;
+            }
+        }
+
+        return local;
+    }
+
+    public static string SeedPath(IConfiguration configuration) => ResolveDataPath(configuration["Seed:Path"], "seed");
+
     public static IServiceCollection AddMenuPlannerInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        if (UsesMemoryStorage(configuration))
+        {
+            services.AddSingleton(_ => Memory.InMemoryStore.FromSeed(SeedData.Load(SeedPath(configuration))));
+            services.AddSingleton<IPlanRepository>(sp => sp.GetRequiredService<Memory.InMemoryStore>());
+            services.AddSingleton<IIngredientRepository>(sp => sp.GetRequiredService<Memory.InMemoryStore>());
+            services.AddSingleton<IRecipeRepository>(sp => sp.GetRequiredService<Memory.InMemoryStore>());
+            services.AddSingleton<IMenuRepository>(sp => sp.GetRequiredService<Memory.InMemoryStore>());
+            services.AddSingleton<ISettingsRepository>(sp => sp.GetRequiredService<Memory.InMemoryStore>());
+            services.AddSingleton<IDishRepository>(sp => sp.GetRequiredService<Memory.InMemoryStore>());
+            services.AddSingleton<IImportRepository>(sp => sp.GetRequiredService<Memory.InMemoryStore>());
+            return services;
+        }
+
         services.Configure<MongoOptions>(configuration.GetSection(MongoOptions.Section));
         services.AddSingleton<MongoContext>();
         services.AddSingleton<IPlanRepository, PlanRepository>();

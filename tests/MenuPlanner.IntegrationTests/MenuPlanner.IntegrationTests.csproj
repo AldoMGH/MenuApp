@@ -29,4 +29,8 @@
     <None Include="..\MenuPlanner.UnitTests\Fixtures\**" Link="Fixtures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="MenuPlanner.Contracts" />
+  </ItemGroup>
+
 </Project>

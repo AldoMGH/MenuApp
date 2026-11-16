@@ -3,23 +3,6 @@ using MenuPlanner.Importers;
 
 namespace MenuPlanner.Application.Imports;
 
-public sealed record ReviewMapping(string Name, string? DishId = null, string? NewDishName = null, bool Ignore = false);
-
-public sealed record ReviewRequest(IReadOnlyList<ReviewMapping> Mappings);
-
-public sealed record PantrySuggestion(
-    string? IngredientId,
-    string Name,
-    NoteSection Section,
-    int WeeksBought,
-    int WeeksInWindow,
-    double Share,
-    DateTime LastBought,
-    double? TypicalQty,
-    Unit? TypicalUnit,
-    bool InPantry,
-    bool InBasics);
-
 /// <summary>
 /// Importa tu historial de Keep (texto de Google Docs), asigna platillos con el diccionario, guarda el historial
 /// de compras y recalcula las estadísticas que usa el generador. Reimportar el mismo texto no duplica nada.

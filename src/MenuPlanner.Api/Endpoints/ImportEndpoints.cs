@@ -49,7 +49,7 @@ public static class ImportEndpoints
             .WithSummary("Lo que compras con frecuencia según tus listas de Keep (para despensa y básicos).");
 
         app.MapPost("/api/seed/sync", (SeedSyncService service, IConfiguration configuration, CancellationToken ct) =>
-                service.SyncAsync(SeedData.Load(SeedPath(configuration)), ct))
+                service.SyncAsync(SeedData.Load(MenuPlanner.Infrastructure.DependencyInjection.SeedPath(configuration)), ct))
             .WithTags("Seed")
             .WithSummary("Agrega lo nuevo del seed a una base existente y quita las recetas de arranque inventadas.");
 
@@ -78,17 +78,5 @@ public static class ImportEndpoints
         }
 
         return body;
-    }
-
-    internal static string SeedPath(IConfiguration configuration)
-    {
-        var configured = configuration["Seed:Path"];
-        if (!string.IsNullOrWhiteSpace(configured))
-        {
-            return Path.GetFullPath(configured);
-        }
-
-        var local = Path.Combine(AppContext.BaseDirectory, "seed");
-        return Directory.Exists(local) ? local : Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "seed"));
     }
 }

@@ -4,6 +4,7 @@
     <ProjectReference Include="..\MenuPlanner.Domain\MenuPlanner.Domain.csproj" />
     <ProjectReference Include="..\MenuPlanner.Portioning\MenuPlanner.Portioning.csproj" />
     <ProjectReference Include="..\MenuPlanner.Importers\MenuPlanner.Importers.csproj" />
+    <ProjectReference Include="..\MenuPlanner.Contracts\MenuPlanner.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -13,5 +14,9 @@
 
   <PropertyGroup>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="MenuPlanner.Contracts" />
+  </ItemGroup>
 
 </Project>

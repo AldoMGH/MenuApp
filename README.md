@@ -5,7 +5,9 @@ Genera tu menú semanal de **comidas** a partir de tu plan de alimentación, con
 - Stack: .NET 8 (C#) · MongoDB local · Minimal APIs + Swagger
 - Arquitectura y decisiones de diseño: [`docs/arquitectura.md`](docs/arquitectura.md)
 
-> Estado: **Fases 0, 1 y 2**: backend, motor de porciones, menú, lista de compras e **importador de tu historial de Google Keep**. Pendientes: PWA en Blazor, servidor MCP y sugerencia de platillos nuevos con IA (ver roadmap en la documentación).
+> Estado: **Fases 0 a 3**: backend, motor de porciones, menú, lista de compras, importador de Google Keep, **app web (Blazor + MudBlazor)** y **servidor MCP para Claude Desktop**. Pendiente: sugerencia de platillos nuevos con IA (fase 4).
+
+![Menú de la semana](docs/img/01-menu.png)
 
 ## Cómo funciona
 
@@ -102,7 +104,40 @@ Al arrancar, la API crea los índices y **carga el seed solo en colecciones vac�
 dotnet run --project src/MenuPlanner.Api
 ```
 
-Swagger: http://localhost:5033/swagger
+- **App web:** http://localhost:5033 (la API la sirve; un solo proceso)
+- **Swagger:** http://localhost:5033/swagger
+
+Para probar **sin MongoDB** (datos de ejemplo en memoria que se pierden al cerrar):
+
+```bash
+dotnet run --project src/MenuPlanner.Api -- --Storage:Provider=Memory
+```
+
+## App web
+
+| Página | Qué haces ahí |
+|---|---|
+| **Menú de la semana** | Generar N platillos (incluir/excluir), ver tu porción y el lote, cambiar por otra proteína, quitar, agregar, otra propuesta y confirmar |
+| **Lista de compras** | Checklist por pasillo (las palomitas se guardan en el navegador), "ya tienes", copiar como texto |
+| **Recetas** | Buscar y filtrar; detalle porcionado con proteína mín/medio/máx y frijolitos |
+| **Mis platillos** | Tu historial de Keep: veces, última vez, meses y receta ligada |
+| **Importar Keep** | Subir el `.md`/`.txt`, revisar sin guardar, importar y resolver los nombres pendientes |
+| **Despensa y básicos** | Lo que siempre tienes, lo que compras seguido y tus básicos semanales |
+| **Plan** | Tu plato por componentes, tablas de intercambio, reglas, versiones y sincronizar el seed |
+| **Ingredientes** | Rendimientos, equivalencias y cómo se compra cada uno |
+
+**Formularios dinámicos:** recetas, platillos, ingredientes y planes se editan con un formulario que se **genera a partir del JSON Schema** (`schemas/*.schema.json`):
+- Soporta objetos anidados, arreglos (agregar, quitar y reordenar), enums, `$ref`, tipos con `null`, `readOnly` y autocompletado de ids del catálogo.
+- Valida en el navegador con el mismo schema que la API (JsonSchema.Net) y muestra cada error junto a su campo.
+- El servidor vuelve a validar, incluidas las referencias entre documentos.
+
+| Lista de compras | Editor generado desde JSON Schema |
+|---|---|
+| ![Lista de compras](docs/img/02-compras.png) | ![Editor de receta](docs/img/04-editor-receta.png) |
+
+## Claude Desktop (MCP)
+
+Pide "Dame un menú semanal con 5 platillos" desde Claude Desktop. El servidor `src/MenuPlanner.Mcp` expone 12 herramientas: generar, cambiar, agregar, quitar, confirmar, lista de compras, recetas, favoritos y despensa. Corre por stdio contra tu misma base de Mongo. Configuración paso a paso: [`docs/claude-desktop.md`](docs/claude-desktop.md).
 
 ### Ejemplos
 
@@ -205,6 +240,13 @@ dotnet test
 
 - `MenuPlanner.UnitTests`: motor de porciones, conversiones, generador, regla de leguminosa, lista de compras (golden test), validez del seed contra los schemas y casos de uso con repositorios en memoria. También cubre el importador de Keep: títulos, años, dos formatos de exportación, cantidades, asignación, revisión, idempotencia y despensa. Si guardas tu documento en `data/Menus-drive.md`, una prueba extra lo valida completo.
 - `MenuPlanner.ApiTests`: la API HTTP real con `WebApplicationFactory` y repositorios en memoria.
+- `MenuPlanner.WebTests` (bUnit):
+  - el formulario dinámico con los 4 schemas reales: dibujo, validación por campo, arreglos y campos bloqueados;
+  - la lista de compras con palomitas en `localStorage`.
+- `MenuPlanner.McpTests`:
+  - cada herramienta con el modo memoria;
+  - el resolutor de nombres ("las enchiladas", "poyo ajonjolí");
+  - una sesión de punta a punta por stdio con el cliente oficial del SDK de MCP.
 - `MenuPlanner.IntegrationTests`: contra tu Mongo local, en una base temporal `menuplanner_test_*` que se borra al terminar. **Se omiten si no defines la variable.**
 
 Para correr también las de integración (Linux/macOS):
@@ -227,9 +269,12 @@ src/
   MenuPlanner.Portioning/      Conversión de unidades, redondeo y motor de porciones
   MenuPlanner.Importers/       Parser de notas de Keep, cantidades y asignación de platillos e ingredientes
   MenuPlanner.Application/     Generador, leguminosa, lista de compras, importación, casos de uso, schemas, seed
-  MenuPlanner.Infrastructure/  MongoDB (repositorios, índices, carga del seed)
-  MenuPlanner.Api/             Minimal APIs + Swagger
+  MenuPlanner.Infrastructure/  MongoDB (repositorios, índices, carga del seed) y modo memoria
+  MenuPlanner.Contracts/       Tipos compartidos entre API, app web y MCP (vistas, peticiones, JSON)
+  MenuPlanner.Api/             Minimal APIs + Swagger; también sirve la app web
+  MenuPlanner.Web/             Blazor WebAssembly + MudBlazor; formulario dinámico desde JSON Schema
+  MenuPlanner.Mcp/             Servidor MCP (stdio) para Claude Desktop
 tests/
-  MenuPlanner.UnitTests/  MenuPlanner.ApiTests/  MenuPlanner.IntegrationTests/
+  MenuPlanner.UnitTests/  MenuPlanner.ApiTests/  MenuPlanner.WebTests/  MenuPlanner.McpTests/  MenuPlanner.IntegrationTests/
 schemas/  seed/  docs/  data/ (tus notas; no se versiona)
 ```

@@ -5,6 +5,7 @@ using System.Text.Json.Nodes;
 using MenuPlanner.Application;
 using MenuPlanner.Application.Menus;
 using MenuPlanner.Domain;
+using MenuPlanner.Infrastructure.Memory;
 using MenuPlanner.UnitTests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -16,7 +17,7 @@ namespace MenuPlanner.ApiTests;
 /// <summary>API real (rutas, JSON, schemas, errores) sobre repositorios en memoria, sin MongoDB.</summary>
 public sealed class ApiFactory : WebApplicationFactory<Program>
 {
-    public InMemoryStore Store { get; } = InMemoryStore.FromSeed();
+    public InMemoryStore Store { get; } = TestData.Store();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

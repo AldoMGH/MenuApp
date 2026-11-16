@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddSingleton<ShoppingListBuilder>();
         services.TryAddSingleton(new GenerationOptions());
         services.AddScoped<MenuService>();
+        services.AddScoped<DishResolver>();
         services.AddScoped<Imports.ImportService>();
         services.AddScoped<Imports.DishService>();
         services.AddScoped<Seeding.SeedSyncService>();

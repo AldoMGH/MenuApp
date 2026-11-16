@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menú semanal</title>
+    <base href="/" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="icon-192.png" />
+</head>
+
+<body>
+    <div id="app">
+        <div class="loading">Cargando tu menú…</div>
+    </div>
+
+    <div id="blazor-error-ui">
+        Ocurrió un error inesperado.
+        <a href="." class="reload">Recargar</a>
+        <span class="dismiss">🗙</span>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <script>
+        window.menuApp = {
+            copy: text => navigator.clipboard.writeText(text),
+            getItem: key => { try { return localStorage.getItem(key); } catch { return null; } },
+            setItem: (key, value) => { try { localStorage.setItem(key, value); } catch { } },
+        };
+    </script>
+</body>
+
+</html>

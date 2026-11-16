@@ -1,0 +1,102 @@
+@page "/menus/{MenuId}/compras"
+@inherits AppPage
+@inject BrowserStorage Storage
+
+<PageTitle>Lista de compras</PageTitle>
+
+<div class="d-flex flex-wrap align-center gap-2 mb-3">
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Href="@($"menus/{MenuId}")" aria-label="Volver al menú" />
+    <MudText Typo="Typo.h4">Lista de compras</MudText>
+    <MudSpacer />
+    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ContentCopy" OnClick="Copy" Disabled="@(_text is null)" data-testid="copy-text">Copiar como texto</MudButton>
+    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.RemoveDone" OnClick="ClearChecks">Desmarcar todo</MudButton>
+</div>
+
+@if (_list is not null)
+{
+    var total = _list.Items.Count;
+    var done = _list.Items.Count(i => _checked.Contains(i.IngredientId));
+    <MudProgressLinear Color="Color.Primary" Value="@(total == 0 ? 0 : done * 100.0 / total)" Class="mb-1" />
+    <MudText Typo="Typo.caption" Class="mud-text-secondary">@done de @total artículos en el carrito</MudText>
+
+    <MudGrid Class="mt-2">
+        @foreach (var aisle in _list.Items.GroupBy(i => i.Aisle))
+        {
+            <MudItem xs="12" md="6">
+                <MudPaper Outlined="true" Class="pa-3" data-testid="aisle">
+                    <MudText Typo="Typo.h6">@aisle.Key</MudText>
+                    @foreach (var item in aisle)
+                    {
+                        var isDone = _checked.Contains(item.IngredientId);
+                        <div class="d-flex align-center">
+                            <MudCheckBox T="bool" Value="@isDone" ValueChanged="v => Toggle(item.IngredientId, v)" Color="Color.Primary" Dense="true" />
+                            <div class="@(isDone ? "done" : null)">
+                                <MudText Typo="Typo.body1"><b>@item.Name</b>: @item.PurchaseDisplay</MudText>
+                                <MudText Typo="Typo.caption" Class="mud-text-secondary">Necesitas @item.NeededDisplay · @string.Join(", ", item.Sources)</MudText>
+                            </div>
+                        </div>
+                    }
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+
+    @if (_list.AlreadyHave.Count > 0)
+    {
+        <MudPaper Outlined="true" Class="pa-3 mt-4">
+            <MudText Typo="Typo.h6">Ya tienes (revisa que alcance)</MudText>
+            @foreach (var item in _list.AlreadyHave)
+            {
+                <MudText Typo="Typo.body2">• @item.Name: @item.NeededDisplay</MudText>
+            }
+        </MudPaper>
+    }
+}
+
+@code {
+    [Parameter] public string MenuId { get; set; } = string.Empty;
+
+    private ShoppingList? _list;
+    private string? _text;
+    private HashSet<string> _checked = [];
+
+    private string StorageKey => $"compras:{MenuId}";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Run(async () =>
+        {
+            _list = await Api.GetShoppingListAsync(MenuId);
+            _text = await Api.GetShoppingListTextAsync(MenuId);
+        });
+
+        var saved = await Storage.GetAsync(StorageKey);
+        _checked = string.IsNullOrEmpty(saved) ? [] : saved.Split('|', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
+    }
+
+    private async Task Toggle(string ingredientId, bool value)
+    {
+        if (value)
+        {
+            _checked.Add(ingredientId);
+        }
+        else
+        {
+            _checked.Remove(ingredientId);
+        }
+
+        await Storage.SetAsync(StorageKey, string.Join('|', _checked));
+    }
+
+    private async Task ClearChecks()
+    {
+        _checked.Clear();
+        await Storage.SetAsync(StorageKey, string.Empty);
+    }
+
+    private async Task Copy()
+    {
+        var ok = _text is not null && await Storage.CopyAsync(_text);
+        Snackbar.Add(ok ? "Lista copiada: pégala en WhatsApp o Keep." : "No se pudo copiar al portapapeles.", ok ? Severity.Success : Severity.Warning);
+    }
+}

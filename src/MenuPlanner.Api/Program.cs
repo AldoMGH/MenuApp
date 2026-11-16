@@ -19,7 +19,8 @@ builder.Services.AddSingleton(
 builder.Services.AddMenuPlannerApplication();
 builder.Services.AddMenuPlannerInfrastructure(builder.Configuration);
 
-var schemasPath = ResolvePath(builder.Configuration["Schemas:Path"], "schemas");
+var schemasPath = MenuPlanner.Infrastructure.DependencyInjection.ResolveDataPath(builder.Configuration["Schemas:Path"], "schemas");
+var memoryStorage = MenuPlanner.Infrastructure.DependencyInjection.UsesMemoryStorage(builder.Configuration);
 builder.Services.AddSingleton(SchemaValidator.FromDirectory(schemasPath));
 
 var app = builder.Build();
@@ -27,15 +28,40 @@ var app = builder.Build();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
+if (memoryStorage)
+{
+    // El almacén en memoria no es concurrente: en este modo las peticiones a la API se atienden de una en una.
+    app.Logger.LogWarning("Modo memoria: los datos se pierden al cerrar la app (Storage:Provider = Memory).");
+    var gate = new SemaphoreSlim(1, 1);
+    app.Use(async (context, next) =>
+    {
+        if (!context.Request.Path.StartsWithSegments("/api"))
+        {
+            await next();
+            return;
+        }
+
+        await gate.WaitAsync(context.RequestAborted);
+        try
+        {
+            await next();
+        }
+        finally
+        {
+            gate.Release();
+        }
+    });
+}
+
 if (app.Environment.IsDevelopment() || app.Configuration.GetValue("Swagger:Enabled", true))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-if (app.Configuration.GetValue("Seed:Enabled", true))
+if (!memoryStorage && app.Configuration.GetValue("Seed:Enabled", true))
 {
-    var seedPath = ResolvePath(app.Configuration["Seed:Path"], "seed");
+    var seedPath = MenuPlanner.Infrastructure.DependencyInjection.SeedPath(app.Configuration);
     try
     {
         await MenuPlanner.Infrastructure.DependencyInjection.InitializeDatabaseAsync(app.Services, seedPath, app.Logger);
@@ -50,25 +76,17 @@ if (app.Configuration.GetValue("Seed:Enabled", true))
     }
 }
 
-app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
+// App web (Blazor WebAssembly) servida desde la misma API: mismo origen, sin CORS.
+app.UseBlazorFrameworkFiles();
+app.UseStaticFiles();
 app.MapPlanEndpoints();
 app.MapCatalogEndpoints();
 app.MapMenuEndpoints();
 app.MapSettingsEndpoints();
 app.MapImportEndpoints();
+app.MapFallback("/api/{**rest}", () => Results.NotFound()).ExcludeFromDescription();
+app.MapFallbackToFile("index.html");
 
 app.Run();
-
-// Busca primero junto al ejecutable (archivos copiados al compilar) y luego en la raíz del repo.
-static string ResolvePath(string? configured, string folder)
-{
-    if (!string.IsNullOrWhiteSpace(configured))
-    {
-        return Path.GetFullPath(configured);
-    }
-
-    var local = Path.Combine(AppContext.BaseDirectory, folder);
-    return Directory.Exists(local) ? local : Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", folder));
-}
 
 public partial class Program;
