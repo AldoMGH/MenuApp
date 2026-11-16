@@ -18,6 +18,10 @@ public static class DependencyInjection
         services.TryAddSingleton(new GenerationOptions());
         services.AddScoped<MenuService>();
         services.AddScoped<DishResolver>();
+        services.AddScoped<Suggestions.AvailableIngredients>();
+        services.AddScoped<Suggestions.PantryCookability>();
+        services.AddScoped<Suggestions.RecipeDraftService>();
+        services.AddScoped<Suggestions.SuggestionContextBuilder>();
         services.AddScoped<Imports.ImportService>();
         services.AddScoped<Imports.DishService>();
         services.AddScoped<Seeding.SeedSyncService>();

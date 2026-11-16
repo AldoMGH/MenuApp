@@ -45,6 +45,10 @@ public static class CatalogEndpoints
 
         recipes.MapGet("/", (string? meal, IRecipeRepository repo, CancellationToken ct) => repo.ListAsync(meal, ct));
 
+        recipes.MapGet("/cookable", (int? limit, MenuPlanner.Application.Suggestions.PantryCookability service, CancellationToken ct) =>
+                service.RankAsync(limit ?? 20, ct))
+            .WithSummary("Recetas que puedes cocinar con lo que sueles tener (despensa, básicos y compras frecuentes), con lo que falta.");
+
         recipes.MapGet("/{id}", async (string id, IRecipeRepository repo, CancellationToken ct) =>
             await repo.GetAsync(id, ct) ?? throw new NotFoundException($"No existe la receta '{id}'."));
 

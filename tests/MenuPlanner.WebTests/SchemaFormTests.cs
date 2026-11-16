@@ -194,6 +194,8 @@ public class ShoppingListPageTests
 
         var cut = bunit.Render<ShoppingListPage>(p => p.Add(x => x.MenuId, "menu-1"));
 
+        // La página carga la lista y las palomitas de forma asíncrona: se espera a que termine.
+        cut.WaitForAssertion(() => Assert.Contains("1 de 2 artículos", cut.Markup), TimeSpan.FromSeconds(5));
         Assert.Equal(2, cut.FindAll("[data-testid=aisle]").Count);
         Assert.Contains("1.15 kg", cut.Markup);
         Assert.Contains("Ya tienes", cut.Markup);
@@ -201,8 +203,8 @@ public class ShoppingListPageTests
 
         cut.FindAll("input[type=checkbox]")[0].Change(true);                   // primer pasillo: Carnes → pechuga
 
+        cut.WaitForAssertion(() => Assert.Contains("2 de 2 artículos", cut.Markup), TimeSpan.FromSeconds(5));
         Assert.Contains(setItem.Invocations, i => ((string)i.Arguments[1]!).Contains("pechuga-pollo"));
-        Assert.Contains("2 de 2 artículos", cut.Markup);
     }
 
     private sealed class FakeApi(string shoppingList) : HttpMessageHandler
@@ -216,5 +218,28 @@ public class ShoppingListPageTests
                 Content = new StringContent(body, Encoding.UTF8, url.Contains("format=text", StringComparison.Ordinal) ? "text/plain" : "application/json"),
             });
         }
+    }
+}
+
+public class DishCardTests
+{
+    [Fact]
+    public async Task Shows_approximate_macros_per_serving()
+    {
+        await using var bunit = new BunitContext();
+        bunit.JSInterop.Mode = JSRuntimeMode.Loose;
+        bunit.Services.AddMudServices();
+        var portioned = new PortionedRecipe
+        {
+            RecipeId = "pollo-teriyaki",
+            Name = "Pollo teriyaki",
+            Servings = 4,
+            ProteinPerServingGrams = 200,
+            Nutrition = new RecipeNutrition { PerServing = new NutritionFacts { Kcal = 577, Protein = 70.9, Carbs = 40, Fat = 6, Fiber = 5 } },
+        };
+
+        var cut = bunit.Render<DishCard>(p => p.Add(x => x.Dish, new MenuDishView("pollo-teriyaki", "Pollo teriyaki", 0, portioned)));
+
+        Assert.Contains("≈ 577 kcal · 71 g prot.", cut.Find("[data-testid=kcal-chip]").TextContent);
     }
 }

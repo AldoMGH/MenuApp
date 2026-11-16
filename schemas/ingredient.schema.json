@@ -140,6 +140,48 @@
         "null"
       ],
       "title": "Notas"
+    },
+    "nutrition": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "title": "Nutrición (aprox., por 100 g o 100 ml en crudo)",
+      "description": "Valores de referencia SMAE/USDA, solo informativos. Se calculan sobre la unidad base en crudo.",
+      "required": [
+        "kcal",
+        "protein",
+        "carbs",
+        "fat"
+      ],
+      "properties": {
+        "kcal": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Energía (kcal)"
+        },
+        "protein": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Proteína (g)"
+        },
+        "carbs": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Carbohidratos (g)"
+        },
+        "fat": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Grasa (g)"
+        },
+        "fiber": {
+          "type": "number",
+          "minimum": 0,
+          "title": "Fibra (g)"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false,

@@ -66,6 +66,39 @@
     </MudItem>
 
     <MudItem xs="12">
+        <MudPaper Outlined="true" Class="pa-4" data-testid="cookable">
+            <MudText Typo="Typo.h6">¿Qué puedo cocinar con lo que tengo?</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary mb-2">
+                Recetas ordenadas por qué tanto de sus ingredientes ya sueles tener (despensa, básicos y lo que compras seguido).
+                Para platillos <b>nuevos</b>, pídeselos a Claude Desktop con el prompt <i>sugerir_platillo</i>.
+            </MudText>
+            <MudSimpleTable Dense="true" Hover="true">
+                <thead><tr><th>Receta</th><th>Ya tienes</th><th>Falta comprar</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (var r in _cookable)
+                    {
+                        <tr>
+                            <td><MudLink Href="@($"recetas/{r.RecipeId}")">@r.Name</MudLink>@if (r.KcalPerServing is { } kcal) {<MudText Typo="Typo.caption" Class="mud-text-secondary"> · ≈ @kcal.ToString("0") kcal/porción</MudText>}</td>
+                            <td style="min-width: 140px"><MudProgressLinear Value="@(r.Coverage * 100)" Color="@(r.Coverage >= 0.7 ? Color.Success : Color.Primary)" /><MudText Typo="Typo.caption">@r.Coverage.ToString("P0")</MudText></td>
+                            <td><MudText Typo="Typo.caption">@(r.Missing.Count == 0 ? "Nada" : string.Join(", ", r.Missing))</MudText></td>
+                            <td>
+                                @if (_inDraft.Contains(r.RecipeId))
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Success">En el menú</MudChip>
+                                }
+                                else
+                                {
+                                    <MudButton Size="Size.Small" Variant="Variant.Text" OnClick="() => AddToMenu(r.RecipeId)" data-testid="add-to-menu">Al menú</MudButton>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </MudSimpleTable>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12">
         <MudPaper Outlined="true" Class="pa-4">
             <MudText Typo="Typo.h6">Básicos semanales</MudText>
             <MudText Typo="Typo.body2" Class="mud-text-secondary">
@@ -123,6 +156,8 @@
     private BasicsConfig _basics = new();
     private List<Ingredient> _ingredients = [];
     private List<PantrySuggestion> _suggestions = [];
+    private List<CookableRecipe> _cookable = [];
+    private HashSet<string> _inDraft = [];
     private List<string> _planBasics = [];
     private string? _toPantry;
     private int _months = 6;
@@ -133,6 +168,8 @@
         _pantry = await Api.GetPantryAsync();
         _basics = await Api.GetBasicsAsync();
         _suggestions = await Api.GetPantrySuggestionsAsync(_months, 0.25);
+        _cookable = await Api.GetCookableAsync();
+        await LoadDraftAsync();
         var plan = (await Api.ListPlansAsync()).FirstOrDefault(p => p.Active);
         _planBasics = plan?.WeeklyBasics.Select(b => $"{Name(b.IngredientId)} {b.QtyPerDay} {Formatting.Unit(b.Unit)}/día").ToList() ?? [];
     });
@@ -157,7 +194,25 @@
         return SavePantry();
     }
 
-    private Task SavePantry() => Run(async () => _pantry = await Api.SavePantryAsync(_pantry), "Despensa guardada.");
+    private Task SavePantry() => Run(async () =>
+    {
+        _pantry = await Api.SavePantryAsync(_pantry);
+        _cookable = await Api.GetCookableAsync();
+    }, "Despensa guardada.");
+
+    private async Task LoadDraftAsync()
+    {
+        var draft = (await Api.ListMenusAsync()).FirstOrDefault(m => m.Status == MenuStatus.Draft);
+        _inDraft = draft is null ? [] : (await Api.GetMenuAsync(draft.Id)).Dishes.Select(d => d.RecipeId).ToHashSet();
+    }
+
+    private Task AddToMenu(string recipeId) => Run(async () =>
+    {
+        var draft = (await Api.ListMenusAsync()).FirstOrDefault(m => m.Status == MenuStatus.Draft)
+            ?? throw new ApiException("No hay un menú en borrador: genera uno primero.", 400, []);
+        await Api.AddDishAsync(draft.Id, recipeId);
+        _inDraft.Add(recipeId);
+    }, "Agregado al menú en borrador.");
 
     private Task SetMonths(int months)
     {

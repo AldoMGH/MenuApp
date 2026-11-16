@@ -514,3 +514,97 @@ Versiones verificadas en NuGet (todas compatibles con .NET 8): MudBlazor 9.13.0,
   - `DishResolver` usa la coincidencia aproximada del historial solo como último recurso, para que "lomo en salsa verde" no termine en "pollo en salsa verde".
   - El formulario lee números tanto enteros como decimales.
   - Los schemas ganaron títulos en español, que también son las etiquetas del formulario.
+
+---
+
+## Fase 4: platillos nuevos con lo que sueles tener (Claude Desktop vía MCP) y macros informativos
+
+### Contexto
+Hoy el menú solo combina recetas que ya existen. La fase 4 cubre el "deseable" del inicio: **proponer platillos nuevos con los ingredientes que sueles tener**.
+
+Decisiones confirmadas:
+- **La creatividad la pone Claude Desktop vía MCP,** sin API key ni costo extra. La app da el contexto y luego **valida, porciona y guarda**: el LLM propone, el código calcula.
+- **Macros solo informativos** (kcal, proteína, carbohidratos, grasa y fibra por porción y por lote), marcados como aproximados. No cambian el cálculo de porciones del plan.
+
+### Diseño
+
+### 1. "¿Qué puedo cocinar con lo que tengo?" (determinista; web + MCP)
+`PantryCookability` (Application):
+- Para cada receta, calcula qué parte de sus ingredientes porcionados (los fijos menores pesan menos) está en tu despensa, en tus básicos o entre tus compras frecuentes de Keep. Esto último sale de `ImportService.GetPantrySuggestionsAsync`.
+- Devuelve las recetas ordenadas por cobertura, con la lista de lo que **falta comprar**.
+- En la app: sección nueva en **Despensa**, con botón "Agregar al menú" sobre el borrador actual.
+
+### 2. Herramientas MCP para crear platillos (Claude Desktop)
+- `get_suggestion_context(focus?, avoid?)` devuelve, en texto compacto:
+  - la plantilla de la comida del plan (componentes, rangos, frecuencia de leguminosa)
+  - las tablas de intercambio y las reglas (métodos prohibidos, proteína magra)
+  - **ingredientes disponibles**: despensa, básicos y compras frecuentes, con su `id`
+  - el resto del catálogo de ingredientes con `id`
+  - tus platillos favoritos (para el gusto) y los métodos de cocción que usas
+  - el formato de receta (`recipe.schema.json` resumido) y un ejemplo
+- `preview_recipe(recipeJson)`:
+  - Valida contra el schema y el catálogo con `SchemaValidator` + `CatalogValidator`, que ya existen.
+  - Calcula con `PortionCalculator`: lote, tu porción, macros, avisos y compatibilidad.
+  - Dice qué ingredientes **ya tienes** y cuáles faltan.
+  - Si hay errores, los regresa en texto para que Claude los corrija y reintente. **No guarda nada.**
+- `save_recipe(recipeJson, addToMenu?)`:
+  - Mismas validaciones.
+  - Fuerza `source: "ia-sugerida"`, la etiqueta `revisar-nutriologa` y estadísticas en cero.
+  - Evita duplicar ids (agrega sufijo).
+  - Crea el platillo en tu catálogo de historial, ligado a la receta.
+  - Opcionalmente la agrega al borrador del menú.
+- **Prompt MCP** `sugerir_platillo` (`McpServerPrompt`): guía a Claude por el flujo contexto → proponer → `preview_recipe` → corregir → mostrar → `save_recipe` solo si el usuario acepta.
+- Los ingredientes que no existen no se inventan. `preview_recipe` explica cuáles faltan en el catálogo y Claude debe usar los existentes; agregar ingredientes nuevos sigue siendo trabajo de la app web.
+
+### 3. Macros informativos
+- **Ingredientes:** `Ingredient.Nutrition` opcional: `{kcal, protein, carbs, fat, fiber}` por 100 g de la **unidad base en crudo** (aceite y yogurt por 100 ml).
+  - En el schema de ingrediente: objeto `nutrition` opcional, con títulos.
+  - Seed: valores aproximados de referencia (SMAE/USDA) para los 69 ingredientes; nota "aproximado" en el README.
+- **Cálculo:** `NutritionCalculator` (Portioning):
+  - Convierte cada renglón del lote a gramos crudos con `UnitConverter`.
+  - Suma lote ÷ porciones = por porción.
+  - Si a algún ingrediente le falta información, lo reporta ("macros incompletos: X").
+- **Resultado:** `PortionedRecipe.Nutrition` (por porción y por lote + faltantes). Queda en el snapshot del menú confirmado.
+- **Dónde se muestra:**
+  - **Receta:** tabla de macros.
+  - **Tarjeta de platillo:** chip "≈ 520 kcal · 45 g proteína".
+  - **Resumen del menú:** promedio por comida.
+  - **MCP:** `get_recipe` y `preview_recipe`.
+
+### Archivos
+- Nuevos:
+  - `src/MenuPlanner.Portioning/NutritionCalculator.cs`
+  - `src/MenuPlanner.Application/Suggestions/{PantryCookability,SuggestionContextBuilder,RecipeDraftService}.cs`
+  - `src/MenuPlanner.Mcp/Tools/SuggestionTools.cs` (+ prompt)
+  - endpoint `GET /api/recipes/cookable`
+- Cambios:
+  - `Domain/Ingredient.cs` (`Nutrition`), `Domain/PortionedRecipe.cs` (`Nutrition`)
+  - `PortionCalculator` (llama a `NutritionCalculator`)
+  - `schemas/ingredient.schema.json`, `seed/ingredients.json` (valores)
+  - Web: `DishCard`, `RecipeDetailPage`, `MenuPage` (promedio), `PantryPage` (cocinables)
+  - `MenuTextFormatter` y la salida del MCP
+  - README, `docs/claude-desktop.md`, `docs/arquitectura.md`
+
+### Verificación
+- **Unitarias:**
+  - `NutritionCalculator`: un caso calculado a mano (pechuga 1.12 kg + arroz 135 g…) y reporte de faltantes.
+  - El seed completo tiene nutrición en todos los ingredientes.
+  - Cocinables: con la despensa de pechuga, arroz y brócoli, el teriyaki queda arriba y lista lo que falta.
+- **MCP:**
+  - `get_suggestion_context` incluye ids de despensa y plantilla.
+  - `preview_recipe` con JSON inválido devuelve errores legibles; con uno válido, porciones y macros sin guardar.
+  - `save_recipe` guarda con `ia-sugerida` + `revisar-nutriologa`, crea el platillo y lo agrega al menú.
+  - E2E por stdio: `ListPrompts` incluye `sugerir_platillo`; ciclo `preview_recipe` → `save_recipe`.
+- **API/bUnit:**
+  - `GET /api/recipes/cookable`.
+  - La tarjeta muestra el chip de kcal.
+  - El schema de ingrediente con `nutrition` se dibuja en el formulario dinámico.
+- **Playwright** (modo memoria): receta con tabla de macros, despensa con cocinables, menú con promedio de kcal. Capturas.
+- Pruebas existentes en verde; push a `feat/fase-4-sugerencias`.
+
+### Resultado
+- Macros del pollo teriyaki: 577 kcal y 70.9 g de proteína por porción. Coinciden con el cálculo a mano. Las 25 recetas quedan entre 250 y 900 kcal y entre 30 y 80 g de proteína por porción.
+- MCP con 16 herramientas y el prompt `sugerir_platillo`. Probado por stdio con el cliente oficial: contexto → revisar → guardar → agregar al menú.
+- Cambios durante la implementación:
+  - `SchemaValidator` se registra en Infrastructure, porque lo usan la API y el MCP. El MCP copia `schemas/` junto al ejecutable.
+  - La sección de cocinables en Despensa marca "En el menú" para las recetas que ya están en el borrador.

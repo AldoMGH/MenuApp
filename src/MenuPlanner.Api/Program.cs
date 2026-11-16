@@ -19,9 +19,7 @@ builder.Services.AddSingleton(
 builder.Services.AddMenuPlannerApplication();
 builder.Services.AddMenuPlannerInfrastructure(builder.Configuration);
 
-var schemasPath = MenuPlanner.Infrastructure.DependencyInjection.ResolveDataPath(builder.Configuration["Schemas:Path"], "schemas");
 var memoryStorage = MenuPlanner.Infrastructure.DependencyInjection.UsesMemoryStorage(builder.Configuration);
-builder.Services.AddSingleton(SchemaValidator.FromDirectory(schemasPath));
 
 var app = builder.Build();
 

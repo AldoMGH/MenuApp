@@ -1,5 +1,6 @@
 using MenuPlanner.Application.Imports;
 using MenuPlanner.Application.Menus;
+using MenuPlanner.Domain;
 using MenuPlanner.Infrastructure.Memory;
 using MenuPlanner.Mcp.Tools;
 using MenuPlanner.UnitTests;
@@ -19,7 +20,14 @@ internal sealed class ToolHarness
         Menu = new MenuTools(menus, Resolver);
         Recipes = new RecipeTools(menus, Resolver, Store, new DishService(Store, Store, imports), imports);
         Imports = imports;
+        var available = new MenuPlanner.Application.Suggestions.AvailableIngredients(Store, imports);
+        Suggestions = new SuggestionTools(
+            new MenuPlanner.Application.Suggestions.SuggestionContextBuilder(Store, Store, Store, Store, available),
+            new MenuPlanner.Application.Suggestions.RecipeDraftService(TestData.Schemas(), Store, Store, Store, Store, available, TestData.Calculator(), menus),
+            new MenuPlanner.Application.Suggestions.PantryCookability(Store, Store, Store, available, TestData.Calculator()));
     }
+
+    public SuggestionTools Suggestions { get; }
 
     public InMemoryStore Store { get; }
 
@@ -164,7 +172,10 @@ public class McpStdioTests
         var tools = await client.ListToolsAsync(cancellationToken: cts.Token);
         Assert.Contains(tools, t => t.Name == "generate_weekly_menu");
         Assert.Contains(tools, t => t.Name == "get_shopping_list");
-        Assert.Equal(12, tools.Count);
+        Assert.Equal(16, tools.Count);
+
+        var prompts = await client.ListPromptsAsync(cancellationToken: cts.Token);
+        Assert.Contains(prompts, p => p.Name == "sugerir_platillo");
 
         var result = await client.CallToolAsync(
             "generate_weekly_menu",
@@ -178,5 +189,91 @@ public class McpStdioTests
 
         var list = await client.CallToolAsync("get_shopping_list", new Dictionary<string, object?>(), cancellationToken: cts.Token);
         Assert.Contains("Lista de compras", string.Concat(list.Content.OfType<TextContentBlock>().Select(c => c.Text)));
+
+        // Ciclo de un platillo nuevo, como lo haría Claude Desktop.
+        var context = await client.CallToolAsync("get_suggestion_context", new Dictionary<string, object?> { ["focus"] = "algo con pescado" }, cancellationToken: cts.Token);
+        Assert.Contains("algo con pescado", Text(context));
+        var preview = await client.CallToolAsync("preview_recipe", new Dictionary<string, object?> { ["recipeJson"] = SuggestionToolTests.Draft }, cancellationToken: cts.Token);
+        Assert.Contains("Vista previa", Text(preview));
+        var save = await client.CallToolAsync("save_recipe", new Dictionary<string, object?> { ["recipeJson"] = SuggestionToolTests.Draft, ["addToMenu"] = true }, cancellationToken: cts.Token);
+        Assert.Contains("Receta guardada", Text(save));
+        Assert.Contains("Se agregó al menú", Text(save));
+    }
+
+    private static string Text(CallToolResult result) => string.Concat(result.Content.OfType<TextContentBlock>().Select(c => c.Text));
+}
+
+public class SuggestionToolTests
+{
+    internal const string Draft = """
+        {
+          "name": "Tacos de pescado al pastor con piña",
+          "cookingMethod": "plancha",
+          "tags": ["pescado", "tacos"],
+          "components": [
+            { "group": "proteina", "ingredients": [ { "ingredientId": "filete-pescado" } ] },
+            { "group": "verdura", "ingredients": [ { "ingredientId": "col", "share": 0.5 }, { "ingredientId": "cebolla", "share": 0.25 }, { "ingredientId": "pimiento", "share": 0.25 } ] },
+            { "group": "leguminosa", "ingredients": [ { "ingredientId": "frijol" } ], "optional": true },
+            { "group": "cereal", "ingredients": [ { "ingredientId": "tortilla-maiz" } ] }
+          ],
+          "fixedIngredients": [ { "ingredientId": "chile-guajillo", "qty": 3, "unit": "pieza" }, { "ingredientId": "limon", "qty": 3, "unit": "pieza" } ],
+          "steps": ["Marina el pescado con guajillo y limón.", "Ásalo a la plancha y sirve en tortillas con la verdura."]
+        }
+        """;
+
+    private readonly ToolHarness _h = new();
+
+    [Fact]
+    public async Task Context_has_template_exchanges_available_ids_and_format()
+    {
+        _h.Store.Pantry = new Pantry { IngredientIds = ["filete-pescado", "tortilla-maiz"] };
+
+        var text = await _h.Suggestions.GetSuggestionContext("rápido", ["cerdo"]);
+
+        Assert.Contains("Lo que pidió el usuario: rápido", text);
+        Assert.Contains("- proteina: 150–200 g", text);
+        Assert.Contains("1 porción de cereal = tortilla-maiz (2 pieza)", text);
+        Assert.Contains("- filete-pescado: Filete de pescado blanco (tilapia/basa) [proteina] (g) · despensa", text);
+        Assert.DoesNotContain("lomo-cerdo:", text);                               // evitado
+        Assert.Contains("\"components\"", text);
+        Assert.Contains("frito, capeado, empanizado", text);
+    }
+
+    [Fact]
+    public async Task Preview_then_save_only_when_accepted()
+    {
+        var preview = await _h.Suggestions.PreviewRecipe(Draft);
+        Assert.StartsWith("Vista previa (no se ha guardado).", preview);
+        Assert.Contains("Tu porción al servir:", preview);
+        Assert.Contains("Por porción (aprox.):", preview);
+        Assert.Contains("Habría que comprar", preview);
+        Assert.DoesNotContain(_h.Store.RecipeList, r => r.Source == "ia-sugerida");
+
+        var bad = await _h.Suggestions.PreviewRecipe(Draft.Replace("filete-pescado", "pescado-pastor"));
+        Assert.StartsWith("La receta no es válida todavía", bad);
+        Assert.Contains("¿Quisiste decir", bad);
+
+        await _h.Menu.GenerateWeeklyMenu(3, seed: 1);
+        var saved = await _h.Suggestions.SaveRecipe(Draft, addToMenu: true);
+        Assert.Contains("Receta guardada: Tacos de pescado al pastor con piña", saved);
+        Assert.Contains("Se agregó al menú", saved);
+        Assert.Contains(_h.Store.RecipeList, r => r.Source == "ia-sugerida" && r.Tags.Contains("revisar-nutriologa"));
+
+        // Ya guardada, Claude la encuentra por nombre como cualquier otra receta.
+        Assert.Contains("Para cocinar (lote):", await _h.Recipes.GetRecipe("tacos de pescado al pastor"));
+    }
+
+    [Fact]
+    public async Task Cookable_and_prompt()
+    {
+        _h.Store.Pantry = new Pantry { IngredientIds = ["pechuga-pollo", "arroz", "brocoli"] };
+
+        var cookable = await _h.Suggestions.CookableRecipes(5);
+        Assert.Contains("tienes", cookable);
+        Assert.Contains("falta:", cookable);
+
+        var prompt = SuggestionPrompts.SuggestDish("algo con pescado");
+        Assert.Contains("focus = \"algo con pescado\"", prompt);
+        Assert.Contains("save_recipe", prompt);
     }
 }

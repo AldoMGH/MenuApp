@@ -62,6 +62,8 @@ public sealed class ApiClient(HttpClient http)
         return GetAsync<PortionedRecipe>($"api/recipes/{E(recipeId)}/portioned{(query.Count == 0 ? string.Empty : "?" + string.Join('&', query))}");
     }
 
+    public Task<List<CookableRecipe>> GetCookableAsync(int limit = 12) => GetAsync<List<CookableRecipe>>($"api/recipes/cookable?limit={limit}");
+
     public Task<List<DishView>> ListDishesAsync(string sort = "frequency") => GetAsync<List<DishView>>($"api/dishes?sort={sort}");
 
     public Task<List<Ingredient>> ListIngredientsAsync() => GetAsync<List<Ingredient>>("api/ingredients");

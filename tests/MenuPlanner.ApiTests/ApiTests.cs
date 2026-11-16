@@ -156,6 +156,22 @@ public class ApiTests(ApiFactory factory) : IClassFixture<ApiFactory>
         Assert.Equal(HttpStatusCode.OK, ok.StatusCode);
     }
 
+    [Fact]
+    public async Task Cookable_recipes_and_macros_are_exposed()
+    {
+        var client = factory.CreateClient();
+        await client.PutAsJsonAsync("/api/pantry", new { ingredientIds = new[] { "pechuga-pollo", "arroz", "brocoli", "zanahoria", "pimiento" } }, Json);
+
+        var cookable = await client.GetFromJsonAsync<List<CookableRecipe>>("/api/recipes/cookable?limit=3", Json);
+        Assert.Equal(3, cookable!.Count);
+        Assert.Contains(cookable, c => c.RecipeId == "pollo-teriyaki");
+        Assert.Equal(cookable.OrderByDescending(c => c.Coverage).Select(c => c.Coverage), cookable.Select(c => c.Coverage));
+        Assert.All(cookable, c => Assert.NotNull(c.KcalPerServing));
+
+        var portioned = await client.GetFromJsonAsync<PortionedRecipe>("/api/recipes/pollo-teriyaki/portioned", Json);
+        Assert.Equal(577, portioned!.Nutrition!.PerServing.Kcal, 0);
+    }
+
     private static async Task<JsonObject> Generate(HttpClient client, int count, string[] exclude)
     {
         var response = await client.PostAsJsonAsync("/api/menus/generate", new { dishCount = count, seed = 5, exclude }, Json);

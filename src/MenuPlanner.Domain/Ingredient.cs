@@ -35,6 +35,23 @@ public class Ingredient
     public string? ProteinFamily { get; set; }
 
     public string? Notes { get; set; }
+
+    /// <summary>Nutrición aproximada por 100 g (o 100 ml) de la unidad base en crudo. Solo informativa.</summary>
+    public NutritionFacts? Nutrition { get; set; }
+}
+
+/// <summary>Energía y macronutrimentos. Por 100 g en el catálogo; por porción o por lote en los resultados.</summary>
+public class NutritionFacts
+{
+    public double Kcal { get; set; }
+
+    public double Protein { get; set; }
+
+    public double Carbs { get; set; }
+
+    public double Fat { get; set; }
+
+    public double Fiber { get; set; }
 }
 
 /// <summary>1 <see cref="Unit"/> del ingrediente en estado <see cref="State"/> pesa <see cref="Grams"/> gramos (en ese mismo estado).</summary>

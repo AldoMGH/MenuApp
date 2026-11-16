@@ -16,7 +16,14 @@
     },
     "aisle": "Carnes y pescados",
     "isLean": true,
-    "proteinFamily": "pollo"
+    "proteinFamily": "pollo",
+    "nutrition": {
+      "kcal": 120,
+      "protein": 22.5,
+      "carbs": 0,
+      "fat": 2.6,
+      "fiber": 0
+    }
   },
   {
     "id": "lomo-cerdo",
@@ -34,7 +41,14 @@
     },
     "aisle": "Carnes y pescados",
     "isLean": true,
-    "proteinFamily": "cerdo"
+    "proteinFamily": "cerdo",
+    "nutrition": {
+      "kcal": 143,
+      "protein": 21,
+      "carbs": 0,
+      "fat": 5.7,
+      "fiber": 0
+    }
   },
   {
     "id": "res-molida-magra",
@@ -53,7 +67,14 @@
     },
     "aisle": "Carnes y pescados",
     "isLean": true,
-    "proteinFamily": "res"
+    "proteinFamily": "res",
+    "nutrition": {
+      "kcal": 176,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 10,
+      "fiber": 0
+    }
   },
   {
     "id": "bistec-res-magro",
@@ -72,7 +93,14 @@
     },
     "aisle": "Carnes y pescados",
     "isLean": true,
-    "proteinFamily": "res"
+    "proteinFamily": "res",
+    "nutrition": {
+      "kcal": 125,
+      "protein": 22,
+      "carbs": 0,
+      "fat": 3.8,
+      "fiber": 0
+    }
   },
   {
     "id": "filete-pescado",
@@ -92,7 +120,14 @@
     },
     "aisle": "Carnes y pescados",
     "isLean": true,
-    "proteinFamily": "pescado"
+    "proteinFamily": "pescado",
+    "nutrition": {
+      "kcal": 96,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 1.7,
+      "fiber": 0
+    }
   },
   {
     "id": "camaron",
@@ -109,7 +144,14 @@
     },
     "aisle": "Carnes y pescados",
     "isLean": true,
-    "proteinFamily": "mariscos"
+    "proteinFamily": "mariscos",
+    "nutrition": {
+      "kcal": 85,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 0.5,
+      "fiber": 0
+    }
   },
   {
     "id": "atun-agua",
@@ -136,7 +178,14 @@
     "aisle": "Abarrotes",
     "isLean": true,
     "proteinFamily": "pescado",
-    "notes": "Ya viene cocido: 1 lata ≈ 140 g drenado."
+    "notes": "Ya viene cocido: 1 lata ≈ 140 g drenado.",
+    "nutrition": {
+      "kcal": 116,
+      "protein": 26,
+      "carbs": 0,
+      "fat": 0.8,
+      "fiber": 0
+    }
   },
   {
     "id": "huevo",
@@ -160,7 +209,14 @@
     "aliases": [
       "huevos",
       "blanquillos"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 143,
+      "protein": 12.6,
+      "carbs": 0.7,
+      "fat": 9.5,
+      "fiber": 0
+    }
   },
   {
     "id": "nopal",
@@ -186,7 +242,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 16,
+      "protein": 1.3,
+      "carbs": 3.3,
+      "fat": 0.1,
+      "fiber": 2.2
+    }
   },
   {
     "id": "champinon",
@@ -208,7 +271,14 @@
       "unit": "g",
       "step": 50
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 22,
+      "protein": 3.1,
+      "carbs": 3.3,
+      "fat": 0.3,
+      "fiber": 1
+    }
   },
   {
     "id": "calabacita",
@@ -235,7 +305,14 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 17,
+      "protein": 1.2,
+      "carbs": 3.1,
+      "fat": 0.3,
+      "fiber": 1
+    }
   },
   {
     "id": "chayote",
@@ -258,7 +335,14 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 19,
+      "protein": 0.8,
+      "carbs": 4.5,
+      "fat": 0.1,
+      "fiber": 1.7
+    }
   },
   {
     "id": "zanahoria",
@@ -284,7 +368,14 @@
     "aisle": "Frutas y verduras",
     "aliases": [
       "zanahorias"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 41,
+      "protein": 0.9,
+      "carbs": 9.6,
+      "fat": 0.2,
+      "fiber": 2.8
+    }
   },
   {
     "id": "brocoli",
@@ -310,7 +401,14 @@
     "aisle": "Frutas y verduras",
     "aliases": [
       "brocoli"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 34,
+      "protein": 2.8,
+      "carbs": 6.6,
+      "fat": 0.4,
+      "fiber": 2.6
+    }
   },
   {
     "id": "ejote",
@@ -331,7 +429,14 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 31,
+      "protein": 1.8,
+      "carbs": 7,
+      "fat": 0.2,
+      "fiber": 2.7
+    }
   },
   {
     "id": "pimiento",
@@ -360,7 +465,14 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 26,
+      "protein": 1,
+      "carbs": 6,
+      "fat": 0.3,
+      "fiber": 2.1
+    }
   },
   {
     "id": "jitomate",
@@ -389,7 +501,14 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 18,
+      "protein": 0.9,
+      "carbs": 3.9,
+      "fat": 0.2,
+      "fiber": 1.2
+    }
   },
   {
     "id": "tomate-verde",
@@ -415,7 +534,14 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 32,
+      "protein": 1,
+      "carbs": 5.8,
+      "fat": 1,
+      "fiber": 1.9
+    }
   },
   {
     "id": "lechuga",
@@ -442,7 +568,14 @@
     "aliases": [
       "mix ensalada",
       "ensalada"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 15,
+      "protein": 1.4,
+      "carbs": 2.9,
+      "fat": 0.2,
+      "fiber": 1.3
+    }
   },
   {
     "id": "pepino",
@@ -468,7 +601,14 @@
     "aisle": "Frutas y verduras",
     "aliases": [
       "pepinos"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 15,
+      "protein": 0.7,
+      "carbs": 3.6,
+      "fat": 0.1,
+      "fiber": 0.5
+    }
   },
   {
     "id": "espinaca",
@@ -490,7 +630,14 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 23,
+      "protein": 2.9,
+      "carbs": 3.6,
+      "fat": 0.4,
+      "fiber": 2.2
+    }
   },
   {
     "id": "col",
@@ -516,7 +663,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 25,
+      "protein": 1.3,
+      "carbs": 5.8,
+      "fat": 0.1,
+      "fiber": 2.5
+    }
   },
   {
     "id": "verdura-mixta",
@@ -535,7 +689,14 @@
       "step": 100
     },
     "aisle": "Frutas y verduras",
-    "notes": "Acompañamiento genérico cuando la receta no trae verdura."
+    "notes": "Acompañamiento genérico cuando la receta no trae verdura.",
+    "nutrition": {
+      "kcal": 25,
+      "protein": 1.5,
+      "carbs": 5,
+      "fat": 0.2,
+      "fiber": 2
+    }
   },
   {
     "id": "cebolla",
@@ -562,7 +723,14 @@
     "aliases": [
       "cebolla morada",
       "cebollas"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 40,
+      "protein": 1.1,
+      "carbs": 9.3,
+      "fat": 0.1,
+      "fiber": 1.7
+    }
   },
   {
     "id": "chile-serrano",
@@ -580,7 +748,14 @@
       "unit": "g",
       "step": 50
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 32,
+      "protein": 1.7,
+      "carbs": 6.7,
+      "fat": 0.4,
+      "fiber": 3.7
+    }
   },
   {
     "id": "ajo",
@@ -604,7 +779,14 @@
       "step": 1,
       "label": "cabeza"
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 149,
+      "protein": 6.4,
+      "carbs": 33,
+      "fat": 0.5,
+      "fiber": 2.1
+    }
   },
   {
     "id": "cilantro",
@@ -624,7 +806,14 @@
       "label": "manojo"
     },
     "aisle": "Frutas y verduras",
-    "notes": "1 pieza = 1 manojo."
+    "notes": "1 pieza = 1 manojo.",
+    "nutrition": {
+      "kcal": 23,
+      "protein": 2.1,
+      "carbs": 3.7,
+      "fat": 0.5,
+      "fiber": 2.8
+    }
   },
   {
     "id": "limon",
@@ -645,7 +834,14 @@
     "aisle": "Frutas y verduras",
     "aliases": [
       "limones"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 30,
+      "protein": 0.7,
+      "carbs": 10.5,
+      "fat": 0.2,
+      "fiber": 2.8
+    }
   },
   {
     "id": "chile-chipotle",
@@ -668,7 +864,14 @@
       "unit": "lata",
       "step": 1
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 60,
+      "protein": 1.5,
+      "carbs": 10,
+      "fat": 1.5,
+      "fiber": 4
+    }
   },
   {
     "id": "tortilla-maiz",
@@ -686,7 +889,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Tortillería y panadería"
+    "aisle": "Tortillería y panadería",
+    "nutrition": {
+      "kcal": 218,
+      "protein": 5.7,
+      "carbs": 44.6,
+      "fat": 2.9,
+      "fiber": 6.3
+    }
   },
   {
     "id": "tortilla-nopal",
@@ -710,7 +920,14 @@
       "step": 1
     },
     "aisle": "Tortillería y panadería",
-    "notes": "Paquete de 10 piezas."
+    "notes": "Paquete de 10 piezas.",
+    "nutrition": {
+      "kcal": 150,
+      "protein": 4,
+      "carbs": 30,
+      "fat": 1.5,
+      "fiber": 6
+    }
   },
   {
     "id": "tostada-horneada",
@@ -734,7 +951,14 @@
       "step": 1
     },
     "aisle": "Tortillería y panadería",
-    "notes": "Paquete de 24 piezas."
+    "notes": "Paquete de 24 piezas.",
+    "nutrition": {
+      "kcal": 400,
+      "protein": 8,
+      "carbs": 75,
+      "fat": 6,
+      "fiber": 8
+    }
   },
   {
     "id": "salmas",
@@ -752,7 +976,14 @@
       "unit": "paquete",
       "step": 1
     },
-    "aisle": "Tortillería y panadería"
+    "aisle": "Tortillería y panadería",
+    "nutrition": {
+      "kcal": 400,
+      "protein": 9,
+      "carbs": 80,
+      "fat": 4,
+      "fiber": 6
+    }
   },
   {
     "id": "arroz",
@@ -771,7 +1002,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 360,
+      "protein": 6.6,
+      "carbs": 79,
+      "fat": 0.6,
+      "fiber": 1.3
+    }
   },
   {
     "id": "pasta",
@@ -796,7 +1034,14 @@
       "step": 1
     },
     "aisle": "Abarrotes",
-    "notes": "Paquete de 200 g."
+    "notes": "Paquete de 200 g.",
+    "nutrition": {
+      "kcal": 371,
+      "protein": 13,
+      "carbs": 75,
+      "fat": 1.5,
+      "fiber": 3.2
+    }
   },
   {
     "id": "quinoa",
@@ -815,7 +1060,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 368,
+      "protein": 14,
+      "carbs": 64,
+      "fat": 6,
+      "fiber": 7
+    }
   },
   {
     "id": "papa",
@@ -839,7 +1091,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 77,
+      "protein": 2,
+      "carbs": 17,
+      "fat": 0.1,
+      "fiber": 2.2
+    }
   },
   {
     "id": "camote",
@@ -863,7 +1122,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 86,
+      "protein": 1.6,
+      "carbs": 20,
+      "fat": 0.1,
+      "fiber": 3
+    }
   },
   {
     "id": "frijol",
@@ -887,7 +1153,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 337,
+      "protein": 22,
+      "carbs": 61,
+      "fat": 1,
+      "fiber": 15
+    }
   },
   {
     "id": "lenteja",
@@ -909,7 +1182,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 352,
+      "protein": 25,
+      "carbs": 63,
+      "fat": 1,
+      "fiber": 11
+    }
   },
   {
     "id": "garbanzo",
@@ -931,7 +1211,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 378,
+      "protein": 20.5,
+      "carbs": 63,
+      "fat": 6,
+      "fiber": 12
+    }
   },
   {
     "id": "aguacate",
@@ -952,7 +1239,14 @@
     "aisle": "Frutas y verduras",
     "aliases": [
       "aguacates"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 160,
+      "protein": 2,
+      "carbs": 8.5,
+      "fat": 14.7,
+      "fiber": 6.7
+    }
   },
   {
     "id": "aceite-oliva",
@@ -975,7 +1269,14 @@
       "unit": "ml",
       "step": 500
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 810,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 92,
+      "fiber": 0
+    }
   },
   {
     "id": "cacahuate",
@@ -993,7 +1294,14 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Semillas y especias"
+    "aisle": "Semillas y especias",
+    "nutrition": {
+      "kcal": 567,
+      "protein": 25.8,
+      "carbs": 16,
+      "fat": 49,
+      "fiber": 8.5
+    }
   },
   {
     "id": "fruta-temporada",
@@ -1021,7 +1329,14 @@
       "papaya",
       "melon",
       "fresas"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 50,
+      "protein": 0.6,
+      "carbs": 13,
+      "fat": 0.2,
+      "fiber": 1.8
+    }
   },
   {
     "id": "yogurt-natural",
@@ -1040,7 +1355,14 @@
       "step": 1000
     },
     "aisle": "Lácteos y huevo",
-    "isLean": true
+    "isLean": true,
+    "nutrition": {
+      "kcal": 61,
+      "protein": 3.5,
+      "carbs": 4.7,
+      "fat": 3.3,
+      "fiber": 0
+    }
   },
   {
     "id": "chia",
@@ -1066,7 +1388,14 @@
     "aisle": "Semillas y especias",
     "aliases": [
       "chia"
-    ]
+    ],
+    "nutrition": {
+      "kcal": 486,
+      "protein": 16.5,
+      "carbs": 42,
+      "fat": 30.7,
+      "fiber": 34
+    }
   },
   {
     "id": "pierna-cerdo",
@@ -1085,7 +1414,14 @@
     },
     "aisle": "Carnes y pescados",
     "isLean": true,
-    "proteinFamily": "cerdo"
+    "proteinFamily": "cerdo",
+    "nutrition": {
+      "kcal": 136,
+      "protein": 21,
+      "carbs": 0,
+      "fat": 5.4,
+      "fiber": 0
+    }
   },
   {
     "id": "paleta-res",
@@ -1104,7 +1440,14 @@
     },
     "aisle": "Carnes y pescados",
     "isLean": true,
-    "proteinFamily": "res"
+    "proteinFamily": "res",
+    "nutrition": {
+      "kcal": 150,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 7,
+      "fiber": 0
+    }
   },
   {
     "id": "queso-panela",
@@ -1121,7 +1464,14 @@
       "step": 100
     },
     "aisle": "Lácteos y huevo",
-    "isLean": true
+    "isLean": true,
+    "nutrition": {
+      "kcal": 250,
+      "protein": 18,
+      "carbs": 3,
+      "fat": 18,
+      "fiber": 0
+    }
   },
   {
     "id": "yogurt-griego",
@@ -1149,7 +1499,14 @@
       "step": 1000
     },
     "aisle": "Lácteos y huevo",
-    "isLean": true
+    "isLean": true,
+    "nutrition": {
+      "kcal": 73,
+      "protein": 10,
+      "carbs": 3.9,
+      "fat": 1.9,
+      "fiber": 0
+    }
   },
   {
     "id": "leche",
@@ -1172,7 +1529,14 @@
       "step": 1000
     },
     "aisle": "Lácteos y huevo",
-    "isLean": true
+    "isLean": true,
+    "nutrition": {
+      "kcal": 42,
+      "protein": 3.4,
+      "carbs": 5,
+      "fat": 1,
+      "fiber": 0
+    }
   },
   {
     "id": "salsa-soya",
@@ -1199,7 +1563,14 @@
       "unit": "ml",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 53,
+      "protein": 8,
+      "carbs": 4.9,
+      "fat": 0.6,
+      "fiber": 0.8
+    }
   },
   {
     "id": "ajonjoli",
@@ -1225,7 +1596,14 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Semillas y especias"
+    "aisle": "Semillas y especias",
+    "nutrition": {
+      "kcal": 573,
+      "protein": 17.7,
+      "carbs": 23.5,
+      "fat": 49.7,
+      "fiber": 11.8
+    }
   },
   {
     "id": "col-napa",
@@ -1252,7 +1630,14 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 16,
+      "protein": 1.2,
+      "carbs": 3.2,
+      "fat": 0.2,
+      "fiber": 1.2
+    }
   },
   {
     "id": "cebollin",
@@ -1280,7 +1665,14 @@
       "step": 1,
       "label": "manojo"
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 32,
+      "protein": 1.8,
+      "carbs": 7.3,
+      "fat": 0.2,
+      "fiber": 2.6
+    }
   },
   {
     "id": "apio",
@@ -1303,7 +1695,14 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 16,
+      "protein": 0.7,
+      "carbs": 3,
+      "fat": 0.2,
+      "fiber": 1.6
+    }
   },
   {
     "id": "pasta-mole",
@@ -1318,7 +1717,14 @@
       "step": 250
     },
     "aisle": "Abarrotes",
-    "notes": "Rinde con caldo desgrasado; úsala en poca cantidad."
+    "notes": "Rinde con caldo desgrasado; úsala en poca cantidad.",
+    "nutrition": {
+      "kcal": 480,
+      "protein": 7,
+      "carbs": 40,
+      "fat": 33,
+      "fiber": 8
+    }
   },
   {
     "id": "pasta-pipian",
@@ -1332,7 +1738,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 520,
+      "protein": 18,
+      "carbs": 20,
+      "fat": 42,
+      "fiber": 8
+    }
   },
   {
     "id": "chile-guajillo",
@@ -1353,7 +1766,14 @@
       "unit": "g",
       "step": 50
     },
-    "aisle": "Semillas y especias"
+    "aisle": "Semillas y especias",
+    "nutrition": {
+      "kcal": 324,
+      "protein": 11,
+      "carbs": 57,
+      "fat": 6,
+      "fiber": 22
+    }
   },
   {
     "id": "jengibre",
@@ -1367,7 +1787,14 @@
       "unit": "g",
       "step": 50
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 80,
+      "protein": 1.8,
+      "carbs": 18,
+      "fat": 0.8,
+      "fiber": 2
+    }
   },
   {
     "id": "mostaza",
@@ -1390,7 +1817,14 @@
       "unit": "ml",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 66,
+      "protein": 4.4,
+      "carbs": 5.8,
+      "fat": 4,
+      "fiber": 3.3
+    }
   },
   {
     "id": "miel",
@@ -1414,7 +1848,14 @@
       "step": 250
     },
     "aisle": "Abarrotes",
-    "notes": "Azúcar: el plan pide moderarla; las recetas usan 1 cda por lote."
+    "notes": "Azúcar: el plan pide moderarla; las recetas usan 1 cda por lote.",
+    "nutrition": {
+      "kcal": 432,
+      "protein": 0.4,
+      "carbs": 117,
+      "fat": 0,
+      "fiber": 0
+    }
   },
   {
     "id": "naranja",
@@ -1435,7 +1876,14 @@
       "unit": "g",
       "step": 500
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 47,
+      "protein": 0.9,
+      "carbs": 11.8,
+      "fat": 0.1,
+      "fiber": 2.4
+    }
   },
   {
     "id": "gochujang",
@@ -1456,7 +1904,14 @@
       "unit": "g",
       "step": 250
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 230,
+      "protein": 5,
+      "carbs": 46,
+      "fat": 2,
+      "fiber": 3
+    }
   },
   {
     "id": "salsa-picante",
@@ -1478,7 +1933,14 @@
       "unit": "ml",
       "step": 500
     },
-    "aisle": "Abarrotes"
+    "aisle": "Abarrotes",
+    "nutrition": {
+      "kcal": 25,
+      "protein": 1,
+      "carbs": 4,
+      "fat": 0.5,
+      "fiber": 1
+    }
   },
   {
     "id": "tortilla-harina-integral",
@@ -1507,7 +1969,14 @@
       "step": 1
     },
     "aisle": "Tortillería y panadería",
-    "notes": "No está en la tabla de intercambios del plan 2; consúltalo con tu nutrióloga."
+    "notes": "No está en la tabla de intercambios del plan 2; consúltalo con tu nutrióloga.",
+    "nutrition": {
+      "kcal": 290,
+      "protein": 9,
+      "carbs": 48,
+      "fat": 7,
+      "fiber": 7
+    }
   },
   {
     "id": "platano",
@@ -1528,7 +1997,14 @@
       "unit": "pieza",
       "step": 1
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 89,
+      "protein": 1.1,
+      "carbs": 22.8,
+      "fat": 0.3,
+      "fiber": 2.6
+    }
   },
   {
     "id": "jalapeno",
@@ -1549,6 +2025,13 @@
       "unit": "g",
       "step": 100
     },
-    "aisle": "Frutas y verduras"
+    "aisle": "Frutas y verduras",
+    "nutrition": {
+      "kcal": 29,
+      "protein": 0.9,
+      "carbs": 6.5,
+      "fat": 0.4,
+      "fiber": 2.8
+    }
   }
 ]

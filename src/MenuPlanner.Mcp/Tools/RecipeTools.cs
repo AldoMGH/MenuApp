@@ -139,6 +139,11 @@ public sealed class RecipeTools(MenuService menus, DishResolver resolver, IRecip
             sb.AppendLine($"- {line.Text}");
         }
 
+        if (portioned.Nutrition is not null)
+        {
+            sb.AppendLine(SuggestionTools.Macros(portioned.Nutrition));
+        }
+
         if (portioned.Steps.Count > 0)
         {
             sb.AppendLine();

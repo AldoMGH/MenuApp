@@ -25,7 +25,8 @@ builder.Services.AddMenuPlannerInfrastructure(builder.Configuration);
 builder.Services
     .AddMcpServer(o => o.ServerInfo = new() { Name = "menu-planner", Version = "1.0.0" })
     .WithStdioServerTransport()
-    .WithToolsFromAssembly();
+    .WithToolsFromAssembly()
+    .WithPromptsFromAssembly();
 
 var host = builder.Build();
 

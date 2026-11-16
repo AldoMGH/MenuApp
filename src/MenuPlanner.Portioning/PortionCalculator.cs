@@ -108,6 +108,7 @@ public sealed class PortionCalculator(UnitConverter converter)
             });
         }
 
+        result.Nutrition = new NutritionCalculator(converter).Calculate(result.Batch, servings, ingredients);
         return result;
     }
 

@@ -46,6 +46,8 @@ Reinicia Claude Desktop. En el chat verás las herramientas de **menu-planner**.
 - "¿Cuánto me sirvo de lomo en salsa verde?"
 - "Pásame la lista de compras", y luego "Confirma el menú"
 - "¿Qué platillos cocino más?" / "¿Qué debería tener siempre en la despensa?"
+- "¿Qué puedo cocinar con lo que tengo?"
+- "Propónme un platillo nuevo con pescado" (o usa el prompt **sugerir_platillo** desde el botón "+" del chat → menu-planner)
 
 Puedes nombrar los platillos como los escribes en Keep ("las enchiladas", "poyo ajonjolí", "tinga"). El servidor los traduce a la receta correspondiente; si hay varias opciones, te las devuelve para que elijas.
 
@@ -61,6 +63,12 @@ Puedes nombrar los platillos como los escribes en Keep ("las enchiladas", "poyo 
 | `get_recipe` | Receta porcionada: lote, tu porción y pasos (`proteinTarget` min/mid/max) |
 | `list_recipes`, `list_favorites` | Catálogo y tus platillos más frecuentes de Keep |
 | `pantry_suggestions` | Lo que compras seguido según tus listas |
+| `cookable_recipes` | Recetas ordenadas por lo que ya sueles tener, con lo que falta |
+| `get_suggestion_context` | Contexto para inventar un platillo: plato del plan, intercambios, reglas, ingredientes disponibles (ids), gustos y formato |
+| `preview_recipe` | Valida y porciona una receta propuesta (lote, tu porción, macros, lo que falta). No guarda |
+| `save_recipe` | Guarda la receta aceptada (`ia-sugerida` + `revisar-nutriologa`) y opcionalmente la agrega al menú |
+
+**Prompt** `sugerir_platillo(idea?)`: guía a Claude por el ciclo contexto → 2–3 ideas → `preview_recipe` → corregir → mostrarte → `save_recipe` solo si aceptas.
 
 ## Probar sin MongoDB
 

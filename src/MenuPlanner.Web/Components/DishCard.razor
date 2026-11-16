@@ -6,6 +6,12 @@
             <div class="d-flex flex-wrap gap-1 mt-1">
                 <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@P.Servings porciones</MudChip>
                 <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@P.ProteinPerServingGrams.ToString("0") g proteína en cocido</MudChip>
+                @if (P.Nutrition is { } n)
+                {
+                    <MudTooltip Text="@($"Aprox. por porción: {n.PerServing.Carbs:0} g carbohidratos · {n.PerServing.Fat:0} g grasa · {n.PerServing.Fiber:0} g fibra")">
+                        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Icon="@Icons.Material.Filled.LocalFireDepartment" data-testid="kcal-chip">≈ @n.PerServing.Kcal.ToString("0") kcal · @n.PerServing.Protein.ToString("0") g prot.</MudChip>
+                    </MudTooltip>
+                }
                 @if (Dish.LegumeSideServings > 0)
                 {
                     <MudChip T="string" Size="Size.Small" Color="Color.Secondary">+ leguminosa en @Dish.LegumeSideServings porciones</MudChip>

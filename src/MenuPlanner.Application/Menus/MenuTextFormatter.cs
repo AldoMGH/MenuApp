@@ -22,6 +22,10 @@ public static class MenuTextFormatter
             sb.AppendLine($"{index++}. {p.Name}");
             sb.AppendLine($"   Lote ({p.Servings} porciones): {string.Join(" · ", p.Batch.Select(l => $"{l.Display} {l.Name.ToLowerInvariant()}"))}");
             sb.AppendLine($"   Tu porción: {string.Join(" + ", p.Serving.Select(s => s.Text))}");
+            if (p.Nutrition is { } n)
+            {
+                sb.AppendLine($"   ≈ {n.PerServing.Kcal:0} kcal · {n.PerServing.Protein:0} g proteína por porción (aprox.)");
+            }
             foreach (var suggestion in p.Suggestions)
             {
                 sb.AppendLine($"   Sugerencia: {suggestion}");

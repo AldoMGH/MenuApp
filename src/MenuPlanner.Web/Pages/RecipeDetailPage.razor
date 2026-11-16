@@ -63,6 +63,26 @@
                 }
             </MudPaper>
         </MudItem>
+        @if (_portioned.Nutrition is { } n)
+        {
+            <MudItem xs="12">
+                <MudPaper Outlined="true" Class="pa-3" data-testid="macros">
+                    <MudText Typo="Typo.h6">Macros aproximados</MudText>
+                    <MudText Typo="Typo.caption" Class="mud-text-secondary">Valores de referencia (SMAE/USDA), solo informativos: tu plan se sigue por porciones, no por calorías.</MudText>
+                    <MudSimpleTable Dense="true" Elevation="0">
+                        <thead><tr><th></th><th>Energía</th><th>Proteína</th><th>Carbohidratos</th><th>Grasa</th><th>Fibra</th></tr></thead>
+                        <tbody>
+                            <tr><td><b>Por porción</b></td><td>@n.PerServing.Kcal.ToString("0") kcal</td><td>@n.PerServing.Protein.ToString("0.#") g</td><td>@n.PerServing.Carbs.ToString("0.#") g</td><td>@n.PerServing.Fat.ToString("0.#") g</td><td>@n.PerServing.Fiber.ToString("0.#") g</td></tr>
+                            <tr><td>Lote (@_portioned.Servings porciones)</td><td>@n.Batch.Kcal.ToString("0") kcal</td><td>@n.Batch.Protein.ToString("0") g</td><td>@n.Batch.Carbs.ToString("0") g</td><td>@n.Batch.Fat.ToString("0") g</td><td>@n.Batch.Fiber.ToString("0") g</td></tr>
+                        </tbody>
+                    </MudSimpleTable>
+                    @if (n.Missing.Count > 0)
+                    {
+                        <MudText Typo="Typo.caption" Color="Color.Warning">Sin datos nutrimentales: @string.Join(", ", n.Missing)</MudText>
+                    }
+                </MudPaper>
+            </MudItem>
+        }
         <MudItem xs="12" md="6">
             <MudPaper Outlined="true" Class="pa-3 h-100">
                 <MudText Typo="Typo.h6">Para cocinar (@_portioned.Servings porciones, en crudo)</MudText>

@@ -29,3 +29,12 @@ public sealed record SeedSyncResult(
     int DishesUpdated,
     int RulesAdded,
     int PlansAdded);
+
+/// <summary>Receta que puedes cocinar con lo que sueles tener: cobertura (0–1) y lo que falta comprar.</summary>
+public sealed record CookableRecipe(
+    string RecipeId,
+    string Name,
+    double Coverage,
+    IReadOnlyList<string> Have,
+    IReadOnlyList<string> Missing,
+    double? KcalPerServing);

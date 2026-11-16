@@ -46,6 +46,8 @@ public static class DependencyInjection
 
     public static IServiceCollection AddMenuPlannerInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton(_ => Application.Validation.SchemaValidator.FromDirectory(ResolveDataPath(configuration["Schemas:Path"], "schemas")));
+
         if (UsesMemoryStorage(configuration))
         {
             services.AddSingleton(_ => Memory.InMemoryStore.FromSeed(SeedData.Load(SeedPath(configuration))));

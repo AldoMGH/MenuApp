@@ -28,6 +28,20 @@ public class PortionedRecipe
     public List<string> Suggestions { get; set; } = [];
 
     public List<string> Steps { get; set; } = [];
+
+    /// <summary>Macros aproximados (informativos; no intervienen en el cálculo de porciones).</summary>
+    public RecipeNutrition? Nutrition { get; set; }
+}
+
+public class RecipeNutrition
+{
+    /// <summary>Promedio por porción (lote ÷ porciones).</summary>
+    public NutritionFacts PerServing { get; set; } = new();
+
+    public NutritionFacts Batch { get; set; } = new();
+
+    /// <summary>Ingredientes sin datos nutrimentales o sin conversión a gramos (no se sumaron).</summary>
+    public List<string> Missing { get; set; } = [];
 }
 
 public class PortionLine

@@ -97,6 +97,12 @@
                 @s.TotalServings porciones para @s.MealsPerWeek comidas@(s.SurplusServings > 0 ? $" · sobran {s.SurplusServings} para congelar" : string.Empty)
             </MudChip>
             <MudChip T="string" Icon="@Icons.Material.Filled.Assignment">Plan v@_menu.PlanVersion</MudChip>
+            @if (_menu.Dishes.Where(d => d.Portioned.Nutrition is not null).ToList() is { Count: > 0 } withMacros)
+            {
+                <MudChip T="string" Icon="@Icons.Material.Filled.LocalFireDepartment" data-testid="avg-kcal">
+                    Promedio por comida ≈ @withMacros.Average(d => d.Portioned.Nutrition!.PerServing.Kcal).ToString("0") kcal · @withMacros.Average(d => d.Portioned.Nutrition!.PerServing.Protein).ToString("0") g proteína (aprox.)
+                </MudChip>
+            }
         </div>
         @foreach (var warning in s.Warnings)
         {

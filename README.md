@@ -5,7 +5,7 @@ Genera tu menú semanal de **comidas** a partir de tu plan de alimentación, con
 - Stack: .NET 8 (C#) · MongoDB local · Minimal APIs + Swagger
 - Arquitectura y decisiones de diseño: [`docs/arquitectura.md`](docs/arquitectura.md)
 
-> Estado: **Fases 0 a 3**: backend, motor de porciones, menú, lista de compras, importador de Google Keep, **app web (Blazor + MudBlazor)** y **servidor MCP para Claude Desktop**. Pendiente: sugerencia de platillos nuevos con IA (fase 4).
+> Estado: **Fases 0 a 4 completas**: backend, motor de porciones, menú, lista de compras, importador de Google Keep, app web (Blazor + MudBlazor), servidor MCP para Claude Desktop, **platillos nuevos con lo que sueles tener** y **macros aproximados**.
 
 ![Menú de la semana](docs/img/01-menu.png)
 
@@ -135,9 +135,26 @@ dotnet run --project src/MenuPlanner.Api -- --Storage:Provider=Memory
 |---|---|
 | ![Lista de compras](docs/img/02-compras.png) | ![Editor de receta](docs/img/04-editor-receta.png) |
 
+## Platillos nuevos y macros (fase 4)
+
+**¿Qué puedo cocinar con lo que tengo?** (Despensa en la app, o `cookable_recipes` en Claude): ordena tus recetas por qué tanto de sus ingredientes ya sueles tener. Cuenta tu despensa, tus básicos y lo que compras en al menos 40% de las semanas según Keep. Además te dice qué falta comprar.
+
+**Platillos nuevos con Claude Desktop** (sin API key ni costo extra): usa el prompt **`sugerir_platillo`** o pídelo con tus palabras ("propónme algo nuevo con pescado"). El proceso es:
+1. Claude lee el contexto: tu plato del plan, los intercambios, las reglas, lo que sueles tener con sus ids y tus gustos.
+2. Propone una receta y la revisa con `preview_recipe`. La app la valida con el mismo JSON Schema y las reglas del plan, calcula tu porción, el lote, los macros y lo que falta comprar. **No guarda nada.**
+3. Solo si la aceptas, `save_recipe` la guarda con las etiquetas `ia-sugerida` y `revisar-nutriologa`, la agrega a tus platillos y, si quieres, al menú en borrador.
+
+El LLM propone; el código calcula y valida. Si Claude usa un ingrediente que no existe, la app le sugiere los más parecidos del catálogo.
+
+**Macros aproximados:** kcal, proteína, carbohidratos, grasa y fibra por porción y por lote. Se ven en la receta, en cada tarjeta del menú, como promedio del menú y en las respuestas del MCP. Salen de valores de referencia SMAE/USDA por 100 g en crudo, que se editan en cada ingrediente. **Son informativos:** tu plan se sigue por porciones, no por calorías.
+
+| Con lo que tienes | Macros por receta |
+|---|---|
+| ![Cocinables](docs/img/12-cookable.png) | ![Macros](docs/img/11-macros.png) |
+
 ## Claude Desktop (MCP)
 
-Pide "Dame un menú semanal con 5 platillos" desde Claude Desktop. El servidor `src/MenuPlanner.Mcp` expone 12 herramientas: generar, cambiar, agregar, quitar, confirmar, lista de compras, recetas, favoritos y despensa. Corre por stdio contra tu misma base de Mongo. Configuración paso a paso: [`docs/claude-desktop.md`](docs/claude-desktop.md).
+Pide "Dame un menú semanal con 5 platillos" desde Claude Desktop. El servidor `src/MenuPlanner.Mcp` expone 16 herramientas (generar, cambiar, agregar, quitar, confirmar, lista de compras, recetas, favoritos, despensa, cocinables y el ciclo para crear platillos nuevos) y el prompt `sugerir_platillo`. Corre por stdio contra tu misma base de Mongo. Configuración paso a paso: [`docs/claude-desktop.md`](docs/claude-desktop.md).
 
 ### Ejemplos
 
