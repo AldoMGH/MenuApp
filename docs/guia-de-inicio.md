@@ -85,6 +85,8 @@ dotnet run --project src/MenuPlanner.Api
 
 Se abre el navegador en **http://localhost:5033**. Swagger, la documentación de la API, está en http://localhost:5033/swagger.
 
+> **Arranca siempre `MenuPlanner.Api`.** La API también sirve la app web. En **Visual Studio o Rider**, clic derecho en `MenuPlanner.Api` → *Establecer como proyecto de inicio*. Puedes usar el perfil `http` (http://localhost:5033) o el `https` (https://localhost:7259). **No ejecutes `MenuPlanner.Web` por separado:** es solo la interfaz, sin API, y los botones fallan con errores como *405 Method Not Allowed*.
+
 En el primer arranque la app crea los índices y **carga los datos iniciales**. En la terminal verás:
 
 ```
@@ -276,6 +278,7 @@ mongosh menuplanner --eval "db.dropDatabase()"
 |---|---|
 | Al arrancar: **"No se pudo conectar a MongoDB"** | Inicia el servicio de MongoDB (paso 0) o revisa la cadena de conexión (paso 3) |
 | **"No hay un plan de alimentación activo"** | En **Plan**, activa una versión; si no hay ninguna, reinicia con la base vacía (paso 13) |
+| **405 Method Not Allowed** al importar, o "La app no está conectada a la API" | Arrancaste `MenuPlanner.Web` en lugar de la API. Detén todo y arranca `MenuPlanner.Api` (en Visual Studio: proyecto de inicio = `MenuPlanner.Api`), luego abre http://localhost:5033 |
 | El puerto **5033 está ocupado** | `dotnet run --project src/MenuPlanner.Api -- --urls http://localhost:5050` |
 | La página queda **en blanco** o con estilos viejos | Detén la app, ejecuta `dotnet build`, vuelve a arrancar y recarga sin caché (`Ctrl/Cmd + Shift + R`) |
 | La importación encuentra **0 notas** | Cada nota debe empezar con un título "Mes N" (p. ej. "Noviembre 1") y tener secciones como "Comidas" |

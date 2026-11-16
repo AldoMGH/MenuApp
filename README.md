@@ -105,7 +105,7 @@ Al arrancar, la API crea los √≠ndices y **carga el seed solo en colecciones vac√
 dotnet run --project src/MenuPlanner.Api
 ```
 
-- **App web:** http://localhost:5033 (la API la sirve; un solo proceso)
+- **App web:** http://localhost:5033, o https://localhost:7259 con el perfil `https`. La API la sirve; un solo proceso. **Arranca siempre `MenuPlanner.Api`**, no `MenuPlanner.Web` por separado (en Visual Studio: proyecto de inicio = `MenuPlanner.Api`).
 - **Swagger:** http://localhost:5033/swagger
 
 Para probar **sin MongoDB** (datos de ejemplo en memoria que se pierden al cerrar):

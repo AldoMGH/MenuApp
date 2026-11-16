@@ -20,6 +20,14 @@ public sealed class ApiException(string message, int status, IReadOnlyList<strin
 /// <summary>Cliente tipado de la API REST del planificador (mismo origen que la app).</summary>
 public sealed class ApiClient(HttpClient http)
 {
+    /// <summary>
+    /// Mensaje cuando la app no está hablando con la API: pasa si se arranca MenuPlanner.Web por separado
+    /// (un servidor de archivos estáticos que responde index.html o 405) en lugar de MenuPlanner.Api.
+    /// </summary>
+    public const string NotConnectedMessage =
+        "La app no está conectada a la API. Arranca MenuPlanner.Api (dotnet run --project src/MenuPlanner.Api; " +
+        "en Visual Studio: proyecto de inicio = MenuPlanner.Api) y abre http://localhost:5033.";
+
     private static readonly JsonSerializerOptions Json = AppJson.Options;
 
     // ---- Menús
@@ -132,6 +140,11 @@ public sealed class ApiClient(HttpClient http)
     {
         using var response = await http.GetAsync(url);
         await EnsureSuccessAsync(response);
+        if (IsHtml(response))
+        {
+            throw new ApiException(NotConnectedMessage, (int)response.StatusCode, []);
+        }
+
         return await response.Content.ReadAsStringAsync();
     }
 
@@ -152,6 +165,11 @@ public sealed class ApiClient(HttpClient http)
     private static async Task<T> ReadAsync<T>(HttpResponseMessage response)
     {
         await EnsureSuccessAsync(response);
+        if (IsHtml(response))
+        {
+            throw new ApiException(NotConnectedMessage, (int)response.StatusCode, []);
+        }
+
         if (response.StatusCode == System.Net.HttpStatusCode.NoContent || response.Content.Headers.ContentLength == 0)
         {
             return default!;
@@ -165,6 +183,11 @@ public sealed class ApiClient(HttpClient http)
         if (response.IsSuccessStatusCode)
         {
             return;
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed || IsHtml(response))
+        {
+            throw new ApiException(NotConnectedMessage, (int)response.StatusCode, []);
         }
 
         var errors = new List<string>();
@@ -185,6 +208,9 @@ public sealed class ApiClient(HttpClient http)
 
         throw new ApiException(message, (int)response.StatusCode, errors);
     }
+
+    private static bool IsHtml(HttpResponseMessage response) =>
+        string.Equals(response.Content.Headers.ContentType?.MediaType, "text/html", StringComparison.OrdinalIgnoreCase);
 
     private static string E(string value) => Uri.EscapeDataString(value);
 }
