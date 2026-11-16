@@ -3,6 +3,7 @@
 Genera tu menú semanal de **comidas** a partir de tu plan de alimentación, con platillos de **4 porciones**, la **lista de compras** agrupada por pasillo y las **recetas con cantidades ajustadas al plan** (lote para cocinar + tu porción al servir).
 
 - Stack: .NET 8 (C#) · MongoDB local · Minimal APIs + Swagger
+- **¿Primera vez? Empieza aquí: [`docs/guia-de-inicio.md`](docs/guia-de-inicio.md)** (instalación, primer arranque, importar Keep, primer menú y Claude Desktop)
 - Arquitectura y decisiones de diseño: [`docs/arquitectura.md`](docs/arquitectura.md)
 
 > Estado: **Fases 0 a 4 completas**: backend, motor de porciones, menú, lista de compras, importador de Google Keep, app web (Blazor + MudBlazor), servidor MCP para Claude Desktop, **platillos nuevos con lo que sueles tener** y **macros aproximados**.
