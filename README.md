@@ -3,6 +3,7 @@
 Genera tu menú semanal de **comidas** a partir de tu plan de alimentación, con platillos de **4 porciones**, la **lista de compras** agrupada por pasillo y las **recetas con cantidades ajustadas al plan** (lote para cocinar + tu porción al servir).
 
 - Stack: .NET 8 (C#) · MongoDB local · Minimal APIs + Swagger
+- **¿Primera vez? Empieza aquí: [`docs/guia-de-inicio.md`](docs/guia-de-inicio.md)** (instalación, primer arranque, importar Keep, primer menú y Claude Desktop)
 - Arquitectura y decisiones de diseño: [`docs/arquitectura.md`](docs/arquitectura.md)
 
 > Estado: **Fases 0 a 4 completas**: backend, motor de porciones, menú, lista de compras, importador de Google Keep, app web (Blazor + MudBlazor), servidor MCP para Claude Desktop, **platillos nuevos con lo que sueles tener** y **macros aproximados**.
@@ -104,7 +105,7 @@ Al arrancar, la API crea los índices y **carga el seed solo en colecciones vac�
 dotnet run --project src/MenuPlanner.Api
 ```
 
-- **App web:** http://localhost:5033 (la API la sirve; un solo proceso)
+- **App web:** http://localhost:5033, o https://localhost:7259 con el perfil `https`. La API la sirve; un solo proceso. **Arranca siempre `MenuPlanner.Api`**, no `MenuPlanner.Web` por separado (en Visual Studio: proyecto de inicio = `MenuPlanner.Api`).
 - **Swagger:** http://localhost:5033/swagger
 
 Para probar **sin MongoDB** (datos de ejemplo en memoria que se pierden al cerrar):

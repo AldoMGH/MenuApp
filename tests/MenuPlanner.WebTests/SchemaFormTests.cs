@@ -243,3 +243,37 @@ public class DishCardTests
         Assert.Contains("≈ 577 kcal · 71 g prot.", cut.Find("[data-testid=kcal-chip]").TextContent);
     }
 }
+
+public class ApiClientNotConnectedTests
+{
+    // Así responde el servidor de archivos de MenuPlanner.Web cuando se arranca solo, sin la API.
+    private sealed class StaticHost(HttpStatusCode status) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>
+            Task.FromResult(new HttpResponseMessage(status)
+            {
+                Content = new StringContent("<!DOCTYPE html><html><body>Cargando…</body></html>", Encoding.UTF8, "text/html"),
+            });
+    }
+
+    private static ApiClient Client(HttpStatusCode status) =>
+        new(new HttpClient(new StaticHost(status)) { BaseAddress = new Uri("https://localhost:7259/") });
+
+    [Fact]
+    public async Task Post_returning_405_explains_how_to_start_the_api()
+    {
+        var ex = await Assert.ThrowsAsync<ApiException>(() => Client(HttpStatusCode.MethodNotAllowed).ImportKeepAsync("Noviembre 1", "Menus.md", dryRun: false, latestYear: null));
+
+        Assert.Equal(ApiClient.NotConnectedMessage, ex.Message);
+        Assert.Equal(405, ex.Status);
+    }
+
+    [Fact]
+    public async Task Html_instead_of_json_explains_how_to_start_the_api()
+    {
+        var ex = await Assert.ThrowsAsync<ApiException>(() => Client(HttpStatusCode.OK).ListRecipesAsync());
+        Assert.Equal(ApiClient.NotConnectedMessage, ex.Message);
+
+        await Assert.ThrowsAsync<ApiException>(() => Client(HttpStatusCode.OK).GetSchemaAsync("recipe"));
+    }
+}
