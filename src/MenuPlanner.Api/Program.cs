@@ -75,6 +75,13 @@ if (!memoryStorage && app.Configuration.GetValue("Seed:Enabled", true))
 }
 
 // App web (Blazor WebAssembly) servida desde la misma API: mismo origen, sin CORS.
+if (app.Environment.IsDevelopment())
+{
+    // Atiende /_framework/debug/ws-proxy (depuración de WASM desde Visual Studio / el navegador);
+    // sin esto la petición cae en el fallback de index.html y truena.
+    app.UseWebAssemblyDebugging();
+}
+
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 app.MapPlanEndpoints();
